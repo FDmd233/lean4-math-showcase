@@ -1,5 +1,6 @@
 import LeanShowcase.TrigonometricExtrema
 import LeanShowcase.LogExtrema
+import LeanShowcase.RootFunctionBounds
 
 /-!
 # LeanShowcase
@@ -34,5 +35,17 @@ theorem twoExtremaSumBounds
     (hx1 : IsLocalExtr (f a) x₁) (hx2 : IsLocalExtr (f a) x₂) :
     2 < x₁ + x₂ ∧ x₁ + x₂ < 3 * Real.exp (a - 1) - 1 :=
   two_extrema_sum_bounds a x₁ x₂ h₁ h₂ h_order hx1 hx2
+
+theorem a8IncreasingOnIoc : StrictMonoOn (f 8) (Set.Ioc 0 1) :=
+  a8_increasing_on_Ioc
+
+theorem a8DecreasingOnIci : StrictAntiOn (f 8) (Set.Ici 1) :=
+  a8_decreasing_on_Ici
+
+theorem rootFunctionGtOne (a x : ℝ) (ha : 0 < a) (hx : 0 < x) : 1 < f a x :=
+  root_function_gt_one a x ha hx
+
+theorem rootFunctionLtTwo (a x : ℝ) (ha : 0 < a) (hx : 0 < x) : f a x < 2 :=
+  root_function_lt_two a x ha hx
 
 end LeanShowcase
