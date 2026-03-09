@@ -1,0 +1,6 @@
+.lake/
+.log/
+build/
+*.olean
+*.ilean
+*.trace
