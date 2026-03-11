@@ -7,6 +7,8 @@
 
 import Mathlib
 
+namespace LeanShowcase.LogExtrema
+
 set_option linter.mathlibStandardSet false
 
 open scoped BigOperators
@@ -537,3 +539,5 @@ theorem two_extrema_sum_bounds
     (hx1 : IsLocalExtr (f a) x₁) (hx2 : IsLocalExtr (f a) x₂) :
     2 < x₁ + x₂ ∧ x₁ + x₂ < 3 * Real.exp (a - 1) - 1 :=
   part2 a x₁ x₂ h₁ h₂ h_order hx1 hx2
+
+end LeanShowcase.LogExtrema

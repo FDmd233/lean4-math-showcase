@@ -2,7 +2,7 @@
 
 ## 项目简介
 
-一个简洁的 Lean4 数学证明展示仓库，收录了三份结构完整、适合公开展示的证明示例。
+一个简洁的 Lean4 数学证明展示仓库，收录三份结构完整、适合公开展示的证明示例，并采用更接近规范 Lean4 项目的模块组织方式。
 
 ## 目录结构
 
@@ -28,5 +28,13 @@
 
 ```bash
 lake update
-lake env lean LeanShowcase.lean
+lake build
+```
+
+```lean
+import LeanShowcase
+
+#check LeanShowcase.TrigonometricExtrema.trig_maximum_on_Icc
+#check LeanShowcase.LogExtrema.two_extrema_sum_bounds
+#check LeanShowcase.RootFunctionBounds.root_function_lt_two
 ```

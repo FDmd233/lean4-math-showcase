@@ -8,6 +8,8 @@
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Data.Real.Basic
 
+namespace LeanShowcase.TrigonometricExtrema
+
 
 open Real
 
@@ -127,3 +129,5 @@ theorem least_phase_shift_upper_bound :
     IsLeast {b : ℝ | ∃ (φ : ℝ), ∀ x : ℝ, 5 * cos x - cos (5 * x + φ) ≤ b}
       (3 * Real.sqrt 3) :=
   question3
+
+end LeanShowcase.TrigonometricExtrema
