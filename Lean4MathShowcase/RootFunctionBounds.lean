@@ -7,7 +7,7 @@
 -/
 import Mathlib
 
-namespace LeanShowcase.RootFunctionBounds
+namespace Lean4MathShowcase.RootFunctionBounds
 
 set_option linter.mathlibStandardSet false
 
@@ -199,4 +199,4 @@ theorem root_function_gt_one (a x : ℝ) (ha : 0 < a) (hx : 0 < x) : 1 < f a x :
 theorem root_function_lt_two (a x : ℝ) (ha : 0 < a) (hx : 0 < x) : f a x < 2 :=
   part2_upper a ha x hx
 
-end LeanShowcase.RootFunctionBounds
+end Lean4MathShowcase.RootFunctionBounds

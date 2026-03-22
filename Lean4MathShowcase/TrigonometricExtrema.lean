@@ -8,7 +8,7 @@
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Data.Real.Basic
 
-namespace LeanShowcase.TrigonometricExtrema
+namespace Lean4MathShowcase.TrigonometricExtrema
 
 
 open Real
@@ -130,4 +130,4 @@ theorem least_phase_shift_upper_bound :
       (3 * Real.sqrt 3) :=
   question3
 
-end LeanShowcase.TrigonometricExtrema
+end Lean4MathShowcase.TrigonometricExtrema

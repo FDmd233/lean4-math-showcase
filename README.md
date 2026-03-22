@@ -23,7 +23,7 @@
 因此本项目采用了比较标准的展示方式：
 
 - 使用 `lakefile.lean` 管理项目
-- 使用统一入口 `LeanShowcase.lean` 汇总导出模块
+- 使用统一入口 `Lean4MathShowcase.lean` 汇总导出模块
 - 每个 `.lean` 文件只承载一个相对独立的数学主题
 - 在文件顶部给出中文背景说明，在文件末尾保留便于展示的定理别名
 
@@ -31,8 +31,8 @@
 
 ```text
 .
-├─ LeanShowcase.lean
-├─ LeanShowcase
+├─ Lean4MathShowcase.lean
+├─ Lean4MathShowcase/
 │  ├─ TrigonometricExtrema.lean
 │  ├─ LogExtrema.lean
 │  └─ RootFunctionBounds.lean
@@ -45,7 +45,7 @@
 ## 模块简介
 
 ### 1. 三角函数极值示例
-文件：`LeanShowcase/TrigonometricExtrema.lean`
+文件：`Lean4MathShowcase/TrigonometricExtrema.lean`
 
 围绕表达式 `5 cos x - cos (5x)`，证明了以下几类结论：
 
@@ -55,12 +55,12 @@
 
 可展示定理：
 
-- `LeanShowcase.TrigonometricExtrema.trig_maximum_on_Icc`
-- `LeanShowcase.TrigonometricExtrema.cosine_interval_witness`
-- `LeanShowcase.TrigonometricExtrema.least_phase_shift_upper_bound`
+- `Lean4MathShowcase.TrigonometricExtrema.trig_maximum_on_Icc`
+- `Lean4MathShowcase.TrigonometricExtrema.cosine_interval_witness`
+- `Lean4MathShowcase.TrigonometricExtrema.least_phase_shift_upper_bound`
 
 ### 2. 对数函数极值示例
-文件：`LeanShowcase/LogExtrema.lean`
+文件：`Lean4MathShowcase/LogExtrema.lean`
 
 研究函数
 
@@ -75,11 +75,11 @@ f(x) = (a + 1)x - (x + 1) log x
 
 可展示定理：
 
-- `LeanShowcase.LogExtrema.part1`
-- `LeanShowcase.LogExtrema.two_extrema_sum_bounds`
+- `Lean4MathShowcase.LogExtrema.part1`
+- `Lean4MathShowcase.LogExtrema.two_extrema_sum_bounds`
 
 ### 3. 根式函数的单调性与估计
-文件：`LeanShowcase/RootFunctionBounds.lean`
+文件：`Lean4MathShowcase/RootFunctionBounds.lean`
 
 研究函数
 
@@ -94,10 +94,10 @@ f(a, x) = 1 / sqrt(1 + x) + 1 / sqrt(1 + a) + sqrt((a * x) / (a * x + 8))
 
 可展示定理：
 
-- `LeanShowcase.RootFunctionBounds.a8_increasing_on_Ioc`
-- `LeanShowcase.RootFunctionBounds.a8_decreasing_on_Ici`
-- `LeanShowcase.RootFunctionBounds.root_function_gt_one`
-- `LeanShowcase.RootFunctionBounds.root_function_lt_two`
+- `Lean4MathShowcase.RootFunctionBounds.a8_increasing_on_Ioc`
+- `Lean4MathShowcase.RootFunctionBounds.a8_decreasing_on_Ici`
+- `Lean4MathShowcase.RootFunctionBounds.root_function_gt_one`
+- `Lean4MathShowcase.RootFunctionBounds.root_function_lt_two`
 
 ## 快速开始
 
@@ -111,11 +111,11 @@ lake build
 ### 统一导入
 
 ```lean
-import LeanShowcase
+import Lean4MathShowcase
 
-#check LeanShowcase.TrigonometricExtrema.trig_maximum_on_Icc
-#check LeanShowcase.LogExtrema.two_extrema_sum_bounds
-#check LeanShowcase.RootFunctionBounds.root_function_lt_two
+#check Lean4MathShowcase.TrigonometricExtrema.trig_maximum_on_Icc
+#check Lean4MathShowcase.LogExtrema.two_extrema_sum_bounds
+#check Lean4MathShowcase.RootFunctionBounds.root_function_lt_two
 ```
 
 ## 适用场景
