@@ -145,3 +145,27 @@ import Lean4MathShowcase
 - *Theorem Proving in Lean 4*
 
 它们为 Lean 项目的模块划分、文档表达和社区规范提供了非常好的对照标准。
+
+## Affine-Prym / Aristotle subproject
+
+New standalone subproject: [`projects/affine-prym-aristotle`](projects/affine-prym-aristotle).
+
+This directory contains the Aristotle / Lean 4 formalization associated with
+*A Rank (2g-1) Affine-Prym Construction and Its Scalar Two-Block Optimality*.
+It uses Lean/mathlib `v4.28.0`, while the top-level showcase project currently
+uses a different Lean/mathlib version, so it is kept as an independent Lake
+project.
+
+Quick check:
+
+```bash
+cd projects/affine-prym-aristotle
+lake build RequestProject.Main
+```
+
+Status: this formalizes the linear-algebraic dependency skeleton behind the
+lower-bound argument and proves the rank inequality conditional on named
+external inputs such as Looijenga and Westwick. It is not a full formalization
+of surface topology, mapping class groups, twisted cohomology, or the original
+Looijenga/Westwick theorems.
+

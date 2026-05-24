@@ -1,0 +1,39 @@
+============================================================
+Raw output of: lake build RequestProject.Main
+============================================================
+
+warning: manifest out of date: source kind (git/path) of dependency 'mathlib' changed; use `lake update mathlib` to update it
+⚠ [8027/8031] Replayed RequestProject.Paper.ExternalInputs
+warning: RequestProject/Paper/ExternalInputs.lean:103:8: declaration uses `sorry`
+warning: RequestProject/Paper/ExternalInputs.lean:118:8: declaration uses `sorry`
+warning: RequestProject/Paper/ExternalInputs.lean:133:8: declaration uses `sorry`
+⚠ [8028/8031] Replayed RequestProject.Paper.Construction
+warning: RequestProject/Paper/Construction.lean:52:51: This simp argument is unused: Fin.val_inj
+warning: RequestProject/Paper/Construction.lean:106:37: This simp argument is unused: mul_assoc
+warning: RequestProject/Paper/Construction.lean:112:69: This simp argument is unused: pow_succ
+warning: RequestProject/Paper/Construction.lean:112:79: This simp argument is unused: mul_assoc
+warning: RequestProject/Paper/Construction.lean:167:50: This simp argument is unused: Finset.sum_apply'
+warning: RequestProject/Paper/Construction.lean:169:35: This simp argument is unused: Finsupp.single_apply
+warning: RequestProject/Paper/Construction.lean:171:35: This simp argument is unused: h_basis
+warning: RequestProject/Paper/Construction.lean:171:44: This simp argument is unused: LinearMap.dualMap_apply
+ℹ [8031/8031] Replayed RequestProject.Main
+info: RequestProject/Main.lean:49:0: 'two_block_optimality_arithmetic_core' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: RequestProject/Main.lean:50:0: 'two_block_optimality_conditional' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Build completed successfully (8031 jobs).
+
+============================================================
+#print axioms output (from Main.lean)
+============================================================
+
+'two_block_optimality_arithmetic_core' depends on axioms: [propext, Classical.choice, Quot.sound]
+'two_block_optimality_conditional' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+============================================================
+Notes
+============================================================
+
+- The `sorryAx` in `two_block_optimality_conditional` comes exclusively from
+  the three Westwick-related theorems in `ExternalInputs.lean` (lines 103, 118, 133).
+- `two_block_optimality_arithmetic_core` is fully proved (no sorryAx).
+- All other files (Defs.lean, Construction.lean, LinearAlgebraCore.lean,
+  MainTheorems.lean) contain no `sorry` statements.
