@@ -1,33 +1,59 @@
-# Lean4 数学证明展示
+# Lean 4 Math Showcase
 
-一个面向公开展示的 Lean4 / mathlib 小型项目，收录 3 个主题明确、可直接阅读的数学证明示例。
+这里放一些用 Lean 4 / mathlib 整理的数学证明示例。目标很简单：每个文件尽量独立，打开后能看出数学内容，也能用 `lake build` 直接检查。
 
-项目目标是形成一个：
+目前仓库分成两部分：
 
-- 结构简洁
-- 命名统一
-- 中文说明清晰
-- 适合直接发布到 GitHub
+- 顶层 `Lean4MathShowcase`：三个偏初等分析和不等式的 Lean 证明示例。
+- `projects/affine-prym-aristotle`：Affine-Prym 论文相关的独立形式化项目。它使用不同的 Lean/mathlib 版本，所以单独保留为一个 Lake project。
 
-的 Lean4 数学证明 showcase 仓库。
+## Contents
 
-## 项目定位
+### Top-level examples
 
-这个仓库不是大型定理库，而是一个轻量级的 **Lean4 数学证明展示项目**。整体组织方式尽量向 Lean 社区常见公开项目靠拢，例如：
+| 文件 | 内容 | 可检查的定理示例 |
+| --- | --- | --- |
+| `Lean4MathShowcase/TrigonometricExtrema.lean` | `5 cos x - cos (5x)` 的极值与上界 | `trig_maximum_on_Icc`, `cosine_interval_witness`, `least_phase_shift_upper_bound` |
+| `Lean4MathShowcase/LogExtrema.lean` | 对数函数极值点与切线计算 | `part1`, `two_extrema_sum_bounds` |
+| `Lean4MathShowcase/RootFunctionBounds.lean` | 根式函数的单调性和双边估计 | `a8_increasing_on_Ioc`, `a8_decreasing_on_Ici`, `root_function_gt_one`, `root_function_lt_two` |
 
-- [`leanprover/lean4`](https://github.com/leanprover/lean4)
-- [`leanprover-community/mathlib4`](https://github.com/leanprover-community/mathlib4)
-- [Mathematics in Lean](https://leanprover-community.github.io/mathematics_in_lean/)
-- [Theorem Proving in Lean 4](https://lean-lang.org/theorem_proving_in_lean4/)
+统一入口是：
 
-因此本项目采用了比较标准的展示方式：
+```lean
+import Lean4MathShowcase
+```
 
-- 使用 `lakefile.lean` 管理项目
-- 使用统一入口 `Lean4MathShowcase.lean` 汇总导出模块
-- 每个 `.lean` 文件只承载一个相对独立的数学主题
-- 在文件顶部给出中文背景说明，在文件末尾保留便于展示的定理别名
+例如：
 
-## 目录结构
+```lean
+#check Lean4MathShowcase.TrigonometricExtrema.trig_maximum_on_Icc
+#check Lean4MathShowcase.LogExtrema.two_extrema_sum_bounds
+#check Lean4MathShowcase.RootFunctionBounds.root_function_lt_two
+```
+
+### Affine-Prym formalization subproject
+
+独立子项目在 [`projects/affine-prym-aristotle`](projects/affine-prym-aristotle)。它对应论文 *A Rank (2g-1) Affine-Prym Construction and Its Scalar Two-Block Optimality*，主要形式化 lower-bound 证明链中的线性代数骨架，并把 Looijenga、Westwick 等结果作为命名外部输入记录下来。
+
+因为该子项目使用 Lean/mathlib `v4.28.0`，而顶层 showcase 使用另一套版本，所以请从子项目目录单独构建。
+
+## Build
+
+顶层项目：
+
+```bash
+lake update
+lake build
+```
+
+Affine-Prym 子项目：
+
+```bash
+cd projects/affine-prym-aristotle
+lake build RequestProject.Main
+```
+
+## Repository layout
 
 ```text
 .
@@ -36,136 +62,15 @@
 │  ├─ TrigonometricExtrema.lean
 │  ├─ LogExtrema.lean
 │  └─ RootFunctionBounds.lean
+├─ projects/
+│  └─ affine-prym-aristotle/
 ├─ lakefile.lean
 ├─ lean-toolchain
-├─ .gitignore
 └─ README.md
 ```
 
-## 模块简介
+## Notes
 
-### 1. 三角函数极值示例
-文件：`Lean4MathShowcase/TrigonometricExtrema.lean`
+这个仓库不是大型定理库，更像是一个可持续整理的小型证明集。后续如果继续加入新题目，我会尽量保持现在的习惯：一个文件对应一个相对独立的主题，文件开头写清楚背景，末尾保留几个便于外部引用的定理名。
 
-围绕表达式 `5 cos x - cos (5x)`，证明了以下几类结论：
-
-- 在区间 `[0, π/4]` 上的极大值
-- 给定角度与区间时，满足余弦上界的点存在性
-- 带相位偏移时，全局上界的最小值
-
-可展示定理：
-
-- `Lean4MathShowcase.TrigonometricExtrema.trig_maximum_on_Icc`
-- `Lean4MathShowcase.TrigonometricExtrema.cosine_interval_witness`
-- `Lean4MathShowcase.TrigonometricExtrema.least_phase_shift_upper_bound`
-
-### 2. 对数函数极值示例
-文件：`Lean4MathShowcase/LogExtrema.lean`
-
-研究函数
-
-```text
-f(x) = (a + 1)x - (x + 1) log x
-```
-
-包含两类内容：
-
-- `a = 0` 时切线方程的验证
-- 当函数存在两个极值点时，极值点之和的双边估计
-
-可展示定理：
-
-- `Lean4MathShowcase.LogExtrema.part1`
-- `Lean4MathShowcase.LogExtrema.two_extrema_sum_bounds`
-
-### 3. 根式函数的单调性与估计
-文件：`Lean4MathShowcase/RootFunctionBounds.lean`
-
-研究函数
-
-```text
-f(a, x) = 1 / sqrt(1 + x) + 1 / sqrt(1 + a) + sqrt((a * x) / (a * x + 8))
-```
-
-主要证明：
-
-- 当 `a = 8` 时的分段单调性
-- 一般情形下的双边估计 `1 < f(a, x) < 2`
-
-可展示定理：
-
-- `Lean4MathShowcase.RootFunctionBounds.a8_increasing_on_Ioc`
-- `Lean4MathShowcase.RootFunctionBounds.a8_decreasing_on_Ici`
-- `Lean4MathShowcase.RootFunctionBounds.root_function_gt_one`
-- `Lean4MathShowcase.RootFunctionBounds.root_function_lt_two`
-
-## 快速开始
-
-### 构建项目
-
-```bash
-lake update
-lake build
-```
-
-### 统一导入
-
-```lean
-import Lean4MathShowcase
-
-#check Lean4MathShowcase.TrigonometricExtrema.trig_maximum_on_Icc
-#check Lean4MathShowcase.LogExtrema.two_extrema_sum_bounds
-#check Lean4MathShowcase.RootFunctionBounds.root_function_lt_two
-```
-
-## 适用场景
-
-这个仓库适合：
-
-- 作为个人 Lean4 / mathlib 学习展示项目
-- 作为 GitHub 公开作品集中的数学证明示例
-- 作为后续继续扩展的小型 Lean4 证明仓库
-
-如果后续继续加入新题目，建议保持当前风格：
-
-- 一个文件一个主题
-- 主题名尽量直接反映数学内容
-- 顶部用简洁中文说明背景
-- 末尾保留便于外部引用的公开定理名
-
-## 致谢
-
-本项目基于 **Lean 4** 与 **mathlib4** 生态构建。
-
-在项目组织方式与公开呈现风格上，参考了 Lean 社区中成熟且广泛使用的资料与仓库，尤其包括：
-
-- `leanprover/lean4`
-- `leanprover-community/mathlib4`
-- *Mathematics in Lean*
-- *Theorem Proving in Lean 4*
-
-它们为 Lean 项目的模块划分、文档表达和社区规范提供了非常好的对照标准。
-
-## Affine-Prym / Aristotle subproject
-
-New standalone subproject: [`projects/affine-prym-aristotle`](projects/affine-prym-aristotle).
-
-This directory contains the Aristotle / Lean 4 formalization associated with
-*A Rank (2g-1) Affine-Prym Construction and Its Scalar Two-Block Optimality*.
-It uses Lean/mathlib `v4.28.0`, while the top-level showcase project currently
-uses a different Lean/mathlib version, so it is kept as an independent Lake
-project.
-
-Quick check:
-
-```bash
-cd projects/affine-prym-aristotle
-lake build RequestProject.Main
-```
-
-Status: this formalizes the linear-algebraic dependency skeleton behind the
-lower-bound argument and proves the rank inequality conditional on named
-external inputs such as Looijenga and Westwick. It is not a full formalization
-of surface topology, mapping class groups, twisted cohomology, or the original
-Looijenga/Westwick theorems.
-
+顶层项目基于 Lean 4 与 mathlib4；具体版本以各自目录中的 `lean-toolchain` 和 Lake 配置为准。
