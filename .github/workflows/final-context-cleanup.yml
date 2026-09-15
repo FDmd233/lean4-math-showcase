@@ -23,11 +23,8 @@ jobs:
           def edit(path, replacements):
               p = Path(path)
               s = p.read_text(encoding='utf-8')
-              old = s
               for a,b in replacements:
                   s = s.replace(a,b)
-              if s == old:
-                  print('no change:', path)
               p.write_text(s, encoding='utf-8')
 
           edit('projects/erdos-906-sparse-fock/README.md', [
@@ -42,12 +39,12 @@ jobs:
              '## Assistance\n\nAI-assisted tools were used during development of the formalization. Its mathematical status is determined by the source, the explicit external assumptions, and the axiom/build audit above.')
           ])
           edit('projects/affine-prym-formalization/FORMALIZATION_NOTES.md', [
-            ('This note replaces the older run-by-run summary.  It records the mathematical boundary of the checked source rather than the history of individual tool runs.',
-             'This note records the mathematical boundary of the checked source and its remaining external inputs.')
+            ('This note records the current mathematical boundary of the Affine-Prym Lean project. It replaces the older run-by-run summary, which was useful during development but was too tied to the history of individual tool runs.',
+             'This note records the current mathematical boundary of the Affine-Prym Lean project and its remaining external inputs.')
           ])
           edit('projects/erdos-906-sparse-fock/formalization/lean/FORMALIZATION_NOTES.md', [
-            ('This file records the mathematical status of the Lean source without preserving run-by-run history.',
-             'This file records the mathematical status and dependency boundary of the Lean source.')
+            ('The main point of this note is to record what the current source proves, without preserving the run-by-run history of the formalization process.',
+             'This note records what the current source proves and where the formalization boundary lies.')
           ])
           edit('projects/erdos-906-sparse-fock/paper/paper_en.tex', [
             ('I used language-model tools during exploration, proof checking, and preparation of the manuscript. The mathematical claims should be judged from the arguments given here; I do not claim external peer review or a complete formal verification of the whole paper.',
@@ -64,7 +61,7 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq ripgrep poppler-utils
-          PATTERN='OpenAI|ChatGPT|GPT[- ]?[0-9]|Claude|Astra|Aristotle|undergraduate|thesis|defense|本科|毕业论文|答辩|public version|public directory|private version|internal version|our conversation|this conversation|chat history|run-by-run|materiali[sz]ation|first pass'
+          PATTERN='OpenAI|ChatGPT|GPT[- ]?[0-9]|Claude|Astra|Aristotle|\bundergraduate\b|\bthesis\b|\bdefense\b|本科|毕业论文|答辩|public version|public directory|private version|internal version|our conversation|this conversation|chat history|run-by-run|materiali[sz]ation|first pass|individual tool runs'
           if rg -n -i -P --hidden --glob '!*.pdf' --glob '!final-context-cleanup.yml' --glob '!conversation-trace-audit.yml' "$PATTERN" .; then
             echo 'Forbidden project-context wording remains' >&2
             exit 1
