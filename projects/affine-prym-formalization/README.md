@@ -34,6 +34,6 @@ See [`FORMALIZATION_NOTES.md`](FORMALIZATION_NOTES.md) for the exact boundary.
 - `RequestProject/Paper/LinearAlgebraCore.lean` - the proved support and rank-strata core.
 - `RequestProject/Paper/MainTheorems.lean` - the conditional theorem chain and final rank inequality.
 
-## Assistance
+## Provenance
 
-AI-assisted tools were used during development of the formalization. Its mathematical status is determined by the source, the explicit external assumptions, and the axiom/build audit above.
+The initial formalization was prepared with Aristotle. The generated summary and build record are kept in the repository for reproducibility.
