@@ -52,5 +52,6 @@ jobs:
           git rm .github/workflows/restore-erdos906-paper-disclosure.yml
           git add projects/erdos-906-sparse-fock/paper/paper_en.tex projects/erdos-906-sparse-fock/paper/paper_en.pdf
           git commit -m 'Restore original Erdős 906 paper disclosure'
+          git reset --hard HEAD
           git pull --rebase origin main
           git push
