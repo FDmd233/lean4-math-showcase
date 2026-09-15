@@ -1,3 +1,12 @@
+This project was edited by [Aristotle](https://aristotle.harmonic.fun).
+
+To cite Aristotle:
+- Tag @Aristotle-Harmonic on GitHub PRs/issues
+- Add as co-author to commits:
+```
+Co-authored-by: Aristotle (Harmonic) <aristotle-harmonic@harmonic.fun>
+```
+
 # `p=3/2` Lean formalization
 
 This Lake project contains the published Lean 4 / Mathlib source for the `p=3/2` part of *Zeros of high derivatives of sparse Fock series*.
