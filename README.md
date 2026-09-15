@@ -24,7 +24,7 @@ import Lean4MathShowcase
 
 ## Affine-Prym
 
-这个子项目对应 *A Rank (2g-1) Affine-Prym Construction and Its Scalar Two-Block Optimality*。我把它看成一份 Lean 依赖审计：线性代数核心在 Lean 中展开，Looijenga、Westwick 以及尚未形式化的拓扑输入则明确留在外部假设一侧。
+这个子项目对应 *A Rank (2g-1) Affine-Prym Construction and Its Scalar Two-Block Optimality*。形式化重点是把线性代数核心、外部输入和最终依赖关系分开写清楚。
 
 它使用 Lean/mathlib `v4.28.0`，应从自己的目录构建：
 
@@ -35,7 +35,7 @@ lake build RequestProject.Main
 
 ## Erdős Problem #906
 
-这个项目给出显式的稀疏 Fock 系列，并研究高阶导数零点在固定环带上的几何。公开目录包含英文论文、优先权说明以及 `p=3/2` 的 Lean 源码。项目不主张首次解决 #906；我更关心的是显式构造和可量化的零点定位。
+这个项目给出显式的稀疏 Fock 系列，并研究高阶导数零点在固定环带上的几何。目录包含英文论文、优先权说明以及 `p=3/2` 的 Lean 源码。项目不主张首次解决 #906；重点是显式构造和可量化的零点定位。
 
 Lean 子项目单独构建：
 
@@ -43,8 +43,6 @@ Lean 子项目单独构建：
 cd projects/erdos-906-sparse-fock/formalization/lean
 lake build RequestProject.Main
 ```
-
-中文本科毕业论文和答辩材料不在这个公开仓库中。
 
 ## Root project build
 
