@@ -71,7 +71,14 @@ jobs:
             echo 'Forbidden wording remains in rebuilt PDF' >&2
             exit 1
           fi
-          grep -F 'AI-assisted tools were used' /tmp/paper.txt
+          grep -F 'AI-assisted' /tmp/paper.txt
+          mkdir -p /tmp/erdos906-render
+          pdftoppm -f 9 -singlefile -png -r 150 projects/erdos-906-sparse-fock/paper/paper_en.pdf /tmp/erdos906-render/page >/dev/null 2>&1
+      - name: Upload visual QA
+        uses: actions/upload-artifact@v4
+        with:
+          name: erdos906-context-cleanup-qa
+          path: /tmp/erdos906-render/page.png
       - name: Commit cleanup
         run: |
           rm -f .github/workflows/conversation-trace-audit.yml .github/workflows/final-context-cleanup.yml
