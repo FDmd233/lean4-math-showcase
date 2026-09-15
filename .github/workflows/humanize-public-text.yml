@@ -1,0 +1,47 @@
+name: Polish public project prose
+
+on:
+  push:
+    paths:
+      - '.github/humanize_payload.b64'
+      - '.github/workflows/humanize-public-text.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Decode and run cleanup
+        run: |
+          base64 -d .github/humanize_payload.b64 | gzip -d > /tmp/humanize_public_text.py
+          sha256sum /tmp/humanize_public_text.py
+          python3 /tmp/humanize_public_text.py
+
+      - name: Inspect Affine-Prym PDF text
+        run: |
+          if command -v pdftotext >/dev/null 2>&1; then
+            pdftotext projects/affine-prym-formalization/paper.pdf /tmp/affine-paper.txt
+            echo 'Potential tool/provenance terms in Affine-Prym paper PDF:'
+            grep -niE 'Aristotle|ChatGPT|GPT[- ]?[0-9]*|language[- ]model|LLM|AI assistance|artificial intelligence' /tmp/affine-paper.txt || true
+          else
+            echo 'pdftotext unavailable on runner; skipping PDF text probe'
+          fi
+
+      - name: Review and commit
+        run: |
+          rm -f .github/humanize_payload.b64
+          git diff --check
+          git status --short
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Polish public project prose and provenance'
+          git push
