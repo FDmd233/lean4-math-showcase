@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'projects/erdos-906-sparse-fock/paper/paper_en.tex'
+      - '.github/workflows/build-erdos906-paper.yml'
   workflow_dispatch:
 
 permissions:
