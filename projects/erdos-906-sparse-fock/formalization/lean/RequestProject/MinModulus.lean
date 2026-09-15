@@ -3,7 +3,7 @@ import Mathlib
 /-!
 # A minimum-modulus zero-detection principle
 
-This file contains the complex-analytic input that replaces Rouché's theorem in the
+The complex-analytic input below replaces Rouché's theorem in the
 localisation argument of Section 3 of the paper *Zeros of high derivatives of sparse
 Fock series*.
 

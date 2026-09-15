@@ -1,12 +1,9 @@
 /-
-# Core Definitions for the Affine-Prym Construction Paper
+# Core definitions for the Affine-Prym construction
 
-This file formalizes the core definitions used throughout the paper
-"A Rank (2g−1) Affine-Prym Construction and Its Two-Block Optimality".
-
-Since Mathlib does not contain topological infrastructure for surface groups,
-mapping class groups, or twisted cohomology, we parameterize these objects
-abstractly and capture their essential properties as hypotheses.
+The definitions below isolate the linear-algebraic objects used in the paper.
+Surface groups, mapping class groups, and twisted cohomology are kept abstract,
+since the required topological infrastructure is not part of Mathlib here.
 -/
 import Mathlib
 

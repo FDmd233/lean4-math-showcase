@@ -47,7 +47,7 @@ It is equivalent to density of $\bigcup_k\Zer(f^{(n_k)})$ for every strictly inc
 
 This is the question in Erd\H{o}s \cite[p.~72, IV.1(i)]{Erdos82}, now numbered 906. The adjacent interpolation question, associated with Problem~229, concerns prescribed discrete sets and derivative orders selected during the construction. Barth and Schneider \cite[Theorem~1]{BS72} settle that interpolation problem. It does not itself provide the cofinite quantifier in \eqref{eq:cofinite}. MacLane's derivative universality theorem \cite{MacLane52} is another related density result.
 
-Hou \cite[Theorem~1.2]{Hou26} proves \eqref{eq:cofinite} by a bounded random Fock series, with a finite quadratic exponential growth bound. His public repository accompanies the paper with a Lean formalization; we have not rerun it. His introduction also records earlier probabilistic proposals by Almeida and Chojecki. Our purpose is an explicit sparse series and its local zero geometry. Neither the existence assertion nor order-two finite-type existence is claimed as a first result here.
+Hou \cite[Theorem~1.2]{Hou26} proves \eqref{eq:cofinite} by a bounded random Fock series, with a finite quadratic exponential growth bound. His public repository also contains a Lean formalization; I have not rerun it. His introduction records earlier probabilistic proposals by Almeida and Chojecki. I am interested here in a different feature: an explicit sparse series whose derivative zeros can be tracked rather precisely. I do not claim the existence statement, or order-two finite-type existence, as new.
 
 Fix $p\in[4/3,2)$ and set
 \begin{equation}\label{eq:series}
@@ -118,9 +118,9 @@ Consequently, on $\C\setminus\{0\}$, in the sense of integration against continu
 Zeros in the sum are repeated according to multiplicity.
 \end{theorem}
 
-The support in \eqref{eq:series} is not a Hadamard gap sequence: $\nu_{j+1}/\nu_j\to1$. The relevant scale is instead the gap relative to the differentiated saddle width. For $p>4/3$ it is
+The support in \eqref{eq:series} is not a Hadamard gap sequence: $\nu_{j+1}/\nu_j\to1$. For this construction the useful scale is instead the gap compared with the differentiated saddle width. For $p>4/3$ it is
 $n^{1/4}\ll q_j\ll n^{1/2}$ near $\nu_j=n+O(\sqrt n)$.
-Gethner's work on final sets \cite{Gethner85} and Offord's work on lacunary entire functions \cite{Offord93} provide earlier context. A final-set assertion formulated using infinitely many orders does not alone imply \eqref{eq:cofinite}. Offord's publisher abstract concerns angular zero distribution and growth away from small zero neighborhoods; a complete comparison with his full hypotheses remains outstanding. We make no priority claim for the sparse construction.
+Gethner's work on final sets \cite{Gethner85} and Offord's work on lacunary entire functions \cite{Offord93} provide earlier context. A final-set assertion formulated using infinitely many orders does not alone imply \eqref{eq:cofinite}. I have only been able to compare the present argument with Offord's publisher abstract, which concerns angular zero distribution and growth away from small zero neighborhoods; a full comparison with his hypotheses remains open. Accordingly I make no priority claim for the sparse construction.
 
 \section{Analytic preliminaries and the crossing radii}\label{sec:weights}
 \begin{lemma}\label{lem:gaps}
@@ -445,11 +445,11 @@ $\pi(b^2-a^2)\leq C\sqrt n\,\pi h_n(\Aab)^2$, giving the asserted lower bound.
 Finally, every nonempty open set contains a nonzero point $w$ and a disk $D(w,\varepsilon)$ contained in a fixed annulus. The upper bounds in Theorem~\ref{thm:main} tend to zero for every sufficiently large integer $n$. They place a derivative zero in that disk, proving \eqref{eq:cofinite} in both regimes. The subsequence in the critical proof is used to contradict failure of a uniform bound; the final assertion is not restricted to a subsequence.
 
 \subsection*{Further questions}
-For $p=3/2$, the sharp annular covering scale is $n^{-1/6}$; at $p=4/3$ it is $n^{-1/4}$. The latter proof supplies neither an explicit circular grid nor eventual simplicity or a limiting zero measure at the endpoint. These conclusions are not asserted. The range $1<p<4/3$ requires another analysis. A quantitative, effective version of Lemma~\ref{lem:gaussian} would also give explicit constants in the critical covering theorem.
+For $p=3/2$, the sharp annular covering scale is $n^{-1/6}$; at $p=4/3$ it is $n^{-1/4}$. The endpoint is the least explicit part of the argument: the proof gives neither a circular grid nor eventual simplicity or a limiting zero measure, and I do not claim any of these there. The range $1<p<4/3$ seems to require a different analysis. I would also like an effective version of Lemma~\ref{lem:gaussian}, since it would turn the compactness proof into explicit constants for the critical covering theorem.
 
 \subsection*{Source and assistance statement}
-An earlier supplied note contains the exponential construction
-$\sum_{k\geq1}\exp(-10k^2+k^{3/2}z)$; a second supplied note proposes the sparse construction for $p>4/3$. The present arguments develop that sparse construction and its endpoint. Language-model assistance was used in the derivations and manuscript preparation. No external peer review or machine verification of this manuscript is asserted.
+An earlier note contains the exponential construction
+$\sum_{k\geq1}\exp(-10k^2+k^{3/2}z)$; a later note introduced the sparse construction for $p>4/3$. I have kept the present paper focused on the sparse family and its endpoint. I used language-model tools during exploration, proof checking, and preparation of the manuscript. The mathematical claims should be judged from the arguments given here; I do not claim external peer review or a complete formal verification of the whole paper.
 
 \begin{thebibliography}{9}
 \bibitem{BS72} K.~F. Barth and W.~J. Schneider,

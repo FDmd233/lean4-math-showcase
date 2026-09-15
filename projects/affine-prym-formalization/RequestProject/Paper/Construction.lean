@@ -1,12 +1,9 @@
 /-
-# The Affine-Prym Construction (Section 2)
+# The Affine-Prym construction (Section 2)
 
-This file formalizes the affine-Prym construction (Section 2) from the paper
-"A Rank (2g−1) Affine-Prym Construction and Its Two-Block Optimality".
-
-The topological content (surface groups, mapping class groups, group
-cohomology) is parameterized abstractly. The Looijenga input (Section 3)
-is encoded in `Paper/ExternalInputs.lean`.
+This is the algebraic part of the construction.  Surface groups, mapping class
+groups, and group cohomology are parameterized abstractly; the Looijenga input
+is kept separately in `Paper/ExternalInputs.lean`.
 -/
 import Mathlib
 

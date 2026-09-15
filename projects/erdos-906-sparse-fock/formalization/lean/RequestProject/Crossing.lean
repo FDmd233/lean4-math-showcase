@@ -4,7 +4,7 @@ import RequestProject.Aux32
 # The crossing identities and the local curvature bounds
 
 At the crossing radius `ρ_j` the two adjacent principal terms of `F_{3/2}^{(n)}` have
-equal modulus; this file records that identity, the sparse-support gap structure, and
+equal modulus; the lemmas here record that identity, the sparse-support gap structure, and
 the two slope bounds coming from the discrete concavity of the logarithmic weights.
 -/
 

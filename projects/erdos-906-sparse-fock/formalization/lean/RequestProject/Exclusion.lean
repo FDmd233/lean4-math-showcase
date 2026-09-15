@@ -8,7 +8,7 @@ Proposition 3.3 of the manuscript.  Every zero of `F_{3/2}^{(n)}` in a fixed ann
 `a ≤ |z| ≤ b` lies, for all large `n`, in one of the model disks
 `D(z_{j,ℓ}, c ρ_j / q_j)` with `a/2 ≤ ρ_j ≤ 2b`.
 
-The proof follows the manuscript:
+I follow the manuscript's dichotomy:
 
 * choose the crossing index `j` with `ρ_j ≤ |z| < ρ_{j+1}`;
 * if `|z|` is within `c₀ / q_j` (logarithmically) of `ρ_j`, or within `c₀ / q_{j+1}` of

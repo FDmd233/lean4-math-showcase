@@ -8,7 +8,7 @@ Let `n` be the order of the derivative and let `m₀`, `m₀ + q` be two adjacen
 the active sparse support (`m = ν_j - n`).  At the crossing radius `ρ` the two
 corresponding terms of `F_p^{(n)}` have equal modulus, i.e. `Phi n ρ (m₀+q) = Phi n ρ m₀`.
 
-This file proves that, on the whole circle of radius `ρ e^σ` for `|σ|` small, the sum of
+For the whole circle of radius `ρ e^σ` with `|σ|` small, the lemmas below show that the sum of
 *all* remaining terms — both the full left tail and the full right tail — is bounded by
 an explicitly small multiple of the modulus of the principal term.
 -/

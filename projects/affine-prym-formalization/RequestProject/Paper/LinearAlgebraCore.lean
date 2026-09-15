@@ -1,11 +1,8 @@
 /-
-# Proved Linear-Algebraic Core
+# Proved linear-algebraic core
 
-This file contains the fully proved linear-algebraic lemmas that form
-the backbone of the optimality argument in the paper
-"A Rank (2g−1) Affine-Prym Construction and Its Two-Block Optimality".
-
-Every declaration in this file is proved without `sorry`.
+The lemmas below are the part of the optimality argument proved entirely in
+this project.  No declaration in this file uses `sorry`.
 -/
 import Mathlib
 import RequestProject.Paper.Defs

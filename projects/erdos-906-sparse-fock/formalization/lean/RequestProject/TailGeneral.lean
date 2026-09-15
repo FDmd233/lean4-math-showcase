@@ -8,7 +8,7 @@ points, at a radius close to the crossing radius of that pair.  For the exclusio
 additional zeros one needs the same estimate outside a *block* `[m₀, m₀+q]` of arbitrary
 length, at an arbitrary radius `r` at which the two block slopes are `≥ c` and `≤ -c`.
 
-That is what this file proves.  The statement is used twice below: with the block
+The statement below gives exactly that estimate and is used twice: with the block
 `[m_j, m_{j+1}]` in the transition regime, and with the block `[m_j, m_{j+2}]` in the
 one-term-dominant regime.
 -/

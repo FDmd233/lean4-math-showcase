@@ -4,7 +4,7 @@ import RequestProject.Curvature
 # Consequences of the discrete concavity of the logarithmic weights
 
 The logarithmic weight `Phi n r m = ½ log ((n+m)!) - log (m!) + m log r` is strictly
-concave in `m` (`dstep_sub_dstep_succ_pos`).  This file turns that concavity, together
+concave in `m` (`dstep_sub_dstep_succ_pos`).  The next lemmas turn that concavity, together
 with the quantitative curvature bound of `Curvature.lean`, into the *decay* statements
 used for the tail estimate of Section 3 of the paper:
 

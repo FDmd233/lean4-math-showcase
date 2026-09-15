@@ -4,7 +4,7 @@ import RequestProject.Curvature
 /-!
 # The crossing radii `ρ_j`
 
-This file formalises the algebraic part of Lemma 2.4 (radial grid) of the paper
+Here I formalise the algebraic part of Lemma 2.4 (radial grid) of the paper
 *Zeros of high derivatives of sparse Fock series*: the exact formula (2.11) for
 `log ρ_j`, the squeeze (2.14) and the strict monotonicity of the crossing radii.
 

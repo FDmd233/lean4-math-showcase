@@ -3,7 +3,7 @@ import Mathlib
 /-!
 # Discrete curvature of the logarithmic weights
 
-This file formalises Lemma 2.3 (discrete curvature) and the elementary factorial
+This module records Lemma 2.3 (discrete curvature) and the elementary factorial
 bounds (2.7) of the paper *Zeros of high derivatives of sparse Fock series*.
 
 For `n : ℕ`, `r : ℝ` and `m : ℕ` (so `m = k - n` in the notation of the paper),

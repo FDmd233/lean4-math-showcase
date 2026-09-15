@@ -3,7 +3,7 @@ import RequestProject.Crossing
 /-!
 # The lower bound for the radial spacing of the crossing circles
 
-This file proves the missing half of equation (2.16) of the manuscript,
+The missing half of equation (2.16) of the manuscript is proved here,
 
 `log ρ_{j+1} - log ρ_j ≥ κ (q_j + q_{j+1}) / 2`,
 

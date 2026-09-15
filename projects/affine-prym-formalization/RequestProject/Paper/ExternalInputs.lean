@@ -1,12 +1,9 @@
 /-
-# External Inputs and Named Assumptions
+# External inputs and named assumptions
 
-This file collects the external results and named assumptions used in the
-paper "A Rank (2g−1) Affine-Prym Construction and Its Two-Block Optimality"
-that are NOT proved in this formalization.
-
-Each assumption is documented with its origin, mathematical content, and
-role in the proof chain.
+These are the results used by the Affine-Prym argument but not proved in this
+Lean project.  I state each input separately so that its source and its exact
+role in the theorem chain remain visible.
 -/
 import Mathlib
 import RequestProject.Paper.Defs

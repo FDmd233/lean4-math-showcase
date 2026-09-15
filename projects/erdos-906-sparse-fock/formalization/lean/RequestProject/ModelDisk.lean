@@ -6,7 +6,7 @@ import RequestProject.ZeroCount32
 /-!
 # Model disks and the exact local zero count for `p = 3/2`
 
-This file introduces the model data of the manuscript,
+The model data used in the manuscript are introduced here,
 
 `z_{j,ℓ} = ρ_j exp((2ℓ+1)π i / q_j)`,  `D(z_{j,ℓ}, c ρ_j / q_j)`,
 

@@ -3,7 +3,7 @@ import RequestProject.Exclusion
 /-!
 # Every annular zero lies in a model disk (`p = 3/2`)
 
-This file assembles the two halves of the exclusion argument
+The lemmas below assemble the two halves of the exclusion argument
 (`transition_zero_p32` and `no_zero_dominant_p32`) into the statement of
 Proposition 3.3 of the manuscript:
 

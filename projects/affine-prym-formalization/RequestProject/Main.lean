@@ -1,8 +1,8 @@
 /-
 # A Rank (2g−1) Affine-Prym Construction and Its Two-Block Optimality
 
-Formalization of the linear-algebraic dependency skeleton from the paper
-in Lean 4 / Mathlib.
+Entry point for the linear-algebraic part of the paper.  The files below keep
+the proved core separate from the named external inputs.
 
 ## File organization
 

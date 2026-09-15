@@ -6,7 +6,7 @@ import RequestProject.IndexSelect
 /-!
 # The annular covering theorem for `p = 3/2`
 
-This file combines the tail domination (`Tail.lean`), the two-term localisation
+The covering proof combines the tail domination (`Tail.lean`) with the two-term localisation
 (`TwoTerm.lean`) and the arithmetic of the support `ν_j = ⌊j^{3/2}⌋` into the
 quantitative annular covering statement: on every compact annulus
 `{a ≤ |z| ≤ b}` with `0 < a ≤ b`, the zero set of `F_{3/2}^{(n)}` becomes

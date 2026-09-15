@@ -1,9 +1,8 @@
 /-
-# Conditional Main Theorems
+# Conditional main theorems
 
-This file contains the main theorems of the paper
-"A Rank (2g−1) Affine-Prym Construction and Its Two-Block Optimality",
-proved conditional on named external inputs (Looijenga, Westwick).
+The theorem chain below makes the remaining Looijenga and Westwick inputs
+explicit and then derives the rank inequality from the proved linear algebra.
 
 The dependency chain is:
   1. Finite K-orbit → finite-index stabilizer H₀ (hypothesis)

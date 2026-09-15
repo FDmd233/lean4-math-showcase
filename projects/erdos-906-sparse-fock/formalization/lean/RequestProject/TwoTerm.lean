@@ -11,7 +11,7 @@ modulus, and the two-term model
 
 has the `q` nonzero zeros `z = ρ e^{iθ}` with `(e^{iθ})^q = -1`.
 
-This file shows that, under the global tail domination of `Tail.lean`, the *true*
+Under the global tail domination of `Tail.lean`, the argument below shows that the *true*
 derivative `F_p^{(n)}` has a zero within distance `2 ρ c₀ / q` of each such model zero.
 The complex-analytic input is the minimum-modulus principle of `MinModulus.lean`,
 applied in the logarithmic variable `w`, i.e. to `w ↦ F_p^{(n)}(ρ e^{iθ} e^{w})`.

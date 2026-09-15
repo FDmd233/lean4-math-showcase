@@ -3,7 +3,7 @@ import Mathlib
 /-!
 # The Fock majorant `∑ r^k / √(k!)`
 
-This file proves the Cauchy–Schwarz bound (2.6) of the paper
+The Cauchy–Schwarz estimate (2.6) of the paper is proved here
 *Zeros of high derivatives of sparse Fock series*:
 for every `ε > 0`,
 `∑_{k≥0} r^k/√(k!) ≤ √((1+ε)/ε) exp((1+ε) r² / 2)`,

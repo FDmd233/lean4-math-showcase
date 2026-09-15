@@ -3,7 +3,7 @@ import Mathlib
 /-!
 # The majorant `S_n(r)` used for the zero-count upper bound
 
-This file formalises the estimates (5.1) and (5.2) of the paper
+The estimates (5.1) and (5.2) of the paper are formalised here
 *Zeros of high derivatives of sparse Fock series*:
 for `S_n(r) = ∑_{m ≥ 0} √((n+m)!)/m! · r^m` one has, for `0 < t < 1`,
 `S_n(r) ≤ √(n!) (1-t)^{-(n+1)/2} exp(r²/(2t))`,

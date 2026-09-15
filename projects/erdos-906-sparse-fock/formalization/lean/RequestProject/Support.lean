@@ -3,7 +3,7 @@ import Mathlib
 /-!
 # The sparse support `ν_j = ⌊j^p⌋` and its gaps
 
-This file develops the elementary part of Lemma 2.1 of the paper
+The elementary part of Lemma 2.1 of the paper is developed here
 *Zeros of high derivatives of sparse Fock series*: the exponents `ν_j = ⌊j ^ p⌋`
 are strictly increasing (for `p ≥ 1`, `j ≥ 1`) and the gaps
 `q_j = ν_{j+1} - ν_j` satisfy `p j^{p-1} - 1 ≤ q_j ≤ p (j+1)^{p-1} + 1`.

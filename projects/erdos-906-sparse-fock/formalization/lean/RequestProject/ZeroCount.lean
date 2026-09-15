@@ -3,7 +3,7 @@ import Mathlib
 /-!
 # Uniqueness and simplicity of the zero of a dominant two-term model
 
-This file contains the complex-analytic input that upgrades the *existence* statement of
+The complex-analytic argument below upgrades the *existence* statement of
 `TwoTerm.lean` (a zero of `f` near a model zero) to an exact local zero **count**.
 
 The situation is the one of Proposition 3.2 ("Rouché transfer") of the manuscript.  Near a

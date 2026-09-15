@@ -1,59 +1,42 @@
-# Erdős Problem 906: sparse Fock construction
+# Erdős Problem 906 - sparse Fock series
 
-This directory contains the public research version of **Zhijie He's** work on an explicit deterministic construction for the cofinite formulation of Erdős Problem #906.
-
-The central family is
+This directory is the public version of my work on an explicit deterministic construction for the cofinite form of Erdős Problem #906. The family is
 
 \[
 F_p(z)=\sum_{j\ge 1}\frac{z^{\lfloor j^p\rfloor}}{\sqrt{\lfloor j^p\rfloor!}},
 \qquad \frac43\le p<2.
 \]
 
-The manuscript proves that these functions are transcendental entire functions of order 2 and type \(1/2\), and that every nonempty open set contains a zero of every sufficiently high derivative. For \(p>4/3\), it also studies the complete zero geometry on fixed annuli, including localization near explicit circular grids, sharp covering scales, eventual simplicity away from the origin, counting asymptotics, and a limiting zero measure. The endpoint \(p=4/3\) is treated separately by a compactness argument for bilateral Gaussian series.
+What I find most useful about the construction is not the existence statement by itself, but the fact that the derivative zeros can be followed rather explicitly. For `p>4/3` the paper obtains annular zero localization near circular grids, sharp covering scales, eventual simplicity away from the origin, counting asymptotics, and a limiting zero measure. The endpoint `p=4/3` is less explicit and is handled by a compactness argument.
 
 ## Files
 
-- [`paper/paper_en.pdf`](paper/paper_en.pdf): compiled English research manuscript.
-- [`paper/paper_en.tex`](paper/paper_en.tex): manuscript source.
-- [`paper/PRIORITY_AND_SCOPE.md`](paper/PRIORITY_AND_SCOPE.md): publication/priority boundary and comparison with earlier work.
-- [`formalization/formalization_map.md`](formalization/formalization_map.md): theorem-by-theorem proof dependency map.
-- [`formalization/FORMALIZATION_STATUS.md`](formalization/FORMALIZATION_STATUS.md): independent static audit/status note.
-- [`formalization/lean/`](formalization/lean/): full Aristotle Round 4 Lean 4 / Mathlib source tree for the \(p=3/2\) formalization.
+- [`paper/paper_en.pdf`](paper/paper_en.pdf) - compiled English manuscript.
+- [`paper/paper_en.tex`](paper/paper_en.tex) - manuscript source.
+- [`paper/PRIORITY_AND_SCOPE.md`](paper/PRIORITY_AND_SCOPE.md) - what is and is not being claimed about priority.
+- [`formalization/formalization_map.md`](formalization/formalization_map.md) - proof-to-Lean dependency map.
+- [`formalization/FORMALIZATION_STATUS.md`](formalization/FORMALIZATION_STATUS.md) - current formalization boundary.
+- [`formalization/lean/`](formalization/lean/) - the published `p=3/2` Lean 4 / Mathlib source.
 
-The undergraduate thesis and thesis-specific Chinese exposition are intentionally **not** included in this public directory.
+The Chinese undergraduate thesis and defense material are intentionally not part of this public directory.
 
-## Status and priority
+## Scope and priority
 
-This repository does **not** claim the first solution of Erdős Problem #906. Earlier probabilistic constructions exist, including Eric Hou's work. The intended contribution here is the explicit deterministic sparse-Fock construction and the additional quantitative zero geometry.
+I do **not** claim the first solution of Erdős #906. Earlier probabilistic constructions exist, including Eric Hou's work. My narrower claim is that the paper gives an explicit deterministic sparse-Fock construction and develops additional quantitative zero geometry. I also avoid a historical-priority claim for the sparse construction until the older lacunary-entire-function literature has been checked more completely.
 
-## Formalization
+## Lean formalization
 
-For the concrete case \(p=3/2\), the published Round 4 source contains 35 `.lean` files and 6727 lines under `RequestProject/`. Its main entry point is [`formalization/lean/RequestProject/Main.lean`](formalization/lean/RequestProject/Main.lean). It records theorem statements including:
+The `p=3/2` source contains 35 `.lean` files and 6727 lines under `RequestProject/`. The main entry point is [`formalization/lean/RequestProject/Main.lean`](formalization/lean/RequestProject/Main.lean), which prints the axiom dependencies of the principal theorems.
 
-- `erdos906_sparse_fock_p32`
-- `annular_covering_rate_p32`
-- `model_disk_zero_count_one_p32`
-- `annular_zero_exclusion_p32`
-- `annular_zeros_simple_p32`
-- `annular_zeros_simple_deriv_p32`
-- `model_disks_pairwise_disjoint_p32`
-- `zero_count_model_disk_union_p32`
+The formalized layer includes the cofinite theorem, the `n^{-1/6}` annular covering rate, unique simple zeros in admissible model disks, exclusion of extra annular zeros, eventual annular simplicity, disjointness of the model disks, and exact distinct-zero counts on finite unions of such disks. The general `4/3<p<2` structural theorem, the `p=4/3` compactness argument, the sector asymptotic, limiting zero measure, and the exact lower growth estimate are still manuscript-only.
 
-The source uses Lean/mathlib `v4.28.0`. From the Lean project directory, the intended build command is:
+The project uses Lean/mathlib `v4.28.0`. From the Lean directory:
 
 ```bash
 cd projects/erdos-906-sparse-fock/formalization/lean
 lake build RequestProject.Main
 ```
 
-The supplied Aristotle report records a clean build. During publication, the source archive was independently checked against its SHA-256 digest, and the imported tree was checked for the expected 35 Lean files / 6727 lines and for the absence of `sorry`, `admit`, custom `axiom`, `unsafe`, `native_decide`, and `@[implemented_by]` in `RequestProject/`. That publication import did **not** independently rerun Lake, so the distinction between the supplied build report and the publication-time static integrity check is intentional.
+## AI assistance
 
-The general \(4/3<p<2\) structural theorem, the critical \(p=4/3\) analysis, the sector-count asymptotic, limiting zero measure, and the exact order/type lower bound are manuscript results and are not claimed to be fully Lean-formalized here.
-
-## AI assistance disclosure
-
-Language-model tools were used substantially during derivation, checking, exposition, and formalization. The manuscript separates mathematical claims from priority claims, and the formalization status file distinguishes machine-checked portions from manuscript-only results.
-
-## Citation / discussion
-
-This material is intended for mathematical review, including discussion on the Erdős Problems website. In particular, feedback on the global tail-domination/Rouché argument and on possible overlap with older lacunary-entire-function literature is welcome.
+I used language-model tools substantially during exploration, proof checking, exposition, and formalization; the first Lean formalization pass also used Aristotle. I keep this disclosure explicit, but I do not treat tool output as evidence of correctness. The mathematical claims are meant to stand or fall with the written proofs, the Lean source where available, and independent checking.
