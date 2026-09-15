@@ -13,11 +13,12 @@ The manuscript proves that these functions are transcendental entire functions o
 
 ## Files
 
-- [`paper/paper_en.tex`](paper/paper_en.tex): English research manuscript source.
-- `paper/paper_en.pdf`: compiled manuscript when available from the repository build workflow.
+- [`paper/paper_en.pdf`](paper/paper_en.pdf): compiled English research manuscript.
+- [`paper/paper_en.tex`](paper/paper_en.tex): manuscript source.
 - [`paper/PRIORITY_AND_SCOPE.md`](paper/PRIORITY_AND_SCOPE.md): publication/priority boundary and comparison with earlier work.
-- [`formalization/formalization_map.md`](formalization/formalization_map.md): theorem-by-theorem proof dependency map.
-- [`formalization/FORMALIZATION_STATUS.md`](formalization/FORMALIZATION_STATUS.md): current status of the Aristotle/Lean development.
+- [`formalization/formormalization_map.md`](formalization/formalization_map.md): theorem-by-theorem proof dependency map.
+- [`formalization/FORMALIZATION_STATUS.md`](formalization/FORMALIZATION_STATUS.md): independent static audit/status note.
+- [`formalization/lean/`](formalization/lean/): full Aristotle Round 4 Lean 4 / Mathlib source tree for the \(p=3/2\) formalization.
 
 The undergraduate thesis and thesis-specific Chinese exposition are intentionally **not** included in this public directory.
 
@@ -27,7 +28,7 @@ This repository does **not** claim the first solution of Erdős Problem #906. Ea
 
 ## Formalization
 
-For the concrete case \(p=3/2\), an Aristotle-generated Lean 4 / Mathlib development has reached the cofinite #906 conclusion and substantial annular zero-structure statements. The latest static audit reports no `sorry`, `admit`, custom `axiom`, `unsafe`, `native_decide`, or `@[implemented_by]` in the supplied project, and records theorem statements including:
+For the concrete case \(p=3/2\), the published Round 4 source contains 35 `.lean` files and 6727 lines under `RequestProject/`. Its main entry point is [`formalization/lean/RequestProject/Main.lean`](formalization/lean/RequestProject/Main.lean). It records theorem statements including:
 
 - `erdos906_sparse_fock_p32`
 - `annular_covering_rate_p32`
@@ -38,7 +39,16 @@ For the concrete case \(p=3/2\), an Aristotle-generated Lean 4 / Mathlib develop
 - `model_disks_pairwise_disjoint_p32`
 - `zero_count_model_disk_union_p32`
 
-The full Lean source archive is not yet present in this GitHub directory because the current ChatGPT GitHub connector could not export the original Project-file archive bytes. The status document records exactly what was audited; the source tree should be added verbatim from the latest Aristotle Round 4 archive rather than reconstructed or replaced by placeholders.
+The source uses Lean/mathlib `v4.28.0`. From the Lean project directory, the intended build command is:
+
+```bash
+cd projects/erdos-906-sparse-fock/formalization/lean
+lake build RequestProject.Main
+```
+
+The supplied Aristotle report records a clean build. During publication, the source archive was independently checked against its SHA-256 digest, and the imported tree was checked for the expected 35 Lean files / 6727 lines and for the absence of `sorry`, `admit`, custom `axiom`, `unsafe`, `native_decide`, and `@[implemented_by]` in `RequestProject/`. That publication import did **not** independently rerun Lake, so the distinction between the supplied build report and the publication-time static integrity check is intentional.
+
+The general \(4/3<p<2\) structural theorem, the critical \(p=4/3\) analysis, the sector-count asymptotic, limiting zero measure, and the exact order/type lower bound are manuscript results and are not claimed to be fully Lean-formalized here.
 
 ## AI assistance disclosure
 
