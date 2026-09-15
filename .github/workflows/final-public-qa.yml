@@ -27,7 +27,7 @@ jobs:
         run: |
           pdftotext projects/affine-prym-formalization/paper.pdf /tmp/affine-paper.txt
           PATTERN=$(printf '%s' 'QXJpc3RvdGxlfENoYXRHUFR8R1BUWy0gXT9bMC05XSp8bGFuZ3VhZ2VbLSBdbW9kZWx8TExNfEFJIGFzc2lzdGFuY2V8YXJ0aWZpY2lhbCBpbnRlbGxpZ2VuY2U=' | base64 -d)
-          echo 'Potential provenance terms in Affine-Prym PDF:'
+          echo 'Potential provenance terms in Affine-Prym paper PDF:'
           grep -niE "$PATTERN" /tmp/affine-paper.txt || true
 
       - name: Compile Erdős 906 paper
@@ -40,8 +40,9 @@ jobs:
       - name: Check rebuilt paper text
         run: |
           pdftotext projects/erdos-906-sparse-fock/paper/paper_en.pdf /tmp/erdos906-paper.txt
-          grep -F 'I used language-model tools during exploration' /tmp/erdos906-paper.txt
-          if grep -F 'Language-model assistance was used in the derivations' /tmp/erdos906-paper.txt; then
+          echo 'Current assistance disclosure in Erdős 906 PDF:'
+          grep -ni -A2 -B2 'language-model' /tmp/erdos906-paper.txt
+          if grep -Fi 'Language-model assistance was used' /tmp/erdos906-paper.txt; then
             echo 'Old assistance wording remains in rebuilt PDF' >&2
             exit 1
           fi
