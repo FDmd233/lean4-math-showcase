@@ -33,3 +33,7 @@ The main literature risks are still Offord's full hypotheses, older derivative-z
 ## Comparison with Hou
 
 Both constructions give cofinite zero-hitting with order-two finite-type growth. Hou's construction is probabilistic and comes with a public formalization. The present construction specifies its sparse coefficients directly and obtains a detailed annular localization picture. I do not use the numerical type constant as a superiority claim, since rescaling changes it.
+
+## AI assistance
+
+Language-model tools were used substantially during derivation, checking, exposition, and formalization. The GitHub project and any Erdős Problems post should disclose this explicitly.
