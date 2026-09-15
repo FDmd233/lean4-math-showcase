@@ -1,6 +1,6 @@
 # Formalization notes
 
-This note records the current mathematical boundary of the Affine-Prym Lean project. It replaces the older run-by-run summary, which was useful during development but was too tied to the history of individual tool runs.
+This note records the current mathematical boundary of the Affine-Prym Lean project and its remaining external inputs.
 
 ## Build and axiom audit
 

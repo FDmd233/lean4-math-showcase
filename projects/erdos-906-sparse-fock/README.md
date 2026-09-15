@@ -1,6 +1,6 @@
 # Erdős Problem 906 - sparse Fock series
 
-This directory is the public version of my work on an explicit deterministic construction for the cofinite form of Erdős Problem #906. The family is
+This project develops an explicit deterministic construction for the cofinite form of Erdős Problem #906. The family is
 
 \[
 F_p(z)=\sum_{j\ge 1}\frac{z^{\lfloor j^p\rfloor}}{\sqrt{\lfloor j^p\rfloor!}},
@@ -18,7 +18,6 @@ What I find most useful about the construction is not the existence statement by
 - [`formalization/FORMALIZATION_STATUS.md`](formalization/FORMALIZATION_STATUS.md) - current formalization boundary.
 - [`formalization/lean/`](formalization/lean/) - the published `p=3/2` Lean 4 / Mathlib source.
 
-The Chinese undergraduate thesis and defense material are intentionally not part of this public directory.
 
 ## Scope and priority
 
@@ -37,6 +36,6 @@ cd projects/erdos-906-sparse-fock/formalization/lean
 lake build RequestProject.Main
 ```
 
-## AI assistance
+## Assistance
 
-I used language-model tools substantially during exploration, proof checking, exposition, and formalization; the first Lean formalization pass also used Aristotle. I keep this disclosure explicit, but I do not treat tool output as evidence of correctness. The mathematical claims are meant to stand or fall with the written proofs, the Lean source where available, and independent checking.
+AI-assisted tools were used during exploration, proof checking, exposition, and formalization. The mathematical claims rest on the written proofs, the Lean source where available, and independent checking.

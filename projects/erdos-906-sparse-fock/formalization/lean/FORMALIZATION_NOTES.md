@@ -1,6 +1,6 @@
 # Lean notes for the `p=3/2` development
 
-The main point of this note is to record what the current source proves, without preserving the run-by-run history of the formalization process.
+This note records what the current source proves and where the formalization boundary lies.
 
 ## Core theorem
 
