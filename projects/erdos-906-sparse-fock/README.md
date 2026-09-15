@@ -16,7 +16,7 @@ The manuscript proves that these functions are transcendental entire functions o
 - [`paper/paper_en.pdf`](paper/paper_en.pdf): compiled English research manuscript.
 - [`paper/paper_en.tex`](paper/paper_en.tex): manuscript source.
 - [`paper/PRIORITY_AND_SCOPE.md`](paper/PRIORITY_AND_SCOPE.md): publication/priority boundary and comparison with earlier work.
-- [`formalization/formormalization_map.md`](formalization/formalization_map.md): theorem-by-theorem proof dependency map.
+- [`formalization/formalization_map.md`](formalization/formalization_map.md): theorem-by-theorem proof dependency map.
 - [`formalization/FORMALIZATION_STATUS.md`](formalization/FORMALIZATION_STATUS.md): independent static audit/status note.
 - [`formalization/lean/`](formalization/lean/): full Aristotle Round 4 Lean 4 / Mathlib source tree for the \(p=3/2\) formalization.
 
