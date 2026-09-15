@@ -36,6 +36,6 @@ cd projects/erdos-906-sparse-fock/formalization/lean
 lake build RequestProject.Main
 ```
 
-## Assistance
+## AI assistance disclosure
 
-AI-assisted tools were used during exploration, proof checking, exposition, and formalization. The mathematical claims rest on the written proofs, the Lean source where available, and independent checking.
+Language-model tools were used substantially during derivation, checking, exposition, and formalization. The manuscript separates mathematical claims from priority claims, and the formalization status file distinguishes machine-checked portions from manuscript-only results.
