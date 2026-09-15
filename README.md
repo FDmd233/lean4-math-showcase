@@ -2,10 +2,11 @@
 
 这里放一些用 Lean 4 / mathlib 整理的数学证明示例。目标很简单：每个文件尽量独立，打开后能看出数学内容，也能用 `lake build` 直接检查。
 
-目前仓库分成两部分：
+目前仓库分成三部分：
 
 - 顶层 `Lean4MathShowcase`：三个偏初等分析和不等式的 Lean 证明示例。
 - `projects/affine-prym-aristotle`：Affine-Prym 论文相关的独立形式化项目。它使用不同的 Lean/mathlib 版本，所以单独保留为一个 Lake project。
+- `projects/erdos-906-sparse-fock`：Erdős Problem #906 的显式稀疏 Fock 构造、英文研究稿、文献/优先权边界，以及当前 Aristotle/Lean 形式化状态。
 
 ## Contents
 
@@ -37,6 +38,14 @@ import Lean4MathShowcase
 
 因为该子项目使用 Lean/mathlib `v4.28.0`，而顶层 showcase 使用另一套版本，所以请从子项目目录单独构建。
 
+### Erdős Problem #906 sparse-Fock project
+
+项目入口在 [`projects/erdos-906-sparse-fock`](projects/erdos-906-sparse-fock)。公开内容包括英文研究稿源码、优先权与文献边界、证明形式化依赖图和最新 Aristotle Round 4 的形式化状态说明。
+
+该项目**不主张首次解决** Erdős #906；重点是显式确定性稀疏 Fock 构造以及额外的高阶导数零点几何。中文本科毕业论文与答辩材料没有放入公开目录。
+
+目前最新 Aristotle Round 4 的原始 Lean archive 仍保存在项目资料中，但 ChatGPT 当前 GitHub 连接器无法导出该 Project-file 的原始字节，因此仓库中的状态文档明确区分“已审计的形式化结果”和“尚未同步到 GitHub 的 Lean 源码”，没有用占位代码冒充形式化工程。
+
 ## Build
 
 顶层项目：
@@ -63,7 +72,8 @@ lake build RequestProject.Main
 │  ├─ LogExtrema.lean
 │  └─ RootFunctionBounds.lean
 ├─ projects/
-│  └─ affine-prym-aristotle/
+│  ├─ affine-prym-aristotle/
+│  └─ erdos-906-sparse-fock/
 ├─ lakefile.lean
 ├─ lean-toolchain
 └─ README.md
