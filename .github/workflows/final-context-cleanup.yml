@@ -1,0 +1,86 @@
+name: Final context cleanup
+
+on:
+  push:
+    paths:
+      - '.github/workflows/final-context-cleanup.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Clean project-context prose
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          def edit(path, replacements):
+              p = Path(path)
+              s = p.read_text(encoding='utf-8')
+              old = s
+              for a,b in replacements:
+                  s = s.replace(a,b)
+              if s == old:
+                  print('no change:', path)
+              p.write_text(s, encoding='utf-8')
+
+          edit('projects/erdos-906-sparse-fock/README.md', [
+            ('This directory is the public version of my work on an explicit deterministic construction for the cofinite form of Erdős Problem #906.',
+             'This project develops an explicit deterministic construction for the cofinite form of Erdős Problem #906.'),
+            ('\nThe Chinese undergraduate thesis and defense material are intentionally not part of this public directory.\n','\n'),
+            ('## AI assistance\n\nI used language-model tools substantially during exploration, proof checking, exposition, and formalization; the first Lean formalization pass also used Aristotle. I keep this disclosure explicit, but I do not treat tool output as evidence of correctness. The mathematical claims are meant to stand or fall with the written proofs, the Lean source where available, and independent checking.',
+             '## Assistance\n\nAI-assisted tools were used during exploration, proof checking, exposition, and formalization. The mathematical claims rest on the written proofs, the Lean source where available, and independent checking.')
+          ])
+          edit('projects/affine-prym-formalization/README.md', [
+            ('## Provenance\n\nLanguage-model tools were used in the development of this formalization, and the first formalization pass used Aristotle. I keep that disclosure here for provenance; the mathematical status is determined by the source, the explicit external assumptions, and the axiom/build audit above.',
+             '## Assistance\n\nAI-assisted tools were used during development of the formalization. Its mathematical status is determined by the source, the explicit external assumptions, and the axiom/build audit above.')
+          ])
+          edit('projects/affine-prym-formalization/FORMALIZATION_NOTES.md', [
+            ('This note replaces the older run-by-run summary.  It records the mathematical boundary of the checked source rather than the history of individual tool runs.',
+             'This note records the mathematical boundary of the checked source and its remaining external inputs.')
+          ])
+          edit('projects/erdos-906-sparse-fock/formalization/lean/FORMALIZATION_NOTES.md', [
+            ('This file records the mathematical status of the Lean source without preserving run-by-run history.',
+             'This file records the mathematical status and dependency boundary of the Lean source.')
+          ])
+          edit('projects/erdos-906-sparse-fock/paper/paper_en.tex', [
+            ('I used language-model tools during exploration, proof checking, and preparation of the manuscript. The mathematical claims should be judged from the arguments given here; I do not claim external peer review or a complete formal verification of the whole paper.',
+             'AI-assisted tools were used during exploration, proof checking, and manuscript preparation. The mathematical claims rest on the arguments given here; no external peer review or complete formal verification of the entire paper is claimed.')
+          ])
+          PY
+      - name: Compile Erdős 906 manuscript
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: paper_en.tex
+          working_directory: projects/erdos-906-sparse-fock/paper
+          texlive_version: 2026
+      - name: Audit current tree and rebuilt PDF
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ripgrep poppler-utils
+          PATTERN='OpenAI|ChatGPT|GPT[- ]?[0-9]|Claude|Astra|Aristotle|undergraduate|thesis|defense|本科|毕业论文|答辩|public version|public directory|private version|internal version|our conversation|this conversation|chat history|run-by-run|materiali[sz]ation|first pass'
+          if rg -n -i -P --hidden --glob '!*.pdf' --glob '!final-context-cleanup.yml' --glob '!conversation-trace-audit.yml' "$PATTERN" .; then
+            echo 'Forbidden project-context wording remains' >&2
+            exit 1
+          fi
+          pdftotext projects/erdos-906-sparse-fock/paper/paper_en.pdf /tmp/paper.txt
+          if rg -n -i -P "$PATTERN" /tmp/paper.txt; then
+            echo 'Forbidden wording remains in rebuilt PDF' >&2
+            exit 1
+          fi
+          grep -F 'AI-assisted tools were used' /tmp/paper.txt
+      - name: Commit cleanup
+        run: |
+          rm -f .github/workflows/conversation-trace-audit.yml .github/workflows/final-context-cleanup.yml
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Remove private project-context wording'
+          git push
