@@ -37,3 +37,4 @@ import RequestProject.ZeroCountUnion
 #print axioms SparseFock.annular_zeros_simple_deriv_p32
 #print axioms SparseFock.model_disks_pairwise_disjoint_p32
 #print axioms SparseFock.zero_count_model_disk_union_p32
+#print axioms SparseFock.origin_multiplicity
