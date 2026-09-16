@@ -32,20 +32,36 @@ The Lean definitions `nu`, `qgap`, `F`, `mOf`, `rho`, `modelCenter`, `modelRadiu
 | Corollary 1.5: eventual annular simplicity | `annular_zeros_simple_deriv_p32` | `Simplicity.lean` |
 | Proposition 1.6: pairwise disjoint model disks | `model_disks_pairwise_disjoint_p32` | `Disjoint.lean` |
 | Proposition 1.7: finite model-disk zero count | `zero_count_model_disk_union_p32` | `ZeroCountUnion.lean` |
+| Remark 4.1: multiplicity at the origin | `origin_multiplicity` | `Fock.lean` |
+
+## Printed intermediate estimates
+
+The submission also uses displayed intermediate estimates whose formal counterparts lie inside the same dependency chain:
+
+- support and gap arithmetic: `Aux32.lean`, `Support.lean`;
+- discrete curvature of the full logarithmic weight: `Curvature.lean`, `Concavity.lean`;
+- crossing identities and endpoint slope bounds: `Radii.lean`, `Crossing.lean`;
+- radial location and spacing estimates: `RadialBounds.lean`, `Spacing.lean` (imported through the covering/disjointness chain);
+- the exact tail estimate printed as equation (3.2): `tail_sum_bound` in `Tail.lean`;
+- minimum-modulus existence near each model zero: `exists_zero_of_dominant_two_term` and its sparse specialization in `TwoTerm.lean`;
+- uniqueness and simplicity from Cauchy control of the normalized error: `unique_zero_of_two_term` and `unique_zero_near_model` in `ZeroCount.lean` / `ZeroCount32.lean`;
+- transition capture and one-term exclusion: `transition_zero_p32`, `no_zero_dominant_p32`, and `annular_zero_exclusion_p32` in `Exclusion.lean` / `Annulus.lean`.
+
+The important point for the printed proof is that the tail estimate includes the polynomial left-tail factor. The paper no longer replaces it by a stronger geometric-series bound. The formal numerical lemmas absorb that factor using the exponential `exp(-c n^(1/6))` decay available for `p = 3/2`.
 
 ## Proof dependency map
 
 The mathematical proof and the Lean development use the same structural chain:
 
 1. **Support arithmetic.** `Aux32.lean`, `Support.lean` establish explicit upper and lower bounds for `q_j` and the `j^(3/2)` support.
-2. **Entire series and derivatives.** `Fock.lean` establishes the analytic object, its derivatives, transcendence, and the upper growth estimate.
+2. **Entire series and derivatives.** `Fock.lean` establishes the analytic object, its derivatives, transcendence, upper growth, and the origin multiplicity statement.
 3. **Discrete curvature.** `Curvature.lean`, `Concavity.lean` control the decreasing full-weight slope.
 4. **Crossing radii.** `Radii.lean`, `Crossing.lean`, `RadialBounds.lean` locate and separate the radii at which adjacent sparse terms have equal modulus.
-5. **Tail domination.** `Tail.lean` uses curvature plus support gaps to control all terms outside the principal pair.
-6. **Two-term localization.** `TwoTerm.lean`, `ModelDisk.lean`, `ZeroCount.lean`, and `ZeroCount32.lean` transfer the two-term geometry to the true derivative. The printed proof follows the same direct mechanism as the Lean development: existence from a minimum-modulus argument in the logarithmic coordinate, then uniqueness and simplicity from a Cauchy derivative estimate for the normalized error and a quantitative lower bound for the two-term model.
-7. **Exhaustion.** `Dominant.lean`, `Exclusion.lean`, `Annulus.lean` show that outside transition regions one term dominates and hence no zero occurs; every annular zero is therefore captured by a model disk.
+5. **Tail domination.** `Tail.lean` uses curvature plus support gaps to control all terms outside the principal pair. The printed equation (3.2) has the same form as `tail_sum_bound`.
+6. **Two-term localization.** `TwoTerm.lean`, `ModelDisk.lean`, `ZeroCount.lean`, and `ZeroCount32.lean` transfer the two-term geometry to the true derivative. Existence comes from a minimum-modulus argument in logarithmic coordinates; uniqueness and simplicity come from a Cauchy derivative estimate and a quantitative lower bound for the two-term model.
+7. **Exhaustion.** `Dominant.lean`, `Exclusion.lean`, `Annulus.lean` implement the printed three-case dichotomy: near the left crossing, near the right crossing, or one-term dominance away from both.
 8. **Geometry and count.** `Simplicity.lean`, `Disjoint.lean`, `ZeroCountUnion.lean` prove annular simplicity, pairwise disk disjointness, and exact finite distinct-zero counts.
-9. **Covering and cofinite conclusion.** `Covering32.lean` proves the explicit covering rate; `Erdos906.lean` inserts a small annular disk into an arbitrary nonempty open set.
+9. **Covering and cofinite conclusion.** `Covering32.lean` brackets a target radius by consecutive crossing radii, proves the explicit covering rate, and `Erdos906.lean` inserts a small annular disk into an arbitrary nonempty open set.
 
 ## Counting convention
 
@@ -53,6 +69,6 @@ The mathematical proof and the Lean development use the same structural chain:
 
 ## Axiom and integrity audit
 
-`RequestProject/Main.lean` prints the axioms of all declarations used in the paper's theorem crosswalk. The synchronized CI also scans `RequestProject/` for proof escapes and builds `RequestProject.Main`.
+`RequestProject/Main.lean` prints the axioms of every declaration in the theorem crosswalk, including `origin_multiplicity`. The synchronized CI scans `RequestProject/` for the repository's forbidden proof escapes and builds `RequestProject.Main` with the pinned Lean toolchain and project manifest.
 
 No theorem from `../research/` is imported into this map.
