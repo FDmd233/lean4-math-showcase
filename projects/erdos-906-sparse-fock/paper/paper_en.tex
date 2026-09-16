@@ -1,25 +1,21 @@
 \documentclass[11pt,reqno]{amsart}
 \usepackage[T1]{fontenc}
-\usepackage{lmodern,microtype,mathtools,amssymb}
+\usepackage{lmodern,microtype,mathtools,amssymb,booktabs,array}
 \usepackage[a4paper,margin=27mm]{geometry}
 \usepackage[hidelinks]{hyperref}
-\usepackage{enumitem}
-\setlist[enumerate]{leftmargin=*,itemsep=2pt,topsep=4pt}
 \numberwithin{equation}{section}
 \newtheorem{theorem}{Theorem}[section]
-\newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{corollary}[theorem]{Corollary}
 \theoremstyle{remark}
 \newtheorem{remark}[theorem]{Remark}
 \newcommand{\C}{\mathbb C}
-\newcommand{\N}{\mathbb N}
 \newcommand{\ee}{\mathrm e}
-\newcommand{\dist}{\operatorname{dist}}
 \newcommand{\Zer}{\mathcal Z}
 \newcommand{\Aab}{A_{a,b}}
 \allowdisplaybreaks[1]
 \emergencystretch=1.5em
+
 \title[Formalized sparse Fock construction]{A formally verified sparse Fock construction for Erd\H{o}s Problem 906}
 \author{Zhijie He}
 \date{September 17, 2026}
@@ -29,23 +25,24 @@
 \begin{document}
 
 \begin{abstract}
-I study the explicit entire function
+Consider the explicit sparse Fock series
 \[
- F(z)=\sum_{j\ge 1}\frac{z^{\lfloor j^{3/2}\rfloor}}{\sqrt{\lfloor j^{3/2}\rfloor!}}.
+ F(z)=\sum_{j\ge1}\frac{z^{\lfloor j^{3/2}\rfloor}}{\sqrt{\lfloor j^{3/2}\rfloor!}}.
 \]
-Every nonempty open subset of the plane contains a zero of $F^{(n)}$ for every sufficiently large $n$.  On each fixed annulus the zeros admit a quantitative description: they lie in pairwise disjoint disks around explicit two-term model points, each such disk contains exactly one simple zero, and the zero set has covering radius $O(n^{-1/6})$.  The construction is deterministic.  Every theorem, proposition, and corollary stated in this note has a corresponding declaration in the accompanying Lean~4/Mathlib development.  No claim of being the first solution of Erd\H{o}s Problem~906 is made.
+For every nonempty open set $U\subset\C$, the derivative $F^{(n)}$ has a zero in $U$ for every sufficiently large $n$.  On each fixed annulus, the zeros have a quantitative two-term description: every zero lies in a model disk, the relevant model disks are eventually pairwise disjoint, each contains exactly one simple zero, and the covering radius is $O(n^{-1/6})$.  The construction is deterministic.  The accompanying Lean~4/Mathlib development verifies every theorem, proposition, and corollary stated in this note, together with the analytic estimates used in their proofs.
 \end{abstract}
 \maketitle
 
 \section{Statement and context}\label{sec:intro}
-For a nonzero entire function $g$, write $\Zer(g)$ for its zero set.  The cofinite zero-hitting property is
+
+The literal formulation of Erd\H{o}s Problem~906 allows a polynomial, since all sufficiently high derivatives then vanish identically.  The nontrivial form asks for a transcendental entire function.  For such a function $g$, write $\Zer(g)$ for its zero set and consider the cofinite zero-hitting property
 \begin{equation}\label{eq:cofinite}
- \forall U\subset\C\text{ nonempty open},\quad
+ \forall U\subset\C\text{ nonempty open},\qquad
  \exists N(U)\quad\forall n\ge N(U):\quad \Zer(g^{(n)})\cap U\ne\varnothing.
 \end{equation}
-For a transcendental entire function this is equivalent to the formulation of Erd\H{o}s Problem~906 using every strictly increasing sequence of derivative orders.  Indeed, if \eqref{eq:cofinite} fails for an open set $U$, the infinitely many exceptional orders contain a strictly increasing sequence whose derivative-zero union misses $U$.  Conversely, a cofinite set of orders meets every infinite increasing sequence eventually.
+This has the same quantifier content as the usual formulation using every strictly increasing sequence of derivative orders.  If \eqref{eq:cofinite} fails for some $U$, the infinitely many exceptional orders contain a strictly increasing sequence all of whose selected derivatives miss $U$.  Conversely, if \eqref{eq:cofinite} holds, then every strictly increasing sequence $n_k$ eventually satisfies $n_k\ge N(U)$, so all sufficiently late selected derivatives have a zero in $U$.
 
-Erd\H{o}s recorded the problem in \cite[p.~72, IV.1(i)]{Erdos82}.  Barth and Schneider \cite[Theorem~1]{BS72} solved a different interpolation problem: for prescribed discrete sets $S_k$ one may choose derivative orders $n_k$ so that $f^{(n_k)}$ vanishes on $S_k$.  That result does not contain the cofinite quantifier in \eqref{eq:cofinite}.  Gethner's final-set framework likewise concerns points met by zeros of infinitely many derivatives, a weaker quantifier than \eqref{eq:cofinite} \cite{Gethner85}.  Hou recently gave a probabilistic bounded-coefficient Fock-series construction satisfying \eqref{eq:cofinite}, together with a Lean formalization of his main theorem and growth bound \cite{Hou26}.  The point here is different: the function below is explicit and sparse, and the derivative zeros can be localized quantitatively.  I make no historical-priority claim beyond these stated features.
+Erd\H{o}s recorded the problem in \cite[p.~72]{Erdos82}.  Barth and Schneider \cite[Theorem~1]{BS72} proved a different interpolation theorem: for prescribed discrete sets $S_k$, one may choose derivative orders $n_k$ and a transcendental entire function whose $n_k$-th derivative vanishes on $S_k$.  Their result does not contain the cofinite quantifier in \eqref{eq:cofinite}.  Gethner's final-set theory likewise concerns points approached by zeros of infinitely many derivatives, again a weaker quantifier than \eqref{eq:cofinite} \cite{Gethner85}.  Hou recently gave a probabilistic bounded-coefficient Fock-series construction satisfying \eqref{eq:cofinite}, together with a Lean formalization of the main theorem and growth estimate \cite{Hou26}.  The present construction is explicit and sparse, and its derivative zeros admit a quantitative localization theory.  I make no historical-priority claim beyond these stated features.
 
 Put
 \begin{equation}\label{eq:series}
@@ -53,46 +50,46 @@ Put
  q_j=\nu_{j+1}-\nu_j,\qquad
  F(z)=\sum_{j=1}^{\infty}\frac{z^{\nu_j}}{\sqrt{\nu_j!}}.
 \end{equation}
-For $0<a\le b$, set
+For $0<a\le b$, let
 \[
  \Aab=\{z\in\C:a\le |z|\le b\}.
 \]
-For an active index $j$ with $\nu_j\ge n$, define
+For an active index $j$, meaning $\nu_j\ge n$, define
 \begin{equation}\label{eq:weights}
  m_j=\nu_j-n,\qquad
  A_j=\frac{\sqrt{\nu_j!}}{m_j!},\qquad
  T_j(z)=A_jz^{m_j},\qquad
  \rho_j=\left(\frac{A_j}{A_{j+1}}\right)^{1/q_j}.
 \end{equation}
-The radius $\rho_j$ is where $|T_j|=|T_{j+1}|$.  The corresponding nonzero zeros of the two-term model $T_j+T_{j+1}$ are
+Thus $|T_j|=|T_{j+1}|$ on $|z|=\rho_j$.  The nonzero zeros of the two-term model $T_j+T_{j+1}$ are
 \begin{equation}\label{eq:centers}
  z_{j,\ell}=\rho_j\exp\!\left(\frac{(2\ell+1)\pi i}{q_j}\right),
- \qquad 0\le \ell<q_j.
+ \qquad 0\le\ell<q_j.
 \end{equation}
-For $c>0$ write
+For $c>0$, write
 \begin{equation}\label{eq:modeldisk}
  \mathcal D_{j,\ell}(c)=\overline D\!\left(z_{j,\ell},\frac{c\rho_j}{q_j}\right).
 \end{equation}
 
 \begin{theorem}[Cofinite derivative zeros]\label{thm:cofinite}
-For every nonempty open set $U\subset\C$ there is $N$ such that, for every $n\ge N$, the derivative $F^{(n)}$ has a zero in $U$.
+For every nonempty open set $U\subset\C$, there is $N$ such that for every $n\ge N$, the derivative $F^{(n)}$ has a zero in $U$.
 \end{theorem}
 
 \begin{theorem}[Quantitative annular covering]\label{thm:covering}
-Let $0<a\le b$.  There are constants $C>0$ and $N$ such that for every $n\ge N$ and every $w\in\Aab$ there is a zero $z$ of $F^{(n)}$ satisfying
+Let $0<a\le b$.  There are constants $C>0$ and $N$ such that, for every $n\ge N$ and every $w\in\Aab$, there is a zero $z$ of $F^{(n)}$ satisfying
 \begin{equation}\label{eq:coveringrate}
- |z-w|\le C n^{-1/6}.
+ |z-w|\le Cn^{-1/6}.
 \end{equation}
 \end{theorem}
 
 \begin{proposition}[One simple zero in each model disk]\label{prop:modeldisk}
-Let $0<a\le b$.  There exist $c\in(0,1]$ and $N$ such that for every $n\ge N$, every active $j$ with $a\le\rho_j\le b$, and every $0\le\ell<q_j$, the disk $\mathcal D_{j,\ell}(c)$ contains exactly one zero of $F^{(n)}$.  That zero is simple.
+Let $0<a\le b$.  There exist $c\in(0,1]$ and $N$ such that, for every $n\ge N$, every active $j$ with $a\le\rho_j\le b$, and every $0\le\ell<q_j$, the disk $\mathcal D_{j,\ell}(c)$ contains exactly one zero of $F^{(n)}$, and that zero is simple.
 \end{proposition}
 
 \begin{proposition}[Exhaustion of annular zeros]\label{prop:exclusion}
 Let $0<a\le b$ and $c>0$.  For all sufficiently large $n$, every zero $z$ of $F^{(n)}$ with $a\le |z|\le b$ belongs to a disk $\mathcal D_{j,\ell}(c)$ with
 \[
- \frac a2\le\rho_j\le 2b,
+ \frac a2\le\rho_j\le2b,
  \qquad 0\le\ell<q_j.
 \]
 \end{proposition}
@@ -102,35 +99,36 @@ Let $0<a\le b$.  For all sufficiently large $n$, every zero of $F^{(n)}$ in $\Aa
 \end{corollary}
 
 \begin{proposition}[Pairwise disjoint model disks]\label{prop:disjoint}
-Let $0<a\le b$.  If $0<c\le1$, then for all sufficiently large $n$ the admissible disks $\mathcal D_{j,\ell}(c)$ with $a\le\rho_j\le b$ are pairwise disjoint.
+Let $0<a\le b$ and $0<c\le1$.  For all sufficiently large $n$, the disks $\mathcal D_{j,\ell}(c)$ with active $j$, $a\le\rho_j\le b$, and $0\le\ell<q_j$ are pairwise disjoint.
 \end{proposition}
 
 \begin{proposition}[Finite model-disk zero count]\label{prop:count}
-Let $0<a\le b$.  There exist $c\in(0,1]$ and $N$ such that, for every $n\ge N$ and every finite set $I$ of admissible pairs $(j,\ell)$ with $a\le\rho_j\le b$, the union of the disks indexed by $I$ contains exactly $|I|$ distinct zeros of $F^{(n)}$, all simple.
+Let $0<a\le b$.  There exist $c\in(0,1]$ and $N$ such that, for every $n\ge N$ and every finite set $I$ of pairs $(j,\ell)$ with active $j$, $a\le\rho_j\le b$, and $0\le\ell<q_j$, the union of the disks indexed by $I$ contains exactly $|I|$ distinct zeros of $F^{(n)}$, all simple.
 \end{proposition}
 
-The remainder of the paper proves these statements in a form that mirrors the structure of the formal development.  The exact order and type, sectorial zero asymptotics, limiting zero measures, other values of the support exponent, and the critical endpoint $p=4/3$ are deliberately not part of this submission.
+The rest of the paper proves these statements in the same structural order as the formal development.  Results for other support exponents, the endpoint $p=4/3$, sectorial asymptotics, limiting zero measures, and exact order and type are not part of this submission.
 
-\section{Sparse support and derivative weights}\label{sec:weights}
-The two relevant scales are immediate from the support.  The mean-value theorem and the floor error give
+\section{Support, derivative weights, and crossing radii}\label{sec:weights}
+
+The support has one relevant arithmetic scale.  By the mean-value theorem and the floor error,
 \begin{equation}\label{eq:gap}
  \frac32\sqrt j-1\le q_j\le \frac32(\sqrt j+1)+1\qquad(j\ge1).
 \end{equation}
-Thus, when $\nu_j=n+O(\sqrt n)$,
+Hence, whenever $\nu_j=n+O(\sqrt n)$,
 \begin{equation}\label{eq:qscale}
  j\asymp n^{2/3},\qquad q_j\asymp n^{1/3}.
 \end{equation}
-In particular the first active exponent $m_{j_0}$, where $j_0=\min\{j:\nu_j\ge n\}$, is $O(n^{1/3})$.
+In particular, if $j_0=\min\{j:\nu_j\ge n\}$, then $m_{j_0}=O(n^{1/3})$.
 
-The series in \eqref{eq:series} is entire.  A convenient uniform majorant is
+The series \eqref{eq:series} is entire.  A uniform majorant, proved in the formal development by Cauchy--Schwarz, is
 \begin{equation}\label{eq:growthupper}
  |F(z)|\le \sqrt{1+|z|^2}\,\exp\!\left(\frac{1+|z|^2}{2}\right).
 \end{equation}
-Indeed, the sparse series is termwise dominated by $\sum_{k\ge0}|z|^k/\sqrt{k!}$, and a Cauchy--Schwarz estimate gives \eqref{eq:growthupper}.  Termwise differentiation is therefore legitimate, and
+Termwise differentiation is therefore legitimate, and
 \begin{equation}\label{eq:derivative}
  F^{(n)}(z)=\sum_{\nu_j\ge n} A_jz^{m_j}.
 \end{equation}
-The support is infinite, hence $F$ is not a polynomial.  In the Lean development transcendence is certified directly by showing that sufficiently high derivatives of a polynomial vanish while the corresponding derivatives of $F$ do not.
+The support is infinite, so $F$ is not a polynomial.  The formal proof of transcendence is slightly stronger than this observation: a sufficiently high derivative of a polynomial vanishes identically, whereas the corresponding derivative of $F$ does not.
 
 For integers $k\ge n$ and $r>0$, set
 \begin{equation}\label{eq:Phi}
@@ -141,124 +139,136 @@ Its first difference is
  d_{n,r}(k)=\Phi_{n,r}(k+1)-\Phi_{n,r}(k)
  =\log r+\frac12\log(k+1)-\log(k+1-n).
 \end{equation}
-Writing $m=k-n$,
+Writing $m=k-n$ gives
 \begin{equation}\label{eq:curvature}
  d_{n,r}(k)-d_{n,r}(k+1)
  =\log\!\left(1+\frac1{m+1}\right)
  -\frac12\log\!\left(1+\frac1{n+m+1}\right)>0.
 \end{equation}
-Hence $\Phi_{n,r}$ is strictly discretely concave.  Uniformly for $m=O(\sqrt n)$, the drop in \eqref{eq:curvature} is comparable to $n^{-1/2}$.
+Thus $\Phi_{n,r}$ is strictly discretely concave.  Uniformly for $m=O(\sqrt n)$, the drop in \eqref{eq:curvature} is comparable to $n^{-1/2}$.
 
 The crossing radius has the exact representation
 \begin{equation}\label{eq:rhoexact}
  \log\rho_j=\frac1{q_j}\sum_{s=1}^{q_j}
  \left\{\log(m_j+s)-\frac12\log(n+m_j+s)\right\}.
 \end{equation}
-The summand is increasing in $s$, so the $\rho_j$ are strictly increasing.  In the saddle range $m_j=O(\sqrt n)$, \eqref{eq:rhoexact} and \eqref{eq:qscale} give
+The summand is increasing in $s$, hence the crossing radii are strictly increasing.  In the saddle range $m_j=O(\sqrt n)$, \eqref{eq:rhoexact} and \eqref{eq:qscale} give
 \begin{equation}\label{eq:rhoapprox}
- \rho_j=\frac{m_j}{\sqrt n}+O(n^{-1/6}),
+ \rho_j=\frac{m_j}{\sqrt n}+O(n^{-1/6}).
 \end{equation}
-and on every fixed compact annulus
+On every fixed compact annulus, consecutive relevant crossing radii satisfy
 \begin{equation}\label{eq:rhospace}
  c_{a,b}n^{-1/6}\le \rho_{j+1}-\rho_j\le C_{a,b}n^{-1/6}
 \end{equation}
-whenever both radii lie in a fixed enlargement of the annulus.  These estimates explain the exponent in Theorem~\ref{thm:covering}: the radial mesh is $n^{-1/6}$, while the angular mesh on a crossing circle is $q_j^{-1}=O(n^{-1/3})$.
+for all sufficiently large $n$, after enlarging the annulus by a fixed factor.  The radial mesh is therefore $n^{-1/6}$, whereas the angular mesh on a crossing circle is $q_j^{-1}=O(n^{-1/3})$.
 
-\section{Two-term localization}\label{sec:twoterm}
-Fix a compact saddle range $m_j\le B\sqrt n$.  At $r=\rho_j$ the $q_j$ consecutive differences
-\[
- d_{n,r}(\nu_j),\ldots,d_{n,r}(\nu_j+q_j-1)
-\]
-have sum zero.  By \eqref{eq:curvature}, their endpoint values have opposite signs and magnitude $\gg q_j/\sqrt n$.  If
-\[
- |q_j\log(|z|/\rho_j)|\le L,
-\]
-the same signs persist for large $n$.  Since every further sparse step has length $\gg n^{1/3}$, one gains a logarithmic loss
-\begin{equation}\label{eq:En}
- E_n\asymp \frac{q_j^2}{\sqrt n}\asymp n^{1/6}
-\end{equation}
-on each step away from the pair $j,j+1$.  Summing the resulting geometric tails yields
-\begin{equation}\label{eq:tail}
- \frac{\sum_{h\ne j,j+1}|T_h(z)|}{|T_j(z)|}
- \le (1+\ee^L)\frac{\ee^{-E_n}}{1-\ee^{-E_n}}.
-\end{equation}
-This is the quantitative reduction to two adjacent terms.
+\section{Tail domination and local zero transfer}\label{sec:local}
 
-Let $z_0=z_{j,\ell}$ and $q=q_j$.  In the logarithmic coordinate $z=z_0\ee^w$, division by the nonvanishing principal monomial puts the derivative in the form
+Fix a compact saddle range and a relevant crossing $\rho=\rho_j$.  Put
+\[
+ m=m_j,\qquad q=q_j,\qquad Q=\min(q_{j-1},q_{j+1}).
+\]
+For large $n$ the index $j$ is at least $2$.  The curvature estimate provides a positive number $c$ such that the full-weight slope at the left end of the block is at least $c$ and at the right end is at most $-c$.  In the present $p=3/2$ situation,
+\begin{equation}\label{eq:cscale}
+ c\asymp n^{-1/6},\qquad Q\asymp n^{1/3}.
+\end{equation}
+Let $0\le\gamma<c$ and write $|z|=\rho\ee^\sigma$ with $|\sigma|\le\gamma$.  The formal tail estimate is
+\begin{equation}\label{eq:tail_exact}
+ \frac{\displaystyle\sum_{h\ne j,j+1}|T_h(z)|}{|T_j(z)|}
+ \le
+ \ee^{-(c-\gamma)Q}
+ \left((m+1)+\frac{\ee^{q\gamma}}{1-\ee^{-(c-\gamma)}}\right).
+\end{equation}
+This is the estimate used below; in particular, no geometric-series simplification of the left tail is needed.  If $\gamma=C_0/q$ with fixed $C_0>0$, then $q\gamma=O(1)$, $(c-\gamma)Q\asymp n^{1/6}$, and $m=O(\sqrt n)$.  Thus the right-hand side of \eqref{eq:tail_exact} tends to zero despite the polynomial factor.  The explicit numerical lemmas in the Lean development choose a threshold $N$ at which it is smaller than each constant required in the local arguments.
+
+We now prove Proposition~\ref{prop:modeldisk}.  Let $z_0=z_{j,\ell}$ and $q=q_j$.  In logarithmic coordinates $z=z_0\ee^w$, divide by the nonvanishing principal monomial.  The derivative takes the form
 \begin{equation}\label{eq:logmodel}
  \Psi(w)=1-\ee^{qw}+E(w).
 \end{equation}
-Fix a small $c_0>0$ and put $\zeta=c_0/q$.  The tail estimate \eqref{eq:tail}, applied on $|w|\le\zeta$, gives $|E(w)|\le K_n$ with $K_n=O(\ee^{-E_n})$.  At the centre $|\Psi(0)|\le K_n$.  On $|w|=\zeta$, the elementary estimate for the exponential remainder gives
-\[
- |1-\ee^{qw}|\ge c_0/2
-\]
-when $c_0\le1/2$.  Hence $|\Psi|\ge c_0/2-K_n>K_n$ on the boundary for large $n$.  If $\Psi$ had no zero in $|w|\le\zeta$, the maximum-modulus principle applied to $1/\Psi$ would force the modulus at the centre to be at least the boundary minimum, a contradiction.  Thus a true zero lies within $O(\rho_j/q_j)$ of $z_0$.
+Choose once and for all $0<c_0\le1/16$ and put $\zeta=c_0/q$.  Applying \eqref{eq:tail_exact} on $|w|\le\zeta$ gives $|E(w)|\le K_n$, with $K_n\to0$.  At $w=0$, $|\Psi(0)|\le K_n$.  On $|w|=\zeta$, the elementary exponential remainder estimate gives
+\begin{equation}\label{eq:boundarymodel}
+ |1-\ee^{qw}|\ge c_0/2.
+\end{equation}
+For large $n$, $K_n<c_0/4$, so $|\Psi|>K_n$ on the boundary.  If $\Psi$ had no zero in the closed disk, the maximum-modulus principle applied to $1/\Psi$ would contradict the smaller value of $|\Psi|$ at the centre.  Hence there is a zero $z$ with
+\begin{equation}\label{eq:existdist}
+ |z-z_0|\le 2\rho\zeta=\frac{2c_0\rho}{q}.
+\end{equation}
+This is the minimum-modulus step formalized in \texttt{TwoTerm.lean}.
 
-It remains to prove uniqueness and simplicity without a zero-counting black box.  Write $t=z/z_0$ and normalize once more:
+For uniqueness and simplicity, set $t=z/z_0$ and normalize again:
 \begin{equation}\label{eq:tmodel}
  G(t)=1-t^q+R(t).
 \end{equation}
-For a fixed sufficiently small $s\asymp q^{-1}$, the same tail estimate holds on $|t-1|\le2s$ with $|R(t)|\le K_n$.  Cauchy's estimate therefore gives
+Take $s=2c_0/q$, so $qs=2c_0\le1/8$, and use the tail estimate on the doubled disk $|t-1|\le2s$.  The logarithmic radial shift there is at most $4s$, so the same tail theorem applies after increasing the harmless fixed transition constant.  We obtain $|R|\le K_n$ on $|t-1|\le2s$, and Cauchy's estimate gives
 \begin{equation}\label{eq:Rprime}
  |R'(t)|\le K_n/s\qquad(|t-1|\le s).
 \end{equation}
-Choose $s$ so that $qs\le1/8$.  Then $t^{q-1}$ stays within $1/7$ of $1$ on this disk.  Consequently
+On this disk, $|t^{q-1}-1|\le1/7$ for the fixed choice above, and therefore
 \begin{equation}\label{eq:powdiff}
- |t_1^q-t_2^q|\ge \frac{6q}{7}|t_1-t_2|
- \qquad(|t_i-1|\le s),
+ |t_1^q-t_2^q|\ge\frac{6q}{7}|t_1-t_2|
+ \qquad(|t_i-1|\le s).
 \end{equation}
-while \eqref{eq:Rprime} gives
+For large $n$, $K_n<qs/2$.  If $G(t_1)=G(t_2)=0$, \eqref{eq:Rprime} and \eqref{eq:powdiff} force $t_1=t_2$.  At the zero,
 \[
- |R(t_1)-R(t_2)|\le (K_n/s)|t_1-t_2|.
+ |qt^{q-1}|\ge 6q/7>K_n/s,
 \]
-For large $n$, $K_n<qs/2$.  If $G(t_1)=G(t_2)=0$, comparison with \eqref{eq:powdiff} forces $t_1=t_2$.  Moreover
-\[
- |q t^{q-1}|\ge 6q/7>K_n/s,
-\]
-so $G'(t)\ne0$ at its zero.  The zero is therefore unique and simple.  This proves Proposition~\ref{prop:modeldisk} by exactly the existence--uniqueness mechanism used in the formal development.
+so $G'(t)\ne0$.  The zero from \eqref{eq:existdist} lies in this uniqueness disk, proving Proposition~\ref{prop:modeldisk} with the common disk constant $c=2c_0$ after increasing the threshold $N$ if necessary.
 
-\section{Exhaustion, disjointness, and covering}\label{sec:covering}
-Fix $r$ in a compact annulus and choose a summand of maximal modulus on $|z|=r$.  The normalized block slopes satisfy
-\begin{equation}\label{eq:blockslope}
- \frac1{q_j}\log\frac{|T_{j+1}(z)|}{|T_j(z)|}
- =\log r-\log\rho_j.
+\section{Exhaustion, disjointness, and covering}\label{sec:global}
+
+Fix $r$ in a compact annulus.  Because the crossing radii are strictly increasing, for all large $n$ there is a crossing index $j$ with
+\begin{equation}\label{eq:bracket}
+ \rho_j\le r<\rho_{j+1}.
 \end{equation}
-Because $\rho_j$ is strictly increasing, these slopes strictly decrease with $j$.  Hence the sparse terms increase to a single maximal region and then decrease.
+Put
+\[
+ \sigma=\log(r/\rho_j)\ge0,
+ \qquad
+ \tau=\log(\rho_{j+1}/r)\ge0.
+\]
+The formal exclusion argument has exactly three cases.  For a fixed sufficiently small $c_0>0$:
+\begin{enumerate}
+ \item if $\sigma\le c_0/q_j$, the two-term transition estimate at $\rho_j$ puts every zero on $|z|=r$ in a model disk attached to $\rho_j$;
+ \item if $\tau\le c_0/q_{j+1}$, the same argument at $\rho_{j+1}$ puts every zero in a model disk attached to $\rho_{j+1}$;
+ \item if both inequalities fail, the middle term $T_{j+1}$ is larger than the sum of all the remaining terms, so $F^{(n)}$ has no zero on that circle.
+\end{enumerate}
+The third case follows from the same concavity and tail estimate as above, now applied on both sides of the dominant term.  In the first two cases, the transition width is eventually below $1/2$ in logarithmic radius; hence a zero with $a\le|z|\le b$ can only be attached to a crossing radius in $[a/2,2b]$.  This proves Proposition~\ref{prop:exclusion}.
 
-Suppose $r$ lies between two consecutive crossing radii.  If $r$ is outside fixed logarithmic neighborhoods of both crossings, the middle term dominates both neighbors; the tail estimate then makes it larger than the sum of all remaining terms.  No zero can occur there.  If $r$ lies in one of the transition neighborhoods, the two-term estimate applies.  At a zero, division by the dominant monomial and \eqref{eq:tmodel} force the phase to lie within $O(1/q_j)$ of an odd $q_j$-th root of $-1$, hence the zero lies in a model disk.  Since \eqref{eq:rhoapprox} keeps the relevant crossing radius in $[a/2,2b]$, this proves Proposition~\ref{prop:exclusion}.
+Apply Proposition~\ref{prop:modeldisk} on $A_{a/2,2b}$ and use its disk constant in Proposition~\ref{prop:exclusion}.  Every annular zero lies in a disk whose unique zero is simple.  Corollary~\ref{cor:simplicity} follows.
 
-Apply Proposition~\ref{prop:modeldisk} on the enlarged annulus $A_{a/2,2b}$ and choose its disk constant in Proposition~\ref{prop:exclusion}.  Every annular zero then lies in a model disk whose unique zero is simple.  This proves Corollary~\ref{cor:simplicity}.
-
-For the disjointness assertion, model centers on one circle satisfy
+For Proposition~\ref{prop:disjoint}, two distinct model centres on the same crossing circle satisfy
 \begin{equation}\label{eq:angularsep}
- |z_{j,\ell}-z_{j,\ell'}|\ge \frac{4\rho_j}{q_j}
- \qquad(\ell\ne\ell'),
+ |z_{j,\ell}-z_{j,\ell'}|\ge\frac{4\rho_j}{q_j}
+ \qquad(\ell\ne\ell')
 \end{equation}
-for all sufficiently large relevant $j$.  With $c\le1$, disks on the same circle are therefore disjoint.  Disks on different circles are separated by the radial gap \eqref{eq:rhospace}, of order $n^{-1/6}$, whereas their radii are $O(q_j^{-1})=O(n^{-1/3})$.  Hence the whole admissible family is eventually pairwise disjoint, proving Proposition~\ref{prop:disjoint}.  Choosing the disk constant supplied by Proposition~\ref{prop:modeldisk}, disjointness and uniqueness give one distinct simple zero per disk in any finite admissible family.  This proves Proposition~\ref{prop:count}.
+for all sufficiently large relevant $j$.  Hence disks with $c\le1$ on the same circle are disjoint.  On different circles, \eqref{eq:rhospace} gives radial separation of order $n^{-1/6}$, whereas the disk radii are $O(q_j^{-1})=O(n^{-1/3})$.  Thus the whole admissible family is eventually pairwise disjoint.  Proposition~\ref{prop:count} then follows by combining disjointness with the one-simple-zero statement in each disk.
 
-It remains to prove Theorem~\ref{thm:covering}.  Let $w\in\Aab$ and put $r=|w|$.  Choose $j$ so that
-\[
- \nu_j\le n+r\sqrt n<\nu_{j+1},
-\]
-with the first active index used in the harmless initial case.  Equations \eqref{eq:qscale} and \eqref{eq:rhoapprox} give
-\[
- |\rho_j-r|\le Cn^{-1/6}.
-\]
-Choose the nearest model angle on the circle $|z|=\rho_j$.  Its angular displacement from $w$ is $O(q_j^{-1})=O(n^{-1/3})$.  Apply Proposition~\ref{prop:modeldisk} on a fixed enlarged annulus containing all such crossing radii; it supplies a true zero within another $O(n^{-1/3})$.  The radial error dominates, giving \eqref{eq:coveringrate}.
+We finally prove Theorem~\ref{thm:covering}.  Given $w\in\Aab$, set $r=|w|$ and choose the crossing index from \eqref{eq:bracket}.  The upper bound in \eqref{eq:rhospace} gives
+\begin{equation}\label{eq:radialcover}
+ |r-\rho_j|\le C_{a,b}n^{-1/6}.
+\end{equation}
+Choose the nearest model angle on $|z|=\rho_j$.  Its angular displacement from $w$ is $O(q_j^{-1})=O(n^{-1/3})$.  Proposition~\ref{prop:modeldisk}, applied on a fixed enlargement of the annulus, supplies a true zero within another $O(\rho_j/q_j)=O(n^{-1/3})$ of that model point.  The radial error \eqref{eq:radialcover} dominates, proving \eqref{eq:coveringrate}.
 
-Finally let $U$ be a nonempty open set.  It contains a nonzero point $w$ and a small closed disk about $w$ contained in some annulus $\Aab$.  For all sufficiently large $n$, Theorem~\ref{thm:covering} places a zero of $F^{(n)}$ in that disk.  This proves Theorem~\ref{thm:cofinite}.
+Now let $U\subset\C$ be nonempty and open.  Choose a nonzero $w\in U$ and a closed disk $\overline D(w,\delta)\subset U$ with $\delta<|w|/2$.  This disk is contained in a fixed annulus away from the origin.  For all sufficiently large $n$, the covering radius in Theorem~\ref{thm:covering} is smaller than $\delta$, so $F^{(n)}$ has a zero in $U$.  This proves Theorem~\ref{thm:cofinite}.
 
-\begin{remark}[The origin]
-The simplicity statement is deliberately annular.  If $j_0=\min\{j:\nu_j\ge n\}$, then the multiplicity of the zero at the origin is exactly $\nu_{j_0}-n$.  For suitable derivative orders this multiplicity is large, so no global eventual-simplicity statement is true.
+\begin{remark}[The origin]\label{rem:origin}
+Let $j_0=\min\{j:\nu_j\ge n\}$.  The multiplicity of the zero of $F^{(n)}$ at the origin is exactly $\nu_{j_0}-n$.  This can be large, so the simplicity statement is necessarily restricted to annuli bounded away from the origin.
 \end{remark}
 
-\section{Formal verification and scope}\label{sec:formal}
-The Lean development is pinned to Lean/Mathlib~4.28.0.  The main declarations corresponding to the statements above are:
+\section{Formal verification and source}\label{sec:formal}
+
+The Lean development uses Lean~4.28.0 and the Mathlib revision pinned by the project manifest.  It is available with the paper at
 \begin{center}
-\begin{tabular}{p{0.42\textwidth}p{0.48\textwidth}}
-\hline
+\url{https://github.com/FDmd233/lean4-math-showcase/tree/main/projects/erdos-906-sparse-fock}.
+\end{center}
+The canonical entry point is \texttt{formalization/lean/RequestProject/Main.lean}.  It imports the complete proof chain and prints the axiom dependencies of every declaration in the paper-to-Lean crosswalk.  The main correspondences are:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular}{@{}p{0.43\textwidth}p{0.47\textwidth}@{}}
+\toprule
 Printed statement & Lean declaration \\
-\hline
+\midrule
 Entire function and derivative formula & \texttt{F\_differentiable}, \texttt{iteratedDeriv\_F} \\
 Transcendence & \texttt{F\_not\_polynomial} \\
 Upper growth bound \eqref{eq:growthupper} & \texttt{F\_norm\_le} \\
@@ -269,15 +279,17 @@ Proposition~\ref{prop:exclusion} & \texttt{annular\_zero\_exclusion\_p32} \\
 Corollary~\ref{cor:simplicity} & \texttt{annular\_zeros\_simple\_deriv\_p32} \\
 Proposition~\ref{prop:disjoint} & \texttt{model\_disks\_pairwise\_disjoint\_p32} \\
 Proposition~\ref{prop:count} & \texttt{zero\_count\_model\_disk\_union\_p32} \\
-\hline
+Remark~\ref{rem:origin} & \texttt{origin\_multiplicity} \\
+\bottomrule
 \end{tabular}
 \end{center}
-The finite-union theorem uses ordinary cardinality of the set of distinct zeros; simplicity then makes this equal to total multiplicity on those disks.  The published source contains no \texttt{sorry}, \texttt{admit}, custom \texttt{axiom}, \texttt{unsafe}, \texttt{native\_decide}, or \texttt{@[implemented\_by]} in the project modules.  The main declarations are audited with \texttt{\#print axioms}; only the standard dependencies \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound} occur.
 
-The present note is intentionally narrower than the accompanying research directory.  Results there concerning general exponents, the endpoint $p=4/3$, sectorial counting, limiting zero measures, and support-profile limits are not claims of this formalized submission unless and until they receive separate machine verification.
+The exact tail inequality \eqref{eq:tail_exact} is \texttt{tail\_sum\_bound} in \texttt{Tail.lean}; the minimum-modulus localization is formalized in \texttt{TwoTerm.lean}; the local uniqueness and simplicity estimate is formalized in \texttt{ZeroCount32.lean}; and the three-case exclusion argument is formalized in \texttt{Exclusion.lean} and \texttt{Annulus.lean}.  The repository contains a more detailed proof-to-code map.
+
+The checked project modules pass the repository's static proof-integrity policy before compilation.  The declarations printed by \texttt{Main.lean} use only the standard dependencies \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}.  Continuous integration then builds the canonical entry point from the pinned Lean toolchain.
 
 \section*{AI assistance disclosure}
-Language-model tools were used substantially during derivation, checking, exposition, and formalization.  The mathematical claims in this submission are separated from historical-priority claims, and the repository records the boundary of the machine-checked development.
+Language-model tools were used substantially during derivation, checking, exposition, repository maintenance, and formalization.  The repository separates the machine-checked submission from research material that is not part of this paper.
 
 \begin{thebibliography}{9}
 
@@ -290,7 +302,7 @@ DOI: \href{https://doi.org/10.2307/2038336}{10.2307/2038336}.
 \bibitem{Erdos82}
 P. Erd\H{o}s,
 \emph{Some of my favourite problems which recently have been solved},
-in: L.~H.~Y. Chen, T.~B. Ng, M.~J. Wicks (eds.),
+in L.~H.~Y. Chen, T.~B. Ng and M.~J. Wicks (eds.),
 Proceedings of the International Mathematical Conference, Singapore 1981,
 North-Holland Math. Stud. \textbf{74} (1982), 59--79.
 DOI: \href{https://doi.org/10.1016/S0304-0208(08)70415-8}{10.1016/S0304-0208(08)70415-8}.
