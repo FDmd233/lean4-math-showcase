@@ -1,0 +1,44 @@
+name: Check Erdos 906 formalization
+
+on:
+  push:
+    paths:
+      - 'projects/erdos-906-sparse-fock/paper/**'
+      - 'projects/erdos-906-sparse-fock/formalization/**'
+      - '.github/workflows/check-erdos906-formalization.yml'
+  pull_request:
+    paths:
+      - 'projects/erdos-906-sparse-fock/paper/**'
+      - 'projects/erdos-906-sparse-fock/formalization/**'
+      - '.github/workflows/check-erdos906-formalization.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lean:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Static integrity scan
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd projects/erdos-906-sparse-fock/formalization/lean
+          if grep -R -n -E '(^|[[:space:]])(sorry|admit)([[:space:]]|$)|(^|[[:space:]])axiom[[:space:]]|(^|[[:space:]])unsafe([[:space:]]|$)|native_decide|@\[implemented_by\]' RequestProject; then
+            echo 'Forbidden proof escape found in RequestProject/'
+            exit 1
+          fi
+
+      - name: Build Lean project
+        uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: projects/erdos-906-sparse-fock/formalization/lean
+          auto-config: false
+          build: true
+          build-args: 'RequestProject.Main'
+          test: false
+          use-mathlib-cache: true
