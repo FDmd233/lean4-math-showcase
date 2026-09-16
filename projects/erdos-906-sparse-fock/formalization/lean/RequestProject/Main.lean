@@ -24,7 +24,11 @@ import RequestProject.Simplicity
 import RequestProject.Disjoint
 import RequestProject.ZeroCountUnion
 
--- Axiom audit for the main theorems.
+-- Axiom audit for every declaration appearing in the canonical paper-to-Lean crosswalk.
+#print axioms SparseFock.F_differentiable
+#print axioms SparseFock.iteratedDeriv_F
+#print axioms SparseFock.F_not_polynomial
+#print axioms SparseFock.F_norm_le
 #print axioms SparseFock.annular_covering_rate_p32
 #print axioms SparseFock.erdos906_sparse_fock_p32
 #print axioms SparseFock.model_disk_zero_count_one_p32
