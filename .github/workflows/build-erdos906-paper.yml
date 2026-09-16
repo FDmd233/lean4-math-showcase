@@ -5,6 +5,10 @@ on:
     paths:
       - 'projects/erdos-906-sparse-fock/paper/paper_en.tex'
       - '.github/workflows/build-erdos906-paper.yml'
+  pull_request:
+    paths:
+      - 'projects/erdos-906-sparse-fock/paper/paper_en.tex'
+      - '.github/workflows/build-erdos906-paper.yml'
   workflow_dispatch:
 
 permissions:
@@ -24,7 +28,21 @@ jobs:
           working_directory: projects/erdos-906-sparse-fock/paper
           texlive_version: 2026
 
+      - name: Audit LaTeX log
+        shell: bash
+        run: |
+          set -euo pipefail
+          log='projects/erdos-906-sparse-fock/paper/paper_en.log'
+          pdf='projects/erdos-906-sparse-fock/paper/paper_en.pdf'
+          test -s "$log"
+          test -s "$pdf"
+          if grep -n -E 'LaTeX Warning:.*undefined|Citation .* undefined|Reference .* undefined|There were undefined references|multiply defined|Overfull \\hbox|! LaTeX Error' "$log"; then
+            echo 'Publication-blocking LaTeX diagnostic found.'
+            exit 1
+          fi
+
       - name: Commit compiled PDF
+        if: github.event_name != 'pull_request'
         shell: bash
         run: |
           set -euo pipefail
