@@ -23,13 +23,14 @@
 \hypersetup{pdftitle={A formally verified sparse Fock construction for Erdos Problem 906},pdfauthor={Zhijie He}}
 
 \begin{document}
+\raggedbottom
 
 \begin{abstract}
 Consider the explicit sparse Fock series
 \[
  F(z)=\sum_{j\ge1}\frac{z^{\lfloor j^{3/2}\rfloor}}{\sqrt{\lfloor j^{3/2}\rfloor!}}.
 \]
-For every nonempty open set $U\subset\C$, the derivative $F^{(n)}$ has a zero in $U$ for every sufficiently large $n$.  On each fixed annulus, the zeros have a quantitative two-term description: every zero lies in a model disk, the relevant model disks are eventually pairwise disjoint, each contains exactly one simple zero, and the covering radius is $O(n^{-1/6})$.  The construction is deterministic.  The accompanying Lean~4/Mathlib development verifies every theorem, proposition, and corollary stated in this note, together with the analytic estimates used in their proofs.
+For every nonempty open set $U\subset\C$, the derivative $F^{(n)}$ has a zero in $U$ for every sufficiently large $n$.  On each fixed annulus, the zeros have a quantitative two-term description: every zero lies in a model disk, the relevant model disks are eventually pairwise disjoint, each contains exactly one simple zero, and the covering radius is $O(n^{-1/6})$.  The construction is deterministic.  The accompanying Lean~4/Mathlib development verifies every theorem, proposition, and corollary stated in this note and formalizes the explicit inequalities used in their proofs.
 \end{abstract}
 \maketitle
 
@@ -42,7 +43,7 @@ The literal formulation of Erd\H{o}s Problem~906 allows a polynomial, since all 
 \end{equation}
 This has the same quantifier content as the usual formulation using every strictly increasing sequence of derivative orders.  If \eqref{eq:cofinite} fails for some $U$, the infinitely many exceptional orders contain a strictly increasing sequence all of whose selected derivatives miss $U$.  Conversely, if \eqref{eq:cofinite} holds, then every strictly increasing sequence $n_k$ eventually satisfies $n_k\ge N(U)$, so all sufficiently late selected derivatives have a zero in $U$.
 
-Erd\H{o}s recorded the problem in \cite[p.~72]{Erdos82}.  Barth and Schneider \cite[Theorem~1]{BS72} proved a different interpolation theorem: for prescribed discrete sets $S_k$, one may choose derivative orders $n_k$ and a transcendental entire function whose $n_k$-th derivative vanishes on $S_k$.  Their result does not contain the cofinite quantifier in \eqref{eq:cofinite}.  Gethner's final-set theory likewise concerns points approached by zeros of infinitely many derivatives, again a weaker quantifier than \eqref{eq:cofinite} \cite{Gethner85}.  Hou recently gave a probabilistic bounded-coefficient Fock-series construction satisfying \eqref{eq:cofinite}, together with a Lean formalization of the main theorem and growth estimate \cite{Hou26}.  The present construction is explicit and sparse, and its derivative zeros admit a quantitative localization theory.  I make no historical-priority claim beyond these stated features.
+Erd\H{o}s recorded the problem in \cite[p.~72]{Erdos82} and added immediately afterward that the two existence questions stated there had been proved more than ten years earlier.  His accompanying note cites Barth and Schneider.  Their published Theorem~1 \cite{BS72} proves a different interpolation statement: for prescribed discrete sets $S_k$, one may choose derivative orders $n_k$ and a transcendental entire function whose $n_k$-th derivative vanishes on $S_k$.  Their result does not contain the cofinite quantifier in \eqref{eq:cofinite}.  Gethner's final-set theory likewise concerns points approached by zeros of infinitely many derivatives, again a weaker quantifier than \eqref{eq:cofinite} \cite{Gethner85}.  Hou recently gave a probabilistic bounded-coefficient Fock-series construction satisfying \eqref{eq:cofinite}, together with a Lean formalization of the main theorem and growth estimate \cite{Hou26}.  The present construction is explicit and sparse, and its derivative zeros admit a quantitative localization theory.  I make no historical-priority claim beyond these stated features.
 
 Put
 \begin{equation}\label{eq:series}
@@ -152,7 +153,11 @@ The crossing radius has the exact representation
  \log\rho_j=\frac1{q_j}\sum_{s=1}^{q_j}
  \left\{\log(m_j+s)-\frac12\log(n+m_j+s)\right\}.
 \end{equation}
-The summand is increasing in $s$, hence the crossing radii are strictly increasing.  In the saddle range $m_j=O(\sqrt n)$, \eqref{eq:rhoexact} and \eqref{eq:qscale} give
+The summand is increasing in $s$, hence the crossing radii are strictly increasing.  The same averaging formula gives the explicit squeeze
+\begin{equation}\label{eq:rhosqueeze}
+ \frac{m_j+1}{\sqrt{n+m_j+1}}\le \rho_j\le\frac{m_j+q_j}{\sqrt{n+m_j+q_j}}.
+\end{equation}
+In the saddle range $m_j=O(\sqrt n)$, \eqref{eq:rhosqueeze} and \eqref{eq:qscale} give
 \begin{equation}\label{eq:rhoapprox}
  \rho_j=\frac{m_j}{\sqrt n}+O(n^{-1/6}).
 \end{equation}
@@ -199,7 +204,7 @@ For uniqueness and simplicity, set $t=z/z_0$ and normalize again:
 \begin{equation}\label{eq:tmodel}
  G(t)=1-t^q+R(t).
 \end{equation}
-Take $s=2c_0/q$, so $qs=2c_0\le1/8$, and use the tail estimate on the doubled disk $|t-1|\le2s$.  The logarithmic radial shift there is at most $4s$, so the same tail theorem applies after increasing the harmless fixed transition constant.  We obtain $|R|\le K_n$ on $|t-1|\le2s$, and Cauchy's estimate gives
+Take $s=2c_0/q$, so $qs=2c_0\le1/8$, and use the tail estimate on the doubled disk $|t-1|\le2s$.  The logarithmic radial shift there is at most $4s$, so the same tail theorem applies after increasing the harmless fixed transition constant.  After replacing $K_n$ by this larger tail bound, we have $|R|\le K_n$ on $|t-1|\le2s$, and Cauchy's estimate gives
 \begin{equation}\label{eq:Rprime}
  |R'(t)|\le K_n/s\qquad(|t-1|\le s).
 \end{equation}
@@ -315,7 +320,7 @@ DOI: \href{https://doi.org/10.1017/S001309150001720X}{10.1017/S001309150001720X}
 
 \bibitem{Hou26}
 E. Hou,
-\emph{Cofinite zeros of high derivatives},
+\emph{Cofinite Zeros of High Derivatives},
 arXiv:2607.20816 (2026).
 \href{https://arxiv.org/abs/2607.20816}{arXiv:2607.20816}.
 
