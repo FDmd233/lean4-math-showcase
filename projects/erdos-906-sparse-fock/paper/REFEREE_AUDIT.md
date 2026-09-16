@@ -110,7 +110,7 @@ The final bibliography has four entries, and both bibliographic data and cited r
 - **Gethner 1985.** Proc. Edinburgh Math. Soc. 28, 381-407, DOI `10.1017/S001309150001720X`. The final set is defined through neighborhoods containing points of infinitely many derivatives.
 - **Hou 2026.** arXiv:2607.20816. The abstract states a probabilistic bounded-coefficient Fock construction with the cofinite property and a Lean 4 formalization of the existence theorem, growth bound, and supporting lemmas.
 
-Erdős's 1982 article says that the existence questions in items (i) and (ii) had been proved more than ten years earlier and gives a note citing Barth-Schneider. Because the printed Barth-Schneider theorem that is directly available proves the distinct interpolation statement above, the submission makes no first-solution or historical-priority claim.
+Erdős's 1982 article says that the existence questions in items (i) and (ii) had been proved more than ten years earlier, but it does not identify a proof or precise reference establishing the cofinite statement in item (i). The directly checked Barth-Schneider 1972 theorem is the distinct interpolation result described above. The submission therefore makes no first-solution or historical-priority claim.
 
 ## 11. Typesetting and symbol audit
 
