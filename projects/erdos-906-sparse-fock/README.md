@@ -1,41 +1,60 @@
 # Erdős Problem 906 - sparse Fock series
 
-This project develops an explicit deterministic construction for the cofinite form of Erdős Problem #906. The family is
+This project is deliberately split into two independent parts.  The separation is part of the mathematical quality control: the website-submission paper contains only statements backed by the published Lean development, while broader research is kept outside the submission tree.
+
+## Part I - fully formalized website submission
+
+Canonical submission files:
+
+- [`paper/paper_en.pdf`](paper/paper_en.pdf) - compiled submission manuscript.
+- [`paper/paper_en.tex`](paper/paper_en.tex) - authoritative manuscript source.
+- [`paper/PAGE_BY_PAGE_GUIDE.md`](paper/PAGE_BY_PAGE_GUIDE.md) - page-level proof guide.
+- [`paper/PRIORITY_AND_SCOPE.md`](paper/PRIORITY_AND_SCOPE.md) - citation, priority, and scope audit.
+- [`paper/REFEREE_AUDIT.md`](paper/REFEREE_AUDIT.md) - mathematical and expository audit of the submission.
+- [`formalization/formalization_map.md`](formalization/formalization_map.md) - paper-to-Lean dependency map.
+- [`formalization/FORMALIZATION_STATUS.md`](formalization/FORMALIZATION_STATUS.md) - precise machine-verification boundary.
+- [`formalization/lean/`](formalization/lean/) - Lean 4 / Mathlib source.
+
+The submitted function is fixed once and for all as
 
 \[
-F_p(z)=\sum_{j\ge 1}\frac{z^{\lfloor j^p\rfloor}}{\sqrt{\lfloor j^p\rfloor!}},
-\qquad \frac43\le p<2.
+F(z)=\sum_{j\ge1}\frac{z^{\lfloor j^{3/2}\rfloor}}{\sqrt{\lfloor j^{3/2}\rfloor!}}.
 \]
 
-What I find most useful about the construction is not the existence statement by itself, but the fact that the derivative zeros can be followed rather explicitly. For `p>4/3` the paper obtains annular zero localization near circular grids, sharp covering scales, eventual simplicity away from the origin, counting asymptotics, and a limiting zero measure. The endpoint `p=4/3` is less explicit and is handled by a compactness argument.
+The formalized submission proves:
 
-## Files
+- the cofinite zero-hitting property required by Erdős Problem 906;
+- the quantitative annular covering rate `O(n^{-1/6})`;
+- exactly one simple zero in every admissible model disk;
+- exhaustion of all zeros on a fixed annulus by model disks;
+- eventual simplicity of all annular zeros;
+- eventual pairwise disjointness of admissible model disks;
+- exact distinct-zero counts on finite unions of admissible model disks;
+- the entire-function, derivative-series, transcendence, and upper-growth facts used by the paper.
 
-- [`paper/paper_en.pdf`](paper/paper_en.pdf) - compiled English manuscript.
-- [`paper/paper_en.tex`](paper/paper_en.tex) - manuscript source.
-- [`paper/PRIORITY_AND_SCOPE.md`](paper/PRIORITY_AND_SCOPE.md) - what is and is not being claimed about priority.
-- [`formalization/formalization_map.md`](formalization/formalization_map.md) - proof-to-Lean dependency map.
-- [`formalization/FORMALIZATION_STATUS.md`](formalization/FORMALIZATION_STATUS.md) - current formalization boundary.
-- [`formalization/lean/`](formalization/lean/) - the published `p=3/2` Lean 4 / Mathlib source.
+The principal theorem declarations are audited in `RequestProject/Main.lean` with `#print axioms`.
 
-
-## Scope and priority
-
-I do **not** claim the first solution of Erdős #906. Earlier probabilistic constructions exist, including Eric Hou's work. My narrower claim is that the paper gives an explicit deterministic sparse-Fock construction and develops additional quantitative zero geometry. I also avoid a historical-priority claim for the sparse construction until the older lacunary-entire-function literature has been checked more completely.
-
-## Lean formalization
-
-The `p=3/2` source contains 35 `.lean` files and 6727 lines under `RequestProject/`. The main entry point is [`formalization/lean/RequestProject/Main.lean`](formalization/lean/RequestProject/Main.lean), which prints the axiom dependencies of the principal theorems.
-
-The formalized layer includes the cofinite theorem, the `n^{-1/6}` annular covering rate, unique simple zeros in admissible model disks, exclusion of extra annular zeros, eventual annular simplicity, disjointness of the model disks, and exact distinct-zero counts on finite unions of such disks. The general `4/3<p<2` structural theorem, the `p=4/3` compactness argument, the sector asymptotic, limiting zero measure, and the exact lower growth estimate are still manuscript-only.
-
-The project uses Lean/mathlib `v4.28.0`. From the Lean directory:
+From the Lean project directory:
 
 ```bash
 cd projects/erdos-906-sparse-fock/formalization/lean
 lake build RequestProject.Main
 ```
 
+The CI workflow also performs a static scan for proof escapes before building the Lean project.
+
+## Part II - research extension, not part of the submission
+
+The [`research/`](research/) directory contains broader mathematical work that is intentionally **not** used to support the formalized submission.  It includes the earlier general-parameter manuscript and status notes on subsequent research directions.
+
+Nothing in `research/` should be read as machine verified merely because it appears in this repository.  A research result moves into Part I only after its paper statement, proof, and Lean declaration have been synchronized and audited.
+
+## Scope and priority
+
+I do **not** claim the first solution of Erdős Problem 906.  Eric Hou gave a probabilistic bounded-coefficient Fock-series construction in 2026, with a public Lean formalization.  The present submission has a different purpose: it gives a fixed explicit sparse series and a fully formalized quantitative localization theory for its high-derivative zeros.
+
+The historical-priority discussion is kept intentionally narrow; see [`paper/PRIORITY_AND_SCOPE.md`](paper/PRIORITY_AND_SCOPE.md).
+
 ## AI assistance disclosure
 
-Language-model tools were used substantially during derivation, checking, exposition, and formalization. The manuscript separates mathematical claims from priority claims, and the formalization status file distinguishes machine-checked portions from manuscript-only results.
+Language-model tools were used substantially during derivation, checking, exposition, repository maintenance, and formalization.  This disclosure is kept separate from the mathematical prose.  The paper and formalization files state precisely which claims are machine checked.
