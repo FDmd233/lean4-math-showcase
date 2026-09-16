@@ -1,53 +1,74 @@
-# Formalization map: sparse Fock derivative zeros
+# Formalization map: canonical `p = 3/2` submission
 
-I use this file as a compact proof map between the manuscript and the Lean development. The authoritative mathematical statements remain in `../paper/paper_en.tex`.
+This map is intentionally one-directional: the authoritative submitted mathematics is `../paper/paper_en.tex`, and each theorem-level statement below points to the Lean declaration that checks it. Research-only material is excluded.
 
 ## Definitions
 
-- `nu p j = floor (j^p)`, for `j >= 1` and real `p` in `[4/3,2)`.
-- `q p j = nu p (j+1) - nu p j`, after strict positivity of the gap is established.
-- `F p z = sum_{j>=1} z^(nu p j) / sqrt ((nu p j)!)`.
-- At derivative order `n`, `j0 = min {j : n <= nu p j}` and `m j = nu p j - n` for active indices.
-- `A j = sqrt ((nu p j)!)/(m j)!`; `T j z = A j * z^(m j)`.
-- `rho j = (A j/A (j+1))^(1/q j)`.
+The paper fixes
 
-## Dependency table
+- `nu j = floor(j^(3/2))`;
+- `q j = nu (j+1) - nu j`;
+- `F(z) = sum_{j>=1} z^(nu j) / sqrt((nu j)!)`;
+- at derivative order `n`, `m j = nu j - n` on active indices;
+- `A j = sqrt((nu j)!)/(m j)!` and `T j z = A j * z^(m j)`;
+- `rho j = (A j/A (j+1))^(1/q j)`;
+- model centers `z_(j,l) = rho_j exp((2l+1) pi i/q_j)`;
+- closed model disks of radius `c rho_j/q_j`.
 
-| Module | Paper label | Main output |
-|---|---|---|
-| Quantifiers | `eq:cofinite` | Cofinite hitting iff density along every increasing infinite sequence |
-| Sparse support | `lem:gaps` | Positive gaps and local/global gap bounds |
-| Entire function | `lem:analytic` | Normal convergence, derivative identity, transcendence |
-| Growth | `lem:analytic` | Upper growth bound in Lean; full exact growth in the manuscript |
-| Full weights | `lem:curvature` | Decreasing slope and saddle curvature |
-| Radial grid | `lem:radii` | Exact crossing formula and radial control |
-| Global tails | `lem:tail` | Geometric domination of nonprincipal terms |
-| Model roots | `prop:rouche` | A true zero near each admissible model root |
-| Local uniqueness | `prop:rouche` | Unique simple zero in each model disk for `p=3/2` |
-| Exhaustion | `prop:exclusion` | Every fixed-annulus zero lies in a model disk |
-| Covering | `sec:count` | `p=3/2` annular covering, including the `n^{-1/6}` rate |
-| Disk geometry | `thm:geometry` | Disjoint model disks and eventual annular simplicity |
-| Finite counts | `thm:geometry` | Exact distinct-zero count on finite unions of model disks |
-| General/critical theory | Sections 4-5 | Manuscript only at present |
+The Lean definitions `nu`, `qgap`, `F`, `mOf`, `rho`, `modelCenter`, `modelRadius`, and `modelDisk` implement these objects.
 
-## Quantitative tail step
+## Paper statement to Lean declaration
 
-Write `Q=n^beta`, with `beta>1/4`. In the saddle range, the curvature gives an endpoint slope margin of order `q/sqrt(n)`. Monotonicity carries that margin away from the crossing block, and the active-gap lower bound gives a per-step logarithmic loss
+| Paper statement | Lean declaration | Main module |
+| --- | --- | --- |
+| Entire function | `F_differentiable` | `Fock.lean` |
+| Differentiated series formula | `iteratedDeriv_F` | `Fock.lean` |
+| Transcendence | `F_not_polynomial` | `Fock.lean` |
+| Upper growth bound | `F_norm_le` | `Fock.lean` |
+| Theorem 1.1: cofinite derivative zeros | `erdos906_sparse_fock_p32` | `Erdos906.lean` |
+| Theorem 1.2: `n^(-1/6)` annular covering | `annular_covering_rate_p32` | `Covering32.lean` |
+| Proposition 1.3: one simple zero per model disk | `model_disk_zero_count_one_p32` | `ModelDisk.lean` |
+| Proposition 1.4: exhaustion of annular zeros | `annular_zero_exclusion_p32` | `Annulus.lean` |
+| Corollary 1.5: eventual annular simplicity | `annular_zeros_simple_deriv_p32` | `Simplicity.lean` |
+| Proposition 1.6: pairwise disjoint model disks | `model_disks_pairwise_disjoint_p32` | `Disjoint.lean` |
+| Proposition 1.7: finite model-disk zero count | `zero_count_model_disk_union_p32` | `ZeroCountUnion.lean` |
+| Remark 4.1: multiplicity at the origin | `origin_multiplicity` | `Fock.lean` |
 
-`E_n = c Q^2 / sqrt(n)`.
+## Printed intermediate estimates
 
-The normalized tail is then bounded by a geometric expression of the form
+The submission also uses displayed intermediate estimates whose formal counterparts lie inside the same dependency chain:
 
-`(1+exp L) exp(-E_n)/(1-exp(-E_n))`.
+- support and gap arithmetic: `Aux32.lean`, `Support.lean`;
+- discrete curvature of the full logarithmic weight: `Curvature.lean`, `Concavity.lean`;
+- crossing identities and endpoint slope bounds: `Radii.lean`, `Crossing.lean`;
+- radial location and spacing estimates: `RadialBounds.lean`, `Spacing.lean` (imported through the covering/disjointness chain);
+- the exact tail estimate printed as equation (3.2): `tail_sum_bound` in `Tail.lean`;
+- minimum-modulus existence near each model zero: `exists_zero_of_dominant_two_term` and its sparse specialization in `TwoTerm.lean`;
+- uniqueness and simplicity from Cauchy control of the normalized error: `unique_zero_of_two_term` and `unique_zero_near_model` in `ZeroCount.lean` / `ZeroCount32.lean`;
+- transition capture and one-term exclusion: `transition_zero_p32`, `no_zero_dominant_p32`, and `annular_zero_exclusion_p32` in `Exclusion.lean` / `Annulus.lean`.
 
-## Local zero step
+The important point for the printed proof is that the tail estimate includes the polynomial left-tail factor. The paper no longer replaces it by a stronger geometric-series bound. The formal numerical lemmas absorb that factor using the exponential `exp(-c n^(1/6))` decay available for `p = 3/2`.
 
-At a model center `z0=rho exp((2 ell+1) pi i/q)`, divide by the nonvanishing principal monomial. The two-term model becomes `1-(1+u)^q`. The tail is smaller than the boundary size of the model term, giving existence of a nearby true zero. The Lean development then adds a separate uniqueness/simplicity estimate rather than relying on a formal Rouché theorem.
+## Proof dependency map
 
-## Exhaustion step
+The mathematical proof and the Lean development use the same structural chain:
 
-The normalized block slopes `log r - log rho_j` decrease with `j`. At a maximal term, at most one neighboring term can stay comparable; the remaining terms are exponentially smaller. A true annular zero is therefore forced into one of the transition regions and then into a model disk. This is the step that justifies total annular statements rather than only existence near prescribed model points.
+1. **Support arithmetic.** `Aux32.lean`, `Support.lean` establish explicit upper and lower bounds for `q_j` and the `j^(3/2)` support.
+2. **Entire series and derivatives.** `Fock.lean` establishes the analytic object, its derivatives, transcendence, upper growth, and the origin multiplicity statement.
+3. **Discrete curvature.** `Curvature.lean`, `Concavity.lean` control the decreasing full-weight slope.
+4. **Crossing radii.** `Radii.lean`, `Crossing.lean`, `RadialBounds.lean` locate and separate the radii at which adjacent sparse terms have equal modulus.
+5. **Tail domination.** `Tail.lean` uses curvature plus support gaps to control all terms outside the principal pair. The printed equation (3.2) has the same form as `tail_sum_bound`.
+6. **Two-term localization.** `TwoTerm.lean`, `ModelDisk.lean`, `ZeroCount.lean`, and `ZeroCount32.lean` transfer the two-term geometry to the true derivative. Existence comes from a minimum-modulus argument in logarithmic coordinates; uniqueness and simplicity come from a Cauchy derivative estimate and a quantitative lower bound for the two-term model.
+7. **Exhaustion.** `Dominant.lean`, `Exclusion.lean`, `Annulus.lean` implement the printed three-case dichotomy: near the left crossing, near the right crossing, or one-term dominance away from both.
+8. **Geometry and count.** `Simplicity.lean`, `Disjoint.lean`, `ZeroCountUnion.lean` prove annular simplicity, pairwise disk disjointness, and exact finite distinct-zero counts.
+9. **Covering and cofinite conclusion.** `Covering32.lean` brackets a target radius by consecutive crossing radii, proves the explicit covering rate, and `Erdos906.lean` inserts a small annular disk into an arbitrary nonempty open set.
 
-## What remains
+## Counting convention
 
-The current `p=3/2` development reaches the finite model-disk count. The next genuinely new formalization work would be the sector asymptotic and limiting measure, followed by the general `4/3<p<2` range and the critical endpoint `p=4/3`. I would rather extend in that order than hide the remaining analytic arguments behind larger assumptions.
+`zero_count_model_disk_union_p32` uses `Set.ncard`; it therefore counts distinct zeros. Its companion simplicity conclusion shows that on these model disks the same integer is also the total multiplicity. The paper states the theorem in distinct-zero language to match the encoded statement exactly.
+
+## Axiom and integrity audit
+
+`RequestProject/Main.lean` prints the axioms of every declaration in the theorem crosswalk, including `origin_multiplicity`. The synchronized CI scans `RequestProject/` for the repository's forbidden proof escapes and builds `RequestProject.Main` with the pinned Lean toolchain and project manifest.
+
+No theorem from `../research/` is imported into this map.
