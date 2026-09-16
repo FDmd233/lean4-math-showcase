@@ -1,6 +1,6 @@
 # Page-by-page proof guide
 
-This guide is for checking the compiled five-page paper `paper_en.pdf`. It is explanatory only; the paper itself remains the authoritative submission.
+This guide is for checking the compiled six-page paper `paper_en.pdf`. It is explanatory only; the paper itself remains the authoritative submission.
 
 ## Page 1 - problem, literature, and the explicit function
 
@@ -37,22 +37,24 @@ A crossing radius is the geometric mean arising from one entire sparse gap. Aver
 - `rho_j = m_j/sqrt(n) + O(n^(-1/6))`;
 - consecutive relevant crossing radii are separated on the `n^(-1/6)` scale.
 
-At a crossing, curvature across a sparse gap of length `q_j ~ n^(1/3)` produces a slope margin `q_j/sqrt(n)`. Taking another sparse step multiplies this by another gap, producing the logarithmic tail loss `E_n ~ q_j^2/sqrt(n) ~ n^(1/6)`. This is the mechanism that reduces the derivative to two adjacent terms.
+At a crossing, curvature across a sparse gap of length `q_j ~ n^(1/3)` produces a slope margin `q_j/sqrt(n)`. Taking another sparse step multiplies this by another gap, producing the logarithmic tail loss `E_n ~ q_j^2/sqrt(n) ~ n^(1/6)`. This is the mechanism that reduces the derivative to two adjacent terms. The page ends by introducing the normalized logarithmic local model `1-exp(qw)+E(w)`.
 
-## Page 4 - local zero, exhaustion, disjointness, covering, and cofinite hitting
+## Page 4 - existence, uniqueness, simplicity, and annular exhaustion
 
-Near a model center, after division by the nonvanishing principal monomial, the two-term model is `1-(1+u)^q`. On a fixed `c/q` boundary this has a uniform lower bound, while the remaining sparse tail is exponentially small. The printed proof uses Rouché for the local count; the Lean development proves the same count and simplicity directly from the underlying estimates.
+The existence proof is the same mechanism formalized in `TwoTerm.lean`. On a logarithmic disk `|w| <= c_0/q`, the normalized tail is exponentially small. At the centre the two principal terms cancel, while on the boundary the elementary estimate `|1-exp(qw)| >= c_0/2` dominates the tail. If the true function were zero-free, the maximum-modulus principle applied to its reciprocal would contradict the strict centre-versus-boundary modulus inequality. Hence a true zero lies near each model centre.
 
-The exhaustion argument then treats two cases between consecutive crossing radii. Away from both transition regions one term dominates the sum of all others, so no zero exists. In a transition region the two-term estimate forces any zero into a model disk. Combining exhaustion with the one-zero theorem gives annular simplicity.
+Uniqueness and simplicity follow the formalized `ZeroCount.lean` argument. In the coordinate `t=z/z_0`, write `G(t)=1-t^q+R(t)`. A tail bound on the doubled disk and Cauchy's estimate give `|R'| <= K/s`; the condition `q s <= 1/8` keeps `t^(q-1)` uniformly close to `1`. Thus `t -> t^q` has a quantitative lower Lipschitz bound on the model disk, while the error is strictly smaller. Two zeros would violate these two inequalities, and the same derivative comparison rules out a multiple zero.
 
-Angular separation is `O(q_j^(-1)) = O(n^(-1/3))`, whereas radial circle separation is `O(n^(-1/6))`; this proves disk disjointness and the finite count. Finally, the nearest crossing radius plus nearest model angle gives covering radius `O(n^(-1/6))`. A small annular disk inside an arbitrary open set converts covering into the cofinite theorem.
+The page then begins the exhaustion step. Strictly ordered crossing radii make the normalized block slopes decrease with the support index. Away from transition regions one term dominates the sum of all others, so no zero is possible; inside a transition region the two-term estimate forces a zero into a model disk.
 
-The origin is treated separately: high derivatives can have a large zero there, so global eventual simplicity would be false.
+## Page 5 - disjointness, covering, cofinite hitting, and machine crosswalk
 
-## Page 5 - machine-verification crosswalk and references
+Exhaustion plus the one-zero theorem on an enlarged annulus gives eventual annular simplicity. Same-circle model centres are separated on the `q_j^(-1)=O(n^(-1/3))` scale, while adjacent crossing circles are separated on the larger `n^(-1/6)` radial scale; this proves pairwise disk disjointness and exact finite distinct-zero counts.
 
-The first table is a one-to-one crosswalk from each printed theorem-level statement to its Lean declaration. It also records the distinction between distinct-zero counting (`Set.ncard`) and multiplicity; simplicity makes them numerically agree on the model disks.
+For an arbitrary point `w` of a fixed annulus, the support index nearest the continuous saddle `n+|w| sqrt(n)` has a crossing radius within `O(n^(-1/6))`. Choosing the nearest model angle adds only `O(n^(-1/3))`; the local model-disk zero adds another error of the same smaller order. This proves the covering theorem. A small annular disk inside any nonempty open set then gives the cofinite theorem.
 
-The integrity paragraph records the proof-escape scan and the `#print axioms` audit. Research-only generalizations are explicitly excluded from the submission.
+The origin is separated from the annular simplicity statement because its multiplicity can be large. The remainder of the page gives the one-to-one crosswalk from printed theorem-level statements to Lean declarations and records the proof-escape/axiom audit.
 
-The four references are the only works used for historical/contextual claims in the paper. Their roles and bibliographic data are separately audited in `PRIORITY_AND_SCOPE.md`.
+## Page 6 - bibliography
+
+The final page contains only the four references used for historical or contextual claims. Their roles and bibliographic data are separately audited in `PRIORITY_AND_SCOPE.md`.
