@@ -30,9 +30,9 @@ The bibliography of the submission has been restricted to sources whose bibliogr
 
 ## Historical caution
 
-Erdős's 1982 article says immediately after items (i) and (ii) that the existence of both functions had been proved more than ten years earlier, with a footnote listing Barth-Schneider and other Barth-Schneider papers. The directly checked Barth-Schneider 1972 theorem available under the cited title is the discrete interpolation theorem described above, not the cofinite statement of item (i).
+Erdős's 1982 article says immediately after items (i) and (ii) that the existence of both functions had been proved more than ten years earlier, but it does not supply a proof or a precise reference establishing the cofinite statement in item (i). The directly checked Barth-Schneider 1972 theorem under the related title is the discrete interpolation theorem described above, not the cofinite statement of item (i). The current Erdős Problems record makes the same distinction and notes that the historical attribution remains unclear.
 
-Accordingly, the submission does not infer historical priority from this note and does not claim to settle who first proved the cofinite statement. This is deliberate: the mathematical theorem proved here is independent of any priority conclusion.
+Accordingly, the submission does not infer historical priority from Erdős's remark and does not claim to settle who first proved the cofinite statement. This is deliberate: the mathematical theorem proved here is independent of any priority conclusion.
 
 ## What is deliberately not claimed
 
