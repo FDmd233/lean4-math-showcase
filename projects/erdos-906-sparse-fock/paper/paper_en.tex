@@ -184,13 +184,38 @@ on each step away from the pair $j,j+1$.  Summing the resulting geometric tails 
 \end{equation}
 This is the quantitative reduction to two adjacent terms.
 
-Let $H_j=T_j+T_{j+1}$.  At the model center $z_{j,\ell}$, the two summands cancel.  More precisely, for $z=z_{j,\ell}(1+u)$,
-\begin{equation}\label{eq:model}
- \frac{H_j(z)}{T_j(z)}=1-(1+u)^{q_j}.
+Let $z_0=z_{j,\ell}$ and $q=q_j$.  In the logarithmic coordinate $z=z_0\ee^w$, division by the nonvanishing principal monomial puts the derivative in the form
+\begin{equation}\label{eq:logmodel}
+ \Psi(w)=1-\ee^{qw}+E(w).
 \end{equation}
-Choose a sufficiently small fixed $c>0$.  On $|u|=c/q_j$, the right-hand side of \eqref{eq:model} is bounded below by a positive constant depending only on $c$, whereas \eqref{eq:tail} tends to zero exponentially in $n^{1/6}$.  Rouch\'e's theorem therefore gives exactly one zero, counted with multiplicity, in each disk \eqref{eq:modeldisk}.  In particular the zero is simple.  This proves Proposition~\ref{prop:modeldisk}.
+Fix a small $c_0>0$ and put $\zeta=c_0/q$.  The tail estimate \eqref{eq:tail}, applied on $|w|\le\zeta$, gives $|E(w)|\le K_n$ with $K_n=O(\ee^{-E_n})$.  At the centre $|\Psi(0)|\le K_n$.  On $|w|=\zeta$, the elementary estimate for the exponential remainder gives
+\[
+ |1-\ee^{qw}|\ge c_0/2
+\]
+when $c_0\le1/2$.  Hence $|\Psi|\ge c_0/2-K_n>K_n$ on the boundary for large $n$.  If $\Psi$ had no zero in $|w|\le\zeta$, the maximum-modulus principle applied to $1/\Psi$ would force the modulus at the centre to be at least the boundary minimum, a contradiction.  Thus a true zero lies within $O(\rho_j/q_j)$ of $z_0$.
 
-The Lean proof of Proposition~\ref{prop:modeldisk} uses the same two-term and tail estimates but proves the local zero count and simplicity directly, rather than treating Rouch\'e's theorem as a library black box.  Thus the machine-checked statement is the same as the printed proposition.
+It remains to prove uniqueness and simplicity without a zero-counting black box.  Write $t=z/z_0$ and normalize once more:
+\begin{equation}\label{eq:tmodel}
+ G(t)=1-t^q+R(t).
+\end{equation}
+For a fixed sufficiently small $s\asymp q^{-1}$, the same tail estimate holds on $|t-1|\le2s$ with $|R(t)|\le K_n$.  Cauchy's estimate therefore gives
+\begin{equation}\label{eq:Rprime}
+ |R'(t)|\le K_n/s\qquad(|t-1|\le s).
+\end{equation}
+Choose $s$ so that $qs\le1/8$.  Then $t^{q-1}$ stays within $1/7$ of $1$ on this disk.  Consequently
+\begin{equation}\label{eq:powdiff}
+ |t_1^q-t_2^q|\ge \frac{6q}{7}|t_1-t_2|
+ \qquad(|t_i-1|\le s),
+\end{equation}
+while \eqref{eq:Rprime} gives
+\[
+ |R(t_1)-R(t_2)|\le (K_n/s)|t_1-t_2|.
+\]
+For large $n$, $K_n<qs/2$.  If $G(t_1)=G(t_2)=0$, comparison with \eqref{eq:powdiff} forces $t_1=t_2$.  Moreover
+\[
+ |q t^{q-1}|\ge 6q/7>K_n/s,
+\]
+so $G'(t)\ne0$ at its zero.  The zero is therefore unique and simple.  This proves Proposition~\ref{prop:modeldisk} by exactly the existence--uniqueness mechanism used in the formal development.
 
 \section{Exhaustion, disjointness, and covering}\label{sec:covering}
 Fix $r$ in a compact annulus and choose a summand of maximal modulus on $|z|=r$.  The normalized block slopes satisfy
@@ -200,7 +225,7 @@ Fix $r$ in a compact annulus and choose a summand of maximal modulus on $|z|=r$.
 \end{equation}
 Because $\rho_j$ is strictly increasing, these slopes strictly decrease with $j$.  Hence the sparse terms increase to a single maximal region and then decrease.
 
-Suppose $r$ lies between two consecutive crossing radii.  If $r$ is outside fixed logarithmic neighborhoods of both crossings, the middle term dominates both neighbors; the tail estimate then makes it larger than the sum of all remaining terms.  No zero can occur there.  If $r$ lies in one of the transition neighborhoods, the two-term estimate applies.  At a zero, division by the dominant monomial and \eqref{eq:model} force the phase to lie within $O(1/q_j)$ of an odd $q_j$-th root of $-1$, hence the zero lies in a model disk.  Since \eqref{eq:rhoapprox} keeps the relevant crossing radius in $[a/2,2b]$, this proves Proposition~\ref{prop:exclusion}.
+Suppose $r$ lies between two consecutive crossing radii.  If $r$ is outside fixed logarithmic neighborhoods of both crossings, the middle term dominates both neighbors; the tail estimate then makes it larger than the sum of all remaining terms.  No zero can occur there.  If $r$ lies in one of the transition neighborhoods, the two-term estimate applies.  At a zero, division by the dominant monomial and \eqref{eq:tmodel} force the phase to lie within $O(1/q_j)$ of an odd $q_j$-th root of $-1$, hence the zero lies in a model disk.  Since \eqref{eq:rhoapprox} keeps the relevant crossing radius in $[a/2,2b]$, this proves Proposition~\ref{prop:exclusion}.
 
 Apply Proposition~\ref{prop:modeldisk} on the enlarged annulus $A_{a/2,2b}$ and choose its disk constant in Proposition~\ref{prop:exclusion}.  Every annular zero then lies in a model disk whose unique zero is simple.  This proves Corollary~\ref{cor:simplicity}.
 
