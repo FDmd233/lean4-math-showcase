@@ -1,13 +1,21 @@
 # Formalization status
 
-Current source snapshot: September 13, 2026.
+Current synchronized submission snapshot: September 17, 2026.
 
-## Theorems present in the published `p=3/2` project
+## Canonical scope
 
-The Lean source contains the following principal declarations:
+The canonical website-submission paper is `../paper/paper_en.tex`. It is intentionally restricted to the single explicit parameter value `p = 3/2`.
 
-- `erdos906_sparse_fock_p32`
+Every theorem, proposition, and corollary in that submission has a corresponding Lean declaration in `lean/RequestProject/`. Broader results are kept in `../research/` and are not claims of the formalized submission.
+
+## Principal declarations used by the paper
+
+- `F_differentiable`
+- `iteratedDeriv_F`
+- `F_not_polynomial`
+- `F_norm_le`
 - `annular_covering_rate_p32`
+- `erdos906_sparse_fock_p32`
 - `model_disk_zero_count_one_p32`
 - `annular_zero_exclusion_p32`
 - `annular_zeros_simple_p32`
@@ -15,36 +23,47 @@ The Lean source contains the following principal declarations:
 - `model_disks_pairwise_disjoint_p32`
 - `zero_count_model_disk_union_p32`
 
-There are 35 `.lean` files and 6727 lines under `RequestProject/`.
+`RequestProject/Main.lean` prints the axiom dependencies of the principal theorem declarations.
 
-## Integrity and build status
+## Mathematical content of the checked layer
 
-The publication import checked the source archive against its SHA-256 digest, then checked the imported tree for the expected file/line counts and for the absence of `sorry`, `admit`, custom `axiom`, `unsafe`, `native_decide`, and `@[implemented_by]` in `RequestProject/`.
+For the function
 
-The supplied build record reports a clean `lake build` and reports only the standard axioms `propext`, `Classical.choice`, and `Quot.sound` for the principal declarations printed by `RequestProject/Main.lean`. I keep a distinction between that supplied clean-build record and the publication-time static integrity scan; the latter did not independently rerun Lake.
+`F(z) = sum_{j>=1} z^(floor(j^(3/2))) / sqrt(floor(j^(3/2))!)`,
 
-## What the `p=3/2` layer establishes
+the Lean development checks:
 
-For sufficiently high derivatives on a fixed annulus, the formalized structure includes:
+- entire-function construction and the differentiated series formula;
+- transcendence;
+- the upper quadratic-exponential growth estimate used in the paper;
+- the support-gap arithmetic for `floor(j^(3/2))`;
+- discrete curvature and crossing-radius control;
+- tail domination and the two-term local model;
+- the explicit `n^(-1/6)` annular covering rate;
+- the cofinite zero-hitting theorem for every nonempty open set;
+- exactly one simple zero in every admissible model disk;
+- exclusion of additional zeros on a fixed annulus;
+- eventual simplicity of all annular zeros;
+- eventual pairwise disjointness of admissible model disks;
+- exact distinct-zero counts on finite unions of admissible model disks.
 
-- existence of the expected model-disk zero;
-- uniqueness and simplicity of that zero;
-- exclusion of additional annular zeros outside the model disks;
-- pairwise disjointness of the relevant disks;
-- exact counts of **distinct** zeros on finite unions of model disks;
-- the cofinite zero-hitting statement for Erdős #906;
-- the quantitative annular covering rate `n^{-1/6}`.
+The finite-union theorem uses `Set.ncard`, so its formal count is a distinct-point count. The separately checked simplicity statement makes the corresponding total multiplicity equal to the same number.
 
-`zero_count_model_disk_union_p32` uses `Set.ncard`, so its count is a distinct-point count rather than a divisor-valued multiplicity count. This is compatible with the simplicity theorem, but multiplicity is not encoded there as a separate divisor object.
+## Integrity status
 
-## Manuscript results not yet formalized
+The published `RequestProject/` tree contains no `sorry`, `admit`, custom `axiom`, `unsafe`, `native_decide`, or `@[implemented_by]`. The principal declarations printed by `RequestProject/Main.lean` use only the standard axioms `propext`, `Classical.choice`, and `Quot.sound` in the supplied build record.
 
-The following remain outside the published Lean development:
+The repository CI performs a static integrity scan and builds `RequestProject.Main`. A green CI run on the exact submission commit is the release criterion for describing the checked layer as synchronized.
 
+## Research-only statements
+
+The following are intentionally outside the canonical submission and are not represented as machine-checked results here:
+
+- exact order two and exact type `1/2`;
 - the sector zero-count asymptotic;
 - the limiting zero measure;
 - the full structural theorem for general `4/3 < p < 2`;
-- the critical `p=4/3` compactness argument;
-- the lower growth bound needed for exact order two and exact type `1/2`.
+- the critical `p = 4/3` compactness argument;
+- the later `1 < p < 4/3`, support-profile, sea-to-crystal, and microscopic phase-diagram investigations.
 
-For a proof-by-proof map, see [`formalization_map.md`](formalization_map.md).
+See `../research/README.md` for the research boundary.
