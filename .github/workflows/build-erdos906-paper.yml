@@ -25,7 +25,9 @@ jobs:
           texlive_version: 2026
 
       - name: Commit compiled PDF
+        shell: bash
         run: |
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add projects/erdos-906-sparse-fock/paper/paper_en.pdf
@@ -34,4 +36,8 @@ jobs:
             exit 0
           fi
           git commit -m "Build Erdős 906 paper PDF"
-          git push
+          # The branch may have advanced while LaTeX was compiling. Rebase the
+          # generated-PDF commit before pushing so documentation/Lean commits do
+          # not make this job fail with a non-fast-forward error.
+          git pull --rebase origin "$GITHUB_REF_NAME"
+          git push origin "HEAD:$GITHUB_REF_NAME"
