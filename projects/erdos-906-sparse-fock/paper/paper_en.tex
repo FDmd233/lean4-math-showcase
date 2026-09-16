@@ -4,477 +4,284 @@
 \usepackage[a4paper,margin=27mm]{geometry}
 \usepackage[hidelinks]{hyperref}
 \usepackage{enumitem}
-\setlist[enumerate]{leftmargin=*,itemsep=3pt}
+\setlist[enumerate]{leftmargin=*,itemsep=2pt,topsep=4pt}
 \numberwithin{equation}{section}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{corollary}[theorem]{Corollary}
-\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
 \newcommand{\C}{\mathbb C}
-\newcommand{\Z}{\mathbb Z}
 \newcommand{\N}{\mathbb N}
 \newcommand{\ee}{\mathrm e}
 \newcommand{\dist}{\operatorname{dist}}
-\newcommand{\supp}{\operatorname{supp}}
-\newcommand{\Rea}{\operatorname{Re}}
 \newcommand{\Zer}{\mathcal Z}
-\newcommand{\dd}{\,\mathrm d}
 \newcommand{\Aab}{A_{a,b}}
 \allowdisplaybreaks[1]
 \emergencystretch=1.5em
-\title[High derivatives of sparse Fock series]{Zeros of high derivatives of sparse Fock series}
+\title[Formalized sparse Fock construction]{A formally verified sparse Fock construction for Erd\H{o}s Problem 906}
 \author{Zhijie He}
-\date{September 12, 2026}
-\keywords{Entire functions, successive derivatives, sparse power series, zero localization}
-\hypersetup{pdftitle={Zeros of high derivatives of sparse Fock series},pdfauthor={Zhijie He}}
+\date{September 17, 2026}
+\keywords{Entire functions, successive derivatives, sparse power series, formal verification, zero localization}
+\hypersetup{pdftitle={A formally verified sparse Fock construction for Erdos Problem 906},pdfauthor={Zhijie He}}
+
 \begin{document}
+
 \begin{abstract}
-For $4/3\leq p<2$, we prove that the explicit entire function
-$F_p(z)=\sum_{j\geq1}z^{\lfloor j^p\rfloor}/\sqrt{\lfloor j^p\rfloor!}$
-has order two, type $1/2$, and a zero of every sufficiently high derivative in each nonempty open set. For $p>4/3$, a discrete concavity argument identifies all derivative zeros on fixed annuli with small perturbations of explicit circular grids. It gives a sharp covering scale, eventual simplicity away from the origin, and a limiting zero measure. At $p=4/3$, a compactness argument for bilateral Gaussian series gives the sharp annular covering scale $n^{-1/4}$ without discarding the phases introduced by integer parts. These are deterministic constructions for the cofinite formulation of Erd\H{o}s Problem~906; no first-solution claim is made.
+I study the explicit entire function
+\[
+ F(z)=\sum_{j\ge 1}\frac{z^{\lfloor j^{3/2}\rfloor}}{\sqrt{\lfloor j^{3/2}\rfloor!}}.
+\]
+Every nonempty open subset of the plane contains a zero of $F^{(n)}$ for every sufficiently large $n$.  On each fixed annulus the zeros admit a quantitative description: they lie in pairwise disjoint disks around explicit two-term model points, each such disk contains exactly one simple zero, and the zero set has covering radius $O(n^{-1/6})$.  The construction is deterministic.  Every theorem, proposition, and corollary stated in this note has a corresponding declaration in the accompanying Lean~4/Mathlib development.  No claim of being the first solution of Erd\H{o}s Problem~906 is made.
 \end{abstract}
 \maketitle
 
-\section{Statements and context}\label{sec:intro}
-For a nonzero entire function $g$, let $\Zer(g)$ be its zero set. The property under consideration is
+\section{Statement and context}\label{sec:intro}
+For a nonzero entire function $g$, write $\Zer(g)$ for its zero set.  The cofinite zero-hitting property is
 \begin{equation}\label{eq:cofinite}
  \forall U\subset\C\text{ nonempty open},\quad
- \exists N(U)\quad\forall n\geq N(U):\quad
- \Zer(f^{(n)})\cap U\ne\varnothing.
+ \exists N(U)\quad\forall n\ge N(U):\quad \Zer(g^{(n)})\cap U\ne\varnothing.
 \end{equation}
-It is equivalent to density of $\bigcup_k\Zer(f^{(n_k)})$ for every strictly increasing infinite sequence $(n_k)$ of nonnegative integers. Indeed, an infinite set of exceptional orders for one open set gives a sequence violating density; conversely, an increasing infinite sequence eventually exceeds any fixed threshold. We require $f$ to be transcendental, since polynomials make the question trivial.
+For a transcendental entire function this is equivalent to the formulation of Erd\H{o}s Problem~906 using every strictly increasing sequence of derivative orders.  Indeed, if \eqref{eq:cofinite} fails for an open set $U$, the infinitely many exceptional orders contain a strictly increasing sequence whose derivative-zero union misses $U$.  Conversely, a cofinite set of orders meets every infinite increasing sequence eventually.
 
-This is the question in Erd\H{o}s \cite[p.~72, IV.1(i)]{Erdos82}, now numbered 906. The adjacent interpolation question, associated with Problem~229, concerns prescribed discrete sets and derivative orders selected during the construction. Barth and Schneider \cite[Theorem~1]{BS72} settle that interpolation problem. It does not itself provide the cofinite quantifier in \eqref{eq:cofinite}. MacLane's derivative universality theorem \cite{MacLane52} is another related density result.
+Erd\H{o}s recorded the problem in \cite[p.~72, IV.1(i)]{Erdos82}.  Barth and Schneider \cite[Theorem~1]{BS72} solved a different interpolation problem: for prescribed discrete sets $S_k$ one may choose derivative orders $n_k$ so that $f^{(n_k)}$ vanishes on $S_k$.  That result does not contain the cofinite quantifier in \eqref{eq:cofinite}.  Gethner's final-set framework likewise concerns points met by zeros of infinitely many derivatives, a weaker quantifier than \eqref{eq:cofinite} \cite{Gethner85}.  Hou recently gave a probabilistic bounded-coefficient Fock-series construction satisfying \eqref{eq:cofinite}, together with a Lean formalization of his main theorem and growth bound \cite{Hou26}.  The point here is different: the function below is explicit and sparse, and the derivative zeros can be localized quantitatively.  I make no historical-priority claim beyond these stated features.
 
-Hou \cite[Theorem~1.2]{Hou26} proves \eqref{eq:cofinite} by a bounded random Fock series, with a finite quadratic exponential growth bound. His public repository also contains a Lean formalization; I have not rerun it. His introduction records earlier probabilistic proposals by Almeida and Chojecki. I am interested here in a different feature: an explicit sparse series whose derivative zeros can be tracked rather precisely. I do not claim the existence statement, or order-two finite-type existence, as new.
-
-Fix $p\in[4/3,2)$ and set
+Put
 \begin{equation}\label{eq:series}
- \nu_j=\lfloor j^p\rfloor,\quad q_j=\nu_{j+1}-\nu_j,\quad
- \beta=1-\frac1p,\qquad F_p(z)=\sum_{j=1}^\infty\frac{z^{\nu_j}}{\sqrt{\nu_j!}}.
+ \nu_j=\lfloor j^{3/2}\rfloor,\qquad
+ q_j=\nu_{j+1}-\nu_j,\qquad
+ F(z)=\sum_{j=1}^{\infty}\frac{z^{\nu_j}}{\sqrt{\nu_j!}}.
 \end{equation}
-For $0<a<b$, put $\Aab=\{z:a\leq |z|\leq b\}$ and
-$h_n(E)=\sup_{w\in E}\dist(w,\Zer(F_p^{(n)}))$.
-All constants below may depend on fixed radii and on $p$, but not on $n$ or on points in the indicated sets.
-
-\begin{theorem}\label{thm:main}
-The function $F_p$ is transcendental entire, satisfies \eqref{eq:cofinite}, and has
-\begin{equation}\label{eq:growth}
- \log M_{F_p}(r)=\tfrac12r^2+O_p(\log r)\qquad(r\to\infty).
-\end{equation}
-In particular, its order is exactly two and its type is $1/2$.
-\begin{enumerate}[label=\textup{(\roman*)}]
-\item If $4/3<p<2$, then for every $R>0$,
-\begin{equation}\label{eq:cover}
- h_n(\{|z|\leq R\})\leq C_{R,p}
-       \bigl(n^{\beta-1/2}+n^{-\beta}\bigr)
-\end{equation}
-for all sufficiently large $n$. On every fixed annulus $\Aab$, this implies, and can be sharpened to,
-\begin{equation}\label{eq:sharp}
- c_{a,b,p}n^{\beta-1/2}\leq h_n(\Aab)
-       \leq C_{a,b,p}n^{\beta-1/2}.
-\end{equation}
-\item If $p=4/3$, then
-\begin{equation}\label{eq:criticalcover}
- c_{a,b}n^{-1/4}\leq h_n(\Aab)\leq C_{a,b}n^{-1/4}
-\end{equation}
-for all sufficiently large $n$.
-\end{enumerate}
-The upper-bound proof in \eqref{eq:criticalcover} is a compactness argument; it does not give an explicit numerical value for $C_{a,b}$.
-\end{theorem}
-
-For $\nu_j\geq n$, write
+For $0<a\le b$, set
+\[
+ \Aab=\{z\in\C:a\le |z|\le b\}.
+\]
+For an active index $j$ with $\nu_j\ge n$, define
 \begin{equation}\label{eq:weights}
- m_j=\nu_j-n,\quad A_j=\frac{\sqrt{\nu_j!}}{m_j!},\quad
- T_j(z)=A_jz^{m_j},\quad
+ m_j=\nu_j-n,\qquad
+ A_j=\frac{\sqrt{\nu_j!}}{m_j!},\qquad
+ T_j(z)=A_jz^{m_j},\qquad
  \rho_j=\left(\frac{A_j}{A_{j+1}}\right)^{1/q_j}.
 \end{equation}
-Dependence on $n$ is suppressed in these four quantities. Define the model centers
+The radius $\rho_j$ is where $|T_j|=|T_{j+1}|$.  The corresponding nonzero zeros of the two-term model $T_j+T_{j+1}$ are
 \begin{equation}\label{eq:centers}
  z_{j,\ell}=\rho_j\exp\!\left(\frac{(2\ell+1)\pi i}{q_j}\right),
- \qquad 0\leq\ell<q_j.
+ \qquad 0\le \ell<q_j.
+\end{equation}
+For $c>0$ write
+\begin{equation}\label{eq:modeldisk}
+ \mathcal D_{j,\ell}(c)=\overline D\!\left(z_{j,\ell},\frac{c\rho_j}{q_j}\right).
 \end{equation}
 
-\begin{theorem}\label{thm:geometry}
-Suppose $4/3<p<2$. Fix $0<a<b$. There are $c>0$ and a threshold such that, with
-$\eta_n=\exp(-c n^{2\beta-1/2})$, the disks
-\begin{equation}\label{eq:disks}
- D\left(z_{j,\ell},\frac{\rho_j\eta_n}{q_j}\right),
- \qquad a/2\leq\rho_j\leq2b,
-\end{equation}
-are pairwise disjoint and each contains exactly one zero of $F_p^{(n)}$, counted with multiplicity. Every zero in $\Aab$ belongs to one of these disks. Thus every zero on $\Aab$ is eventually simple.
-
-Let $S=\{re^{i\theta}:a<r<b,\ \alpha<\theta<\alpha+\omega\}$, where $0<\omega\leq2\pi$, with angles interpreted on the circle. If $N_n(S)$ counts zeros with multiplicity, then
-\begin{equation}\label{eq:count}
- N_n(S)=\frac{\omega}{2\pi}(b-a)\sqrt n
-       +O_{a,b,p}\bigl(n^\beta+n^{1/2-\beta}\bigr).
-\end{equation}
-Consequently, on $\C\setminus\{0\}$, in the sense of integration against continuous compactly supported functions,
-\begin{equation}\label{eq:measure}
- \frac1{\sqrt n}\sum_{F_p^{(n)}(\zeta)=0}\!\delta_\zeta
-       \ \longrightarrow\ \frac{1}{2\pi|z|}\dd A(z).
-\end{equation}
-Zeros in the sum are repeated according to multiplicity.
+\begin{theorem}[Cofinite derivative zeros]\label{thm:cofinite}
+For every nonempty open set $U\subset\C$ there is $N$ such that, for every $n\ge N$, the derivative $F^{(n)}$ has a zero in $U$.
 \end{theorem}
 
-The support in \eqref{eq:series} is not a Hadamard gap sequence: $\nu_{j+1}/\nu_j\to1$. For this construction the useful scale is instead the gap compared with the differentiated saddle width. For $p>4/3$ it is
-$n^{1/4}\ll q_j\ll n^{1/2}$ near $\nu_j=n+O(\sqrt n)$.
-Gethner's work on final sets \cite{Gethner85} and Offord's work on lacunary entire functions \cite{Offord93} provide earlier context. A final-set assertion formulated using infinitely many orders does not alone imply \eqref{eq:cofinite}. I have only been able to compare the present argument with Offord's publisher abstract, which concerns angular zero distribution and growth away from small zero neighborhoods; a full comparison with his hypotheses remains open. Accordingly I make no priority claim for the sparse construction.
-
-\section{Analytic preliminaries and the crossing radii}\label{sec:weights}
-\begin{lemma}\label{lem:gaps}
-The integers $\nu_j$ strictly increase and
-\[
- q_j=pj^{p-1}(1+o(1))=p\nu_j^\beta(1+o(1)).
-\]
-Writing $Q=n^\beta$, there are constants $\gamma,\Gamma>0$ such that, for large $n$,
-\begin{equation}\label{eq:gapbounds}
- q_h\geq\gamma Q\quad(\nu_h\geq n),\qquad
- q_h\leq\Gamma Q\quad(n\leq\nu_h\leq n+B\sqrt n)
+\begin{theorem}[Quantitative annular covering]\label{thm:covering}
+Let $0<a\le b$.  There are constants $C>0$ and $N$ such that for every $n\ge N$ and every $w\in\Aab$ there is a zero $z$ of $F^{(n)}$ satisfying
+\begin{equation}\label{eq:coveringrate}
+ |z-w|\le C n^{-1/6}.
 \end{equation}
-for each fixed $B$. Moreover $q_h/(pQ)\to1$ uniformly in the latter range. The first active exponent satisfies $m_{j_0}=O(Q)$, where $j_0=\min\{j:\nu_j\geq n\}$.
-\end{lemma}
-\begin{proof}
-The mean value theorem gives
-$q_j=p\xi_j^{p-1}+O(1)$ with $j<\xi_j<j+1$, and the floor error has modulus at most one. Since $(j+1)^p-j^p>1$, the exponents strictly increase. For active indices $j\geq n^{1/p}$, this gives, for example, $\gamma=p/2$ eventually. In a fixed saddle range $j/n^{1/p}\to1$ uniformly, giving the upper bound and the uniform equivalent. The exponent immediately preceding $\nu_{j_0}$ lies below $n$, so the same gap estimate bounds $m_{j_0}$. No monotonicity of the integer gaps is assumed.
-\end{proof}
+\end{theorem}
 
-\begin{lemma}\label{lem:analytic}
-The series \eqref{eq:series} is entire, with
+\begin{proposition}[One simple zero in each model disk]\label{prop:modeldisk}
+Let $0<a\le b$.  There exist $c\in(0,1]$ and $N$ such that for every $n\ge N$, every active $j$ with $a\le\rho_j\le b$, and every $0\le\ell<q_j$, the disk $\mathcal D_{j,\ell}(c)$ contains exactly one zero of $F^{(n)}$.  That zero is simple.
+\end{proposition}
+
+\begin{proposition}[Exhaustion of annular zeros]\label{prop:exclusion}
+Let $0<a\le b$ and $c>0$.  For all sufficiently large $n$, every zero $z$ of $F^{(n)}$ with $a\le |z|\le b$ belongs to a disk $\mathcal D_{j,\ell}(c)$ with
+\[
+ \frac a2\le\rho_j\le 2b,
+ \qquad 0\le\ell<q_j.
+\]
+\end{proposition}
+
+\begin{corollary}[Eventual annular simplicity]\label{cor:simplicity}
+Let $0<a\le b$.  For all sufficiently large $n$, every zero of $F^{(n)}$ in $\Aab$ is simple.
+\end{corollary}
+
+\begin{proposition}[Pairwise disjoint model disks]\label{prop:disjoint}
+Let $0<a\le b$.  If $0<c\le1$, then for all sufficiently large $n$ the admissible disks $\mathcal D_{j,\ell}(c)$ with $a\le\rho_j\le b$ are pairwise disjoint.
+\end{proposition}
+
+\begin{proposition}[Finite model-disk zero count]\label{prop:count}
+Let $0<a\le b$.  There exist $c\in(0,1]$ and $N$ such that, for every $n\ge N$ and every finite set $I$ of admissible pairs $(j,\ell)$ with $a\le\rho_j\le b$, the union of the disks indexed by $I$ contains exactly $|I|$ distinct zeros of $F^{(n)}$, all simple.
+\end{proposition}
+
+The remainder of the paper proves these statements in a form that mirrors the structure of the formal development.  The exact order and type, sectorial zero asymptotics, limiting zero measures, other values of the support exponent, and the critical endpoint $p=4/3$ are deliberately not part of this submission.
+
+\section{Sparse support and derivative weights}\label{sec:weights}
+The two relevant scales are immediate from the support.  The mean-value theorem and the floor error give
+\begin{equation}\label{eq:gap}
+ \frac32\sqrt j-1\le q_j\le \frac32(\sqrt j+1)+1\qquad(j\ge1).
+\end{equation}
+Thus, when $\nu_j=n+O(\sqrt n)$,
+\begin{equation}\label{eq:qscale}
+ j\asymp n^{2/3},\qquad q_j\asymp n^{1/3}.
+\end{equation}
+In particular the first active exponent $m_{j_0}$, where $j_0=\min\{j:\nu_j\ge n\}$, is $O(n^{1/3})$.
+
+The series in \eqref{eq:series} is entire.  A convenient uniform majorant is
+\begin{equation}\label{eq:growthupper}
+ |F(z)|\le \sqrt{1+|z|^2}\,\exp\!\left(\frac{1+|z|^2}{2}\right).
+\end{equation}
+Indeed, the sparse series is termwise dominated by $\sum_{k\ge0}|z|^k/\sqrt{k!}$, and a Cauchy--Schwarz estimate gives \eqref{eq:growthupper}.  Termwise differentiation is therefore legitimate, and
 \begin{equation}\label{eq:derivative}
- F_p^{(n)}(z)=\sum_{j\geq j_0}A_jz^{m_j}.
+ F^{(n)}(z)=\sum_{\nu_j\ge n} A_jz^{m_j}.
 \end{equation}
-It satisfies \eqref{eq:growth}.
-\end{lemma}
-\begin{proof}
-For every $\varepsilon>0$, Cauchy--Schwarz gives
-\begin{equation}\label{eq:CS}
- \sum_{k\geq0}\frac{r^k}{\sqrt{k!}}
- \leq\left(\frac{1+\varepsilon}{\varepsilon}\right)^{1/2}
-       \exp\!\left(\frac{1+\varepsilon}{2}r^2\right).
+The support is infinite, hence $F$ is not a polynomial.  In the Lean development transcendence is certified directly by showing that sufficiently high derivatives of a polynomial vanish while the corresponding derivatives of $F$ do not.
+
+For integers $k\ge n$ and $r>0$, set
+\begin{equation}\label{eq:Phi}
+ \Phi_{n,r}(k)=\frac12\log(k!)-\log((k-n)!)+(k-n)\log r.
 \end{equation}
-This proves normal convergence. Cauchy's integral formula on a slightly larger circle justifies termwise differentiation to every fixed order and gives \eqref{eq:derivative}. Infinitely many Taylor coefficients are nonzero, so the function is transcendental.
-
-Taking $\varepsilon=r^{-2}$ in \eqref{eq:CS} yields the upper bound in \eqref{eq:growth}. For the lower bound choose $k=\nu_j\leq r^2<\nu_{j+1}$. Then $r^2-k=O_p(r^{2\beta})=o(r)$. The elementary integral bounds for the increasing function $\log t$ give
-\begin{equation}\label{eq:factorial}
- k\log k-k+1\leq\log(k!)\leq k\log k-k+1+\log k.
+Its first difference is
+\begin{equation}\label{eq:difference}
+ d_{n,r}(k)=\Phi_{n,r}(k+1)-\Phi_{n,r}(k)
+ =\log r+\frac12\log(k+1)-\log(k+1-n).
 \end{equation}
-Thus
-\[
- \log\frac{r^k}{\sqrt{k!}}
- =\tfrac12\{k+k\log(r^2/k)\}+O(\log k)
- =\tfrac12r^2+O_p(\log r).
-\]
-The last step follows by Taylor expansion in $(r^2-k)/r^2$, with error $O((r^2-k)^2/r^2)=o(1)$. Positivity at $z=r$ supplies the required lower bound. Under the definitions
-$\operatorname{ord}f=\limsup\log\log M_f(r)/\log r$ and
-$\operatorname{type}_2f=\limsup\log M_f(r)/r^2$, the order and type follow.
-\end{proof}
-
-The term ``Fock'' refers here to the normalization $1/\sqrt{k!}$; the coefficient sequence of $F_p$ is not square summable, so no membership in the standard Fock Hilbert space is asserted.
-
-For integers $k\geq n$ and $r>0$ set
-\[
- \Phi_{n,r}(k)=\tfrac12\log(k!)-\log((k-n)!)+(k-n)\log r,
- \qquad d_{n,r}(k)=\Phi_{n,r}(k+1)-\Phi_{n,r}(k).
-\]
-\begin{lemma}[Discrete curvature]\label{lem:curvature}
-Writing $m=k-n$, one has
-\begin{align}
- d_{n,r}(k)&=\log r+\tfrac12\log(n+m+1)-\log(m+1),\label{eq:difference}\\
+Writing $m=k-n$,
+\begin{equation}\label{eq:curvature}
  d_{n,r}(k)-d_{n,r}(k+1)
- &=\log\left(1+\frac1{m+1}\right)
-       -\tfrac12\log\left(1+\frac1{n+m+1}\right)>0.\label{eq:curvature}
-\end{align}
-For any $B>0$, uniformly for $0\leq m\leq B\sqrt n$, the difference in \eqref{eq:curvature} is at least $c_B/\sqrt n$ for all sufficiently large $n$, where one may take $c_B=1/(4(B+1))$. If $m/\sqrt n\to r\in[a,b]$, it equals $(1+o(1))/(r\sqrt n)$ uniformly.
-\end{lemma}
-\begin{proof}
-The formulas follow by cancellation of factorials. Positivity follows since $n+m+1\geq m+1$. The inequalities $x/(1+x)\leq\log(1+x)\leq x$ give the lower bound
-$1/(m+2)-1/(2(n+m+1))$, which is at least $c_B/\sqrt n$ eventually. Expansion of the two logarithms proves the final assertion.
-\end{proof}
+ =\log\!\left(1+\frac1{m+1}\right)
+ -\frac12\log\!\left(1+\frac1{n+m+1}\right)>0.
+\end{equation}
+Hence $\Phi_{n,r}$ is strictly discretely concave.  Uniformly for $m=O(\sqrt n)$, the drop in \eqref{eq:curvature} is comparable to $n^{-1/2}$.
 
-\begin{lemma}[Radial grid]\label{lem:radii}
-The radii $\rho_j$ strictly increase to infinity for each fixed $n$, and
+The crossing radius has the exact representation
 \begin{equation}\label{eq:rhoexact}
  \log\rho_j=\frac1{q_j}\sum_{s=1}^{q_j}
-       \left\{\log(m_j+s)-\tfrac12\log(n+m_j+s)\right\}.
+ \left\{\log(m_j+s)-\frac12\log(n+m_j+s)\right\}.
 \end{equation}
-Uniformly for $0\leq m_j\leq B\sqrt n$,
+The summand is increasing in $s$, so the $\rho_j$ are strictly increasing.  In the saddle range $m_j=O(\sqrt n)$, \eqref{eq:rhoexact} and \eqref{eq:qscale} give
 \begin{equation}\label{eq:rhoapprox}
- \rho_j=\frac{m_j}{\sqrt n}+O_{B,p}(Q/\sqrt n).
+ \rho_j=\frac{m_j}{\sqrt n}+O(n^{-1/6}),
 \end{equation}
-Conversely, bounded $\rho_j$ imply $m_j=O(\sqrt n)$. On fixed compact annuli, consecutive crossing radii have spacings
-\begin{equation}\label{eq:radialspacing}
- c_{a,b,p}\frac{Q}{\sqrt n}\leq\rho_{j+1}-\rho_j
-       \leq C_{a,b,p}\frac{Q}{\sqrt n}.
+and on every fixed compact annulus
+\begin{equation}\label{eq:rhospace}
+ c_{a,b}n^{-1/6}\le \rho_{j+1}-\rho_j\le C_{a,b}n^{-1/6}
 \end{equation}
-\end{lemma}
-\begin{proof}
-Equation \eqref{eq:rhoexact} follows from \eqref{eq:weights}. Put
-$g_n(t)=\log(t+1)-\tfrac12\log(n+t+1)$ for $t\geq0$ and
-$f_n(t)=\exp(g_n(t))$. Both increase strictly. Formula \eqref{eq:rhoexact} averages $g_n$ over successive disjoint integer blocks, proving strict ordering, divergence, and
-\begin{equation}\label{eq:rhosqueeze}
- f_n(m_j)\leq\rho_j\leq f_n(m_j+q_j-1).
-\end{equation}
-For $t=O(\sqrt n)$, $f_n(t)=t/\sqrt n+O(n^{-1/2})$, giving \eqref{eq:rhoapprox}, including $m_j=0$. The lower bound in \eqref{eq:rhosqueeze}, squared, shows that $\rho_j\leq b$ forces $(m_j+1)^2\leq b^2(n+m_j+1)$, hence $m_j=O_b(\sqrt n)$.
+whenever both radii lie in a fixed enlargement of the annulus.  These estimates explain the exponent in Theorem~\ref{thm:covering}: the radial mesh is $n^{-1/6}$, while the angular mesh on a crossing circle is $q_j^{-1}=O(n^{-1/3})$.
 
-On the relevant blocks, Lemma~\ref{lem:curvature} gives
-\begin{equation}\label{eq:logspacing}
- \log\rho_{j+1}-\log\rho_j
- \geq\frac{c_B(q_j+q_{j+1})}{2\sqrt n}.
+\section{Two-term localization}\label{sec:twoterm}
+Fix a compact saddle range $m_j\le B\sqrt n$.  At $r=\rho_j$ the $q_j$ consecutive differences
+\[
+ d_{n,r}(\nu_j),\ldots,d_{n,r}(\nu_j+q_j-1)
+\]
+have sum zero.  By \eqref{eq:curvature}, their endpoint values have opposite signs and magnitude $\gg q_j/\sqrt n$.  If
+\[
+ |q_j\log(|z|/\rho_j)|\le L,
+\]
+the same signs persist for large $n$.  Since every further sparse step has length $\gg n^{1/3}$, one gains a logarithmic loss
+\begin{equation}\label{eq:En}
+ E_n\asymp \frac{q_j^2}{\sqrt n}\asymp n^{1/6}
 \end{equation}
-Indeed, the mean difference of the indices in the two consecutive blocks is $(q_j+q_{j+1})/2$; apply the curvature bound to every pair and average. On an annulus the blocks also satisfy $m_j\asymp\sqrt n$, where the reverse curvature bound is $C/\sqrt n$. This proves \eqref{eq:radialspacing}. Enlarging the fixed saddle range slightly includes both blocks throughout.
-\end{proof}
-
-\section{The two-term regime}\label{sec:twoterm}
-Assume throughout this section that $\beta>1/4$. We give the infinite-tail estimate explicitly.
-
-\begin{lemma}[Stable tail bound]\label{lem:tail}
-Fix $B>0$ and $L>0$. There is $c>0$ such that, with
-$E_n=cQ^2/\sqrt n\to\infty$, every active $j$ with $m_j\leq B\sqrt n$ satisfies
+on each step away from the pair $j,j+1$.  Summing the resulting geometric tails yields
 \begin{equation}\label{eq:tail}
  \frac{\sum_{h\ne j,j+1}|T_h(z)|}{|T_j(z)|}
- \leq(1+\ee^L)\frac{\ee^{-E_n}}{1-\ee^{-E_n}}
- \quad\text{if}\quad |q_j\log(|z|/\rho_j)|\leq L.
+ \le (1+\ee^L)\frac{\ee^{-E_n}}{1-\ee^{-E_n}}.
 \end{equation}
-The threshold may depend on $B,L,p$.
-\end{lemma}
-\begin{proof}
-At $r=\rho_j$, the $q=q_j$ numbers $d_{n,r}(\nu_j),\ldots,d_{n,r}(\nu_j+q-1)$ have sum zero. Each consecutive drop is at least $c_0/\sqrt n$, where $c_0=1/(4(B+2))$ is valid after increasing the threshold. Thus their first and last members are respectively at least
-$c_0(q-1)/(2\sqrt n)$ and at most its negative. For $q\geq2$, replace this magnitude by $c_0q/(4\sqrt n)$.
+This is the quantitative reduction to two adjacent terms.
 
-Changing the radius adds $\log(|z|/\rho_j)$ to every full difference. Since
-$L/q=o(q/\sqrt n)$, the first and last values retain the corresponding signs with magnitude at least $c_0q/(8\sqrt n)$. Global monotonicity of $d_{n,r}$ now controls \emph{all} preceding and following blocks, even outside the saddle range. Every active gap is at least $\gamma Q$ by Lemma~\ref{lem:gaps}; hence each sparse step away from the pair loses at least
-$E_n=c_0\gamma^2Q^2/(8\sqrt n)$ in logarithmic modulus.
-
-The left tail is at most $|T_j|\sum_{s\geq1}\ee^{-sE_n}$. The right tail is at most $|T_{j+1}|\sum_{s\geq1}\ee^{-sE_n}$, and $|T_{j+1}|/|T_j|\leq\ee^L$. Summing these geometric series proves \eqref{eq:tail}; the actual left tail may terminate earlier.
-\end{proof}
-
-\begin{proposition}[Rouch\'e transfer]\label{prop:rouche}
-Uniformly for $0\leq m_j\leq B\sqrt n$, every disk
-$D(z_{j,\ell},\rho_j\eta_n/q_j)$ contains exactly one zero, counted with multiplicity, where $\eta_n=\exp(-E_n/2)$ and $E_n$ is chosen in Lemma~\ref{lem:tail} with $L=2$.
-\end{proposition}
-\begin{proof}
-Put $H_j=T_j+T_{j+1}$. At $z=z_{j,\ell}(1+u)$,
-\[
+Let $H_j=T_j+T_{j+1}$.  At the model center $z_{j,\ell}$, the two summands cancel.  More precisely, for $z=z_{j,\ell}(1+u)$,
+\begin{equation}\label{eq:model}
  \frac{H_j(z)}{T_j(z)}=1-(1+u)^{q_j}.
-\]
-On $|u|=\eta_n/q_j$, one has $|q_j\log|1+u||\leq2\eta_n\leq2$. The binomial theorem yields
-\begin{equation}\label{eq:modelbound}
- |1-(1+u)^{q_j}|\geq1+2\eta_n-\ee^{\eta_n}\geq\eta_n/2
 \end{equation}
-eventually. The last inequality follows from
-$\ee^t-1-t\leq t^2$ for $0\leq t\leq1/4$, directly from its series.
-The right side of \eqref{eq:tail} is $O(\ee^{-E_n})<\eta_n/2$. Thus
-$|F_p^{(n)}-H_j|<|H_j|$ on the entire boundary.
+Choose a sufficiently small fixed $c>0$.  On $|u|=c/q_j$, the right-hand side of \eqref{eq:model} is bounded below by a positive constant depending only on $c$, whereas \eqref{eq:tail} tends to zero exponentially in $n^{1/6}$.  Rouch\'e's theorem therefore gives exactly one zero, counted with multiplicity, in each disk \eqref{eq:modeldisk}.  In particular the zero is simple.  This proves Proposition~\ref{prop:modeldisk}.
 
-The model has the zero $0$ of multiplicity $m_j$, if $m_j>0$, and exactly the $q_j$ simple nonzero zeros \eqref{eq:centers}. The disk excludes $0$. Distinct nonzero model zeros have distance at least $2\rho_j\sin(\pi/q_j)\geq4\rho_j/q_j$ for $q_j\geq2$, so it contains exactly one. Rouch\'e's theorem proves the assertion.
-\end{proof}
+The Lean proof of Proposition~\ref{prop:modeldisk} uses the same two-term and tail estimates but proves the local zero count and simplicity directly, rather than treating Rouch\'e's theorem as a library black box.  Thus the machine-checked statement is the same as the printed proposition.
 
-\begin{proposition}[Exclusion of additional zeros]\label{prop:exclusion}
-For every fixed annulus, the disks in Theorem~\ref{thm:geometry}, with a sufficiently small fixed choice of $c$, are disjoint and contain all its zeros for large $n$.
-\end{proposition}
-\begin{proof}
-The same-circle separation was proved above. Between circles, \eqref{eq:radialspacing} gives a separation of order $Q/\sqrt n$, whereas disk radii are $O(\eta_n/Q)$. Their ratio tends to zero, proving disjointness.
+\section{Exhaustion, disjointness, and covering}\label{sec:covering}
+Fix $r$ in a compact annulus and choose a summand of maximal modulus on $|z|=r$.  The normalized block slopes satisfy
+\begin{equation}\label{eq:blockslope}
+ \frac1{q_j}\log\frac{|T_{j+1}(z)|}{|T_j(z)|}
+ =\log r-\log\rho_j.
+\end{equation}
+Because $\rho_j$ is strictly increasing, these slopes strictly decrease with $j$.  Hence the sparse terms increase to a single maximal region and then decrease.
 
-Fix $r\in[a,b]$ and choose a largest term $|T_k|$ on $|z|=r$. Such a term exists since the summands tend to zero. The normalized block slopes
+Suppose $r$ lies between two consecutive crossing radii.  If $r$ is outside fixed logarithmic neighborhoods of both crossings, the middle term dominates both neighbors; the tail estimate then makes it larger than the sum of all remaining terms.  No zero can occur there.  If $r$ lies in one of the transition neighborhoods, the two-term estimate applies.  At a zero, division by the dominant monomial and \eqref{eq:model} force the phase to lie within $O(1/q_j)$ of an odd $q_j$-th root of $-1$, hence the zero lies in a model disk.  Since \eqref{eq:rhoapprox} keeps the relevant crossing radius in $[a/2,2b]$, this proves Proposition~\ref{prop:exclusion}.
+
+Apply Proposition~\ref{prop:modeldisk} on the enlarged annulus $A_{a/2,2b}$ and choose its disk constant in Proposition~\ref{prop:exclusion}.  Every annular zero then lies in a model disk whose unique zero is simple.  This proves Corollary~\ref{cor:simplicity}.
+
+For the disjointness assertion, model centers on one circle satisfy
+\begin{equation}\label{eq:angularsep}
+ |z_{j,\ell}-z_{j,\ell'}|\ge \frac{4\rho_j}{q_j}
+ \qquad(\ell\ne\ell'),
+\end{equation}
+for all sufficiently large relevant $j$.  With $c\le1$, disks on the same circle are therefore disjoint.  Disks on different circles are separated by the radial gap \eqref{eq:rhospace}, of order $n^{-1/6}$, whereas their radii are $O(q_j^{-1})=O(n^{-1/3})$.  Hence the whole admissible family is eventually pairwise disjoint, proving Proposition~\ref{prop:disjoint}.  Choosing the disk constant supplied by Proposition~\ref{prop:modeldisk}, disjointness and uniqueness give one distinct simple zero per disk in any finite admissible family.  This proves Proposition~\ref{prop:count}.
+
+It remains to prove Theorem~\ref{thm:covering}.  Let $w\in\Aab$ and put $r=|w|$.  Choose $j$ so that
 \[
- \frac1{q_j}\log\frac{|T_{j+1}|}{|T_j|}=\log r-\log\rho_j
+ \nu_j\le n+r\sqrt n<\nu_{j+1},
 \]
-strictly decrease. They show that the moduli increase up to a maximum and then decrease. The first crossing tends to zero. From \eqref{eq:rhosqueeze}, the maximizing index and its fixed number of neighbors satisfy $m_k\asymp\sqrt n$ and $q_k\asymp Q$, uniformly in $r$.
-
-Write $u=|T_{k-1}|/|T_k|\leq1$ and $v=|T_{k+1}|/|T_k|\leq1$. The crossing separation gives
+with the first active index used in the harmless initial case.  Equations \eqref{eq:qscale} and \eqref{eq:rhoapprox} give
 \[
- \frac{\log u}{q_{k-1}}+\frac{\log v}{q_k}
- =\log\rho_{k-1}-\log\rho_k\leq-cQ/\sqrt n.
+ |\rho_j-r|\le Cn^{-1/6}.
 \]
-Both $u$ and $v$ cannot be at least $1/4$, since that would bound the left side below by $-C/Q$, while $Q^2/\sqrt n\to\infty$.
+Choose the nearest model angle on the circle $|z|=\rho_j$.  Its angular displacement from $w$ is $O(q_j^{-1})=O(n^{-1/3})$.  Apply Proposition~\ref{prop:modeldisk} on a fixed enlarged annulus containing all such crossing radii; it supplies a true zero within another $O(n^{-1/3})$.  The radial error dominates, giving \eqref{eq:coveringrate}.
 
-All terms beyond these two neighbors have total modulus $O(\ee^{-c'Q^2/\sqrt n})|T_k|$. To verify this last statement, on the block immediately preceding $k-1$ its normalized slope exceeds that of block $k-1$ by at least $cQ/\sqrt n$, by \eqref{eq:logspacing}. It is therefore positive by this amount. Earlier normalized slopes are larger still. Multiply by the global lower gap bound and sum a geometric series. The right side is identical with reversed signs. This argument uses local curvature only at the two initial blocks and global monotonicity thereafter.
+Finally let $U$ be a nonempty open set.  It contains a nonzero point $w$ and a small closed disk about $w$ contained in some annulus $\Aab$.  For all sufficiently large $n$, Theorem~\ref{thm:covering} places a zero of $F^{(n)}$ in that disk.  This proves Theorem~\ref{thm:cofinite}.
 
-If $u,v<1/4$, the largest term exceeds the sum of all others, so there is no zero. Otherwise select the neighboring pair $j,j+1$ containing a neighbor of relative size at least $1/4$. It has
-$|q_j\log(r/\rho_j)|\leq\log4<2$, so Lemma~\ref{lem:tail} bounds its remainder by $R_n|T_j|$, with $R_n=O(\ee^{-E_n})$ after choosing a common smaller $E_n=cQ^2/\sqrt n$.
+\begin{remark}[The origin]
+The simplicity statement is deliberately annular.  If $j_0=\min\{j:\nu_j\ge n\}$, then the multiplicity of the zero at the origin is exactly $\nu_{j_0}-n$.  For suitable derivative orders this multiplicity is large, so no global eventual-simplicity statement is true.
+\end{remark}
 
-At a zero choose the nearest model angle and write
-$z=z_{j,\ell}\ee^{v_0/q_j}$, where
-$|\Rea v_0|\leq\log4$ and $|\Im v_0|\leq\pi$.
-For $v_0=x+iy$ in this rectangle,
-\[
- |1-\ee^{v_0}|^2=(\ee^x-1)^2+4\ee^x\sin^2(y/2)
-       \geq\tfrac1{16}|v_0|^2.
-\]
-Here $|\ee^x-1|\geq |x|/4$ and $|\sin(y/2)|\geq|y|/\pi$ suffice. At the zero, $|1-\ee^{v_0}|\leq R_n$, hence $|v_0|\leq4R_n$ and
-$|z-z_{j,\ell}|\leq8\rho_jR_n/q_j<\rho_j\eta_n/q_j$ eventually. Also $\rho_j=r\exp(O(Q^{-1}))\in[a/2,2b]$. This proves the exclusion assertion.
-\end{proof}
+\section{Formal verification and scope}\label{sec:formal}
+The Lean development is pinned to Lean/Mathlib~4.28.0.  The main declarations corresponding to the statements above are:
+\begin{center}
+\begin{tabular}{p{0.42\textwidth}p{0.48\textwidth}}
+\hline
+Printed statement & Lean declaration \\
+\hline
+Entire function and derivative formula & \texttt{F\_differentiable}, \texttt{iteratedDeriv\_F} \\
+Transcendence & \texttt{F\_not\_polynomial} \\
+Upper growth bound \eqref{eq:growthupper} & \texttt{F\_norm\_le} \\
+Theorem~\ref{thm:covering} & \texttt{annular\_covering\_rate\_p32} \\
+Theorem~\ref{thm:cofinite} & \texttt{erdos906\_sparse\_fock\_p32} \\
+Proposition~\ref{prop:modeldisk} & \texttt{model\_disk\_zero\_count\_one\_p32} \\
+Proposition~\ref{prop:exclusion} & \texttt{annular\_zero\_exclusion\_p32} \\
+Corollary~\ref{cor:simplicity} & \texttt{annular\_zeros\_simple\_deriv\_p32} \\
+Proposition~\ref{prop:disjoint} & \texttt{model\_disks\_pairwise\_disjoint\_p32} \\
+Proposition~\ref{prop:count} & \texttt{zero\_count\_model\_disk\_union\_p32} \\
+\hline
+\end{tabular}
+\end{center}
+The finite-union theorem uses ordinary cardinality of the set of distinct zeros; simplicity then makes this equal to total multiplicity on those disks.  The published source contains no \texttt{sorry}, \texttt{admit}, custom \texttt{axiom}, \texttt{unsafe}, \texttt{native\_decide}, or \texttt{@[implemented\_by]} in the project modules.  The main declarations are audited with \texttt{\#print axioms}; only the standard dependencies \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound} occur.
 
-\section{Covering, counting and the origin}\label{sec:count}
-Let $|w|=r\leq R$. If $n+r\sqrt n\geq\nu_{j_0}$, choose $j$ with
-$\nu_j\leq n+r\sqrt n<\nu_{j+1}$; otherwise take $j=j_0$. Lemmas~\ref{lem:gaps} and \ref{lem:radii} give
-\[
- |\rho_j-r|\leq C Q/\sqrt n,
- \qquad \rho_j\leq R+o(1),\qquad q_j\asymp Q.
-\]
-For $w\ne0$, a nearest model angle has angular error at most $\pi/q_j$. Proposition~\ref{prop:rouche} therefore supplies a true zero within
-$C(Q/\sqrt n+Q^{-1})$ of $w$. For $w=0$, use any center of the first pair; its radius is $O(Q/\sqrt n)$. This proves \eqref{eq:cover} on the whole disk, without extending an annular estimate across the origin.
+The present note is intentionally narrower than the accompanying research directory.  Results there concerning general exponents, the endpoint $p=4/3$, sectorial counting, limiting zero measures, and support-profile limits are not claims of this formalized submission unless and until they receive separate machine verification.
 
-For the lower bound in \eqref{eq:sharp}, choose two consecutive crossing radii in a fixed smaller annulus inside $\Aab$. Such radii exist for all large $n$ by \eqref{eq:rhoapprox}. Their separation is at least $cQ/\sqrt n$. A point at the midpoint radius is at least half this radial separation from all model circles. Proposition~\ref{prop:exclusion} and the exponentially small disk radii preserve a lower bound $c'Q/\sqrt n$ for the distance to true zeros. Zeros outside a fixed enlargement of the annulus are a fixed positive distance away. This proves the sharp scale.
-
-To count, let $J_n(a,b)=\{j:a<\rho_j<b\}$. It is an interval of consecutive indices, and \eqref{eq:rhoapprox} implies
-\begin{equation}\label{eq:telescoping}
- \sum_{j\in J_n(a,b)}q_j=(b-a)\sqrt n+O(Q),
- \qquad \#J_n(a,b)=O(\sqrt n/Q).
-\end{equation}
-For the first assertion, the sum telescopes to the difference of its endpoint support exponents; the first and last $m_j$ differ from $a\sqrt n$ and $b\sqrt n$ by $O(Q)$, using the same statement for their adjacent radii. Each circle contributes $\omega q_j/(2\pi)+O(1)$ model centers to an arc of length $\omega$. Equations \eqref{eq:telescoping} give \eqref{eq:count} for centers.
-
-Passing to true zeros changes this count by at most $O(Q+\sqrt n/Q)$. At either radial boundary at most one model circle is within the maximal disk radius for large $n$, by \eqref{eq:radialspacing}; each carries $O(Q)$ centers. At either angular boundary each relevant circle has only $O(1)$ affected centers, since the angular displacement is $O(\eta_n/Q)$. This also handles centers or zeros lying exactly on a boundary, and proves \eqref{eq:count}. Approximation of a continuous compactly supported function by step functions on finitely many annular sectors proves \eqref{eq:measure}; \eqref{eq:count} on a containing annulus uniformly bounds the masses needed for this approximation.
-
-At the origin the exact multiplicity is
-\begin{equation}\label{eq:origin}
- \operatorname{mult}_0 F_p^{(n)}=\min_{\nu_j\geq n}(\nu_j-n)=m_{j_0},
-\end{equation}
-where multiplicity zero means a nonzero value. In particular, taking $n=\nu_j+1$ gives multiplicity $q_j-1\to\infty$. Thus a claim of eventual simplicity on the whole plane would be false. This does not affect the disk covering theorem or the annular statements.
-
-\section{The critical gap exponent}\label{sec:critical}
-We now put $p=4/3$, so $\beta=1/4$. The two-term remainder need not tend to zero on a fixed annulus. Instead, a rescaled derivative has subsequential limits among bilateral Gaussian series with arbitrary phases.
-
-\begin{lemma}[Bilateral Gaussian series have zeros]\label{lem:gaussian}
-Let $\kappa>0$, $t\in\mathbb R$, and $|c_s|=1$ for every $s\in\Z$. Then
-\begin{equation}\label{eq:gaussian}
- G(v)=\sum_{s\in\Z}c_s\exp(ts-\kappa s^2/2)\ee^{sv}
-\end{equation}
-is a nonzero entire function and has a zero in $\C$.
-\end{lemma}
-\begin{proof}
-Gaussian decay proves local uniform convergence and a bound
-$|G(v)|\leq\exp(C(1+|v|^2))$. The function is $2\pi i$-periodic. Its Fourier coefficients on the imaginary axis are precisely the nonzero numbers $c_s\exp(ts-\kappa s^2/2)$; absolute convergence justifies integration, and in particular $G\not\equiv0$.
-
-If $G$ had no zeros, it would admit an entire logarithm $h$, with $\Rea h(v)\leq C(1+|v|^2)$. We recall a short proof that $h$ is quadratic. Write $h(v)=\sum a_kv^k$, $u=\Rea h$, and $M_R=\max_{|v|=R}u(v)$. For $k\geq1$, the Fourier formula and the mean-value property give
-\[
- |a_k|R^k
- =\left|\frac1\pi\int_0^{2\pi}u(R\ee^{i\theta})\ee^{-ik\theta}\dd\theta\right|
- \leq 2(M_R-u(0))=O(1+R^2).
-\]
-Thus $a_k=0$ for $k\geq3$. Periodicity implies
-$h(v+2\pi i)-h(v)\in2\pi i\Z$, so this polynomial difference is constant. The quadratic coefficient vanishes and the linear coefficient is an integer. Consequently $G(v)=C_0\ee^{kv}$ for some $k\in\Z$, contradicting the nonzero Fourier coefficient at every integer. Hence $G$ has a zero.
-\end{proof}
-
-\begin{lemma}[Compactness of critical rescalings]\label{lem:criticalcompact}
-Let $n\to\infty$ along any sequence and choose $w_n$ in a fixed annulus $\Aab$. Put $r_n=|w_n|$ and choose $j=j(n)$ with
-\begin{equation}\label{eq:critj}
- \nu_j\leq n+r_n\sqrt n<\nu_{j+1},\qquad q=q_j.
-\end{equation}
-Then $\nu_j\geq n$ eventually. The entire functions
-\begin{equation}\label{eq:rescaling}
- G_n(v)=\frac{F_{4/3}^{(n)}(w_n\ee^{v/q})}
-                  {T_j(w_n\ee^{v/q})}
-\end{equation}
-have a subsequence converging locally uniformly to a function \eqref{eq:gaussian} with $c_0=1$, $\kappa=(4/3)^2/r$ for some $r\in[a,b]$, and finite real $t$.
-\end{lemma}
-\begin{proof}
-By Lemma~\ref{lem:gaps}, $q\sim(4/3)n^{1/4}$ and $m_j=r_n\sqrt n+O(q)$. For each fixed integer $s$, Taylor's theorem for $x^{4/3}$ and the bounded floor errors give
-\begin{equation}\label{eq:increment}
- \Delta_{n,s}:=\nu_{j+s}-\nu_j=sq+O_s(1),
- \qquad\Delta_{n,s}/q\to s.
-\end{equation}
-Every fixed $s$ is active eventually: there are $\asymp\sqrt n/q\to\infty$ active support steps to the left of $j$.
-
-Set $t_n=q\,d_{n,r_n}(\nu_j)$. Formula \eqref{eq:difference}, together with $0\leq n+r_n\sqrt n-\nu_j<q$, shows $t_n=O_{a,b}(1)$. After passage to a subsequence, $r_n\to r$ and $t_n\to t$. Uniformly on each fixed number of adjacent sparse blocks, \eqref{eq:curvature} is $(1+o(1))/(r_n\sqrt n)$. Summing the full differences, for positive and negative integer increments alike, gives
-\begin{equation}\label{eq:criticalweights}
- \Phi_{n,r_n}(\nu_{j+s})-\Phi_{n,r_n}(\nu_j)
- =s t_n-\frac{q^2}{2r_n\sqrt n}s^2+o(1)
- \longrightarrow st-\kappa s^2/2.
-\end{equation}
-For clarity, the discrete quadratic term before taking limits is
-$-\Delta_{n,s}(\Delta_{n,s}-1)/(2r_n\sqrt n)$; replacing it by the term displayed above changes it by $o(1)$.
-
-The coefficient multiplying $\exp(\Delta_{n,s}v/q)$ in \eqref{eq:rescaling} has modulus given by \eqref{eq:criticalweights} and phase $\exp(i\Delta_{n,s}\arg w_n)$. A diagonal subsequence makes these unit phases converge for every integer $s$, giving coefficients $c_s$ with $c_0=1$. We do not replace the integer parts in these phases by real powers.
-
-We verify the tails needed to pass from coefficient convergence to local uniform convergence. Fix $A>0$ and $|\Rea v|\leq A$. The real part of each exponent is the logarithmic weight at radius $r_n\exp(\Rea v/q)$, normalized by the $j$th term. For a fixed sufficiently large integer $S$, \eqref{eq:criticalweights} gives, at $s=S$ and $s=-S$, an upper bound
-$C_A S-cS^2$, with $c>0$ depending only on the annulus. The threshold in $n$ may depend on $S,A$. Formula \eqref{eq:difference} and local curvature likewise show that beyond the right endpoint the full slope is at most $-c'S/q$, and before the left endpoint it is at least $c'S/q$, after choosing $S$ large compared with $A$. Global monotonicity preserves these bounds all the way to the ends of the active support. Every active gap is at least a fixed positive multiple of $q$. Each further sparse step therefore loses at least $c''S$. Consequently
-\begin{equation}\label{eq:crittail}
- \limsup_{n\to\infty}\ \sup_{|\Rea v|\leq A}
- \sum_{|s|\geq S}|\text{the }s\text{th normalized term}|
- \leq\frac{C\exp(C_A S-cS^2)}{1-\exp(-c''S)}.
-\end{equation}
-Here inactive left terms are omitted. The right side tends to zero with $S$. Finite-term convergence and this tail bound prove local uniform convergence to \eqref{eq:gaussian}.
-\end{proof}
-
-\begin{proof}[Proof of the critical upper bound]
-Suppose the upper bound in \eqref{eq:criticalcover} fails. There are $n_h\to\infty$ and $w_h\in\Aab$ with
-$\dist(w_h,\Zer(F_{4/3}^{(n_h)}))>h n_h^{-1/4}$.
-Apply Lemma~\ref{lem:criticalcompact} and then Lemma~\ref{lem:gaussian}. The nonzero limit $G$ has a zero. Choose a small circle around that zero on which $G$ has no zeros. Local uniform convergence and Rouch\'e's theorem give zeros $v_h$ of $G_{n_h}$ in a fixed bounded disk. Equation \eqref{eq:rescaling} yields zeros
-$\zeta_h=w_h\exp(v_h/q_{j(n_h)})$ of the original derivatives, satisfying
-$|\zeta_h-w_h|\leq C/q_{j(n_h)}\leq C'n_h^{-1/4}$. This contradicts the choice of $w_h$.
-\end{proof}
-
-\section{A zero-count upper bound and final deductions}\label{sec:final}
-\begin{lemma}\label{lem:diskcount}
-For every fixed $R>0$ and $4/3\leq p<2$, the number of zeros of $F_p^{(n)}$ in $|z|\leq R$, counted with multiplicity, is $O_{R,p}(\sqrt n)$.
-\end{lemma}
-\begin{proof}
-For $n\geq1$ and $r>0$, Cauchy--Schwarz and the negative-binomial series give
-\begin{align}
- S_n(r)&:=\sum_{m\geq0}\frac{\sqrt{(n+m)!}}{m!}r^m\notag\\
- &\leq\sqrt{n!}(1-t)^{-(n+1)/2}\exp(r^2/(2t)),\qquad 0<t<1.\label{eq:Sn}
-\end{align}
-Indeed, after dividing by $\sqrt{n!}$, each term is
-$\sqrt{\binom{n+m}{n}/m!}\,r^m$, and the two squared sums are
-$\sum_m\binom{n+m}{n}t^m=(1-t)^{-n-1}$ and $\sum_m(r^2/t)^m/m!=\exp(r^2/t)$.
-Taking $t=r/(r+\sqrt n)$ and using $\log(1+x)\leq x$ yields
-\begin{equation}\label{eq:snbound}
- \log S_n(r)\leq\tfrac12\log(n!)+r\sqrt n+(r+r^2)/2.
-\end{equation}
-This estimate also appears in Hou \cite[Lemma~2.1]{Hou26}; its elementary derivation is included here.
-
-Factor $F_p^{(n)}(z)=z^{m_0}g_n(z)$ with $m_0=m_{j_0}=O(Q)=o(\sqrt n)$.
-For large $n$, $m_0\leq\sqrt n$ and
-\[
- g_n(0)=\frac{\sqrt{(n+m_0)!}}{m_0!}\geq\sqrt{n!},
-\]
-since $m_0!\leq m_0^{m_0}\leq n^{m_0/2}$, with the case $m_0=0$ read separately. Choose a fixed $L>\max(1,R)$, for instance $L=2(R+1)$. On $|z|=L$,
-$|g_n(z)|\leq L^{-m_0}S_n(L)\leq S_n(L)$. Jensen's formula bounds the number of zeros of $g_n$ in $|z|\leq R$ by
-\[
- \frac{\log S_n(L)-\log g_n(0)}{\log(L/R)}=O_R(\sqrt n).
-\]
-Adding the origin multiplicity proves the lemma.
-\end{proof}
-
-The lower bound in \eqref{eq:criticalcover} follows from area. The upper bound already proved implies $h_n(\Aab)<1$ eventually. Zeros in the disk $|z|\leq b+1$ suffice to cover $\Aab$ by disks of radius $h_n(\Aab)$. There are at most $C\sqrt n$ such zeros by Lemma~\ref{lem:diskcount}. Therefore
-$\pi(b^2-a^2)\leq C\sqrt n\,\pi h_n(\Aab)^2$, giving the asserted lower bound.
-
-Finally, every nonempty open set contains a nonzero point $w$ and a disk $D(w,\varepsilon)$ contained in a fixed annulus. The upper bounds in Theorem~\ref{thm:main} tend to zero for every sufficiently large integer $n$. They place a derivative zero in that disk, proving \eqref{eq:cofinite} in both regimes. The subsequence in the critical proof is used to contradict failure of a uniform bound; the final assertion is not restricted to a subsequence.
-
-\subsection*{Further questions}
-For $p=3/2$, the sharp annular covering scale is $n^{-1/6}$; at $p=4/3$ it is $n^{-1/4}$. The endpoint is the least explicit part of the argument: the proof gives neither a circular grid nor eventual simplicity or a limiting zero measure, and I do not claim any of these there. The range $1<p<4/3$ seems to require a different analysis. I would also like an effective version of Lemma~\ref{lem:gaussian}, since it would turn the compactness proof into explicit constants for the critical covering theorem.
-
-\subsection*{Source and assistance statement}
-An earlier supplied note contains the exponential construction
-$\sum_{k\geq1}\exp(-10k^2+k^{3/2}z)$; a second supplied note proposes the sparse construction for $p>4/3$. The present arguments develop that sparse construction and its endpoint. Language-model assistance was used in the derivations and manuscript preparation. No external peer review or machine verification of this manuscript is asserted.
+\section*{AI assistance disclosure}
+Language-model tools were used substantially during derivation, checking, exposition, and formalization.  The mathematical claims in this submission are separated from historical-priority claims, and the repository records the boundary of the machine-checked development.
 
 \begin{thebibliography}{9}
-\bibitem{BS72} K.~F. Barth and W.~J. Schneider,
+
+\bibitem{BS72}
+K.~F. Barth and W.~J. Schneider,
 \emph{On a problem of Erd\H{o}s concerning the zeros of the derivatives of an entire function},
 Proc. Amer. Math. Soc. \textbf{32} (1972), 229--232.
-\href{https://doi.org/10.2307/2038336}{doi:10.2307/2038336}.
-\bibitem{Erdos82} P. Erd\H{o}s,
+DOI: \href{https://doi.org/10.2307/2038336}{10.2307/2038336}.
+
+\bibitem{Erdos82}
+P. Erd\H{o}s,
 \emph{Some of my favourite problems which recently have been solved},
-North-Holland Mathematics Studies \textbf{74} (1982), 59--79.
-\href{https://users.renyi.hu/~p_erdos/1982-33.pdf}{Author archive}.
-\bibitem{Gethner85} R.~M. Gethner,
+in: L.~H.~Y. Chen, T.~B. Ng, M.~J. Wicks (eds.),
+Proceedings of the International Mathematical Conference, Singapore 1981,
+North-Holland Math. Stud. \textbf{74} (1982), 59--79.
+DOI: \href{https://doi.org/10.1016/S0304-0208(08)70415-8}{10.1016/S0304-0208(08)70415-8}.
+
+\bibitem{Gethner85}
+R.~M. Gethner,
 \emph{On the zeros of the derivatives of some entire functions of finite order},
 Proc. Edinburgh Math. Soc. \textbf{28} (1985), 381--407.
-\href{https://doi.org/10.1017/S001309150001720X}{doi:10.1017/S001309150001720X}.
-\bibitem{Hou26} E. Hou,
-\emph{Cofinite zeros of high derivatives}, arXiv:2607.20816v5 (2026).
-\url{https://arxiv.org/html/2607.20816v5}.
-Accompanying repository: \url{https://github.com/erichou1/cofinite-derivative-zeros}.
-\bibitem{MacLane52} G.~R. MacLane,
-\emph{Sequences of derivatives and normal families},
-J. Anal. Math. \textbf{2} (1952), 72--87.
-\href{https://doi.org/10.1007/BF02786968}{doi:10.1007/BF02786968}.
-\bibitem{Offord93} A.~C. Offord,
-\emph{Lacunary entire functions},
-Math. Proc. Cambridge Philos. Soc. \textbf{114} (1993), 67--83.
-\href{https://doi.org/10.1017/S0305004100071413}{doi:10.1017/S0305004100071413}.
+DOI: \href{https://doi.org/10.1017/S001309150001720X}{10.1017/S001309150001720X}.
+
+\bibitem{Hou26}
+E. Hou,
+\emph{Cofinite zeros of high derivatives},
+arXiv:2607.20816 (2026).
+\href{https://arxiv.org/abs/2607.20816}{arXiv:2607.20816}.
+
 \end{thebibliography}
+
 \end{document}
