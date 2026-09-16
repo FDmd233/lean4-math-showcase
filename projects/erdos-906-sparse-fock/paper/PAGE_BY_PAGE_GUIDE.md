@@ -2,9 +2,9 @@
 
 This guide is for checking the compiled six-page paper `paper_en.pdf`. It is explanatory only; the paper itself remains the authoritative submission.
 
-## Page 1 - problem, literature, and the explicit function
+## Page 1 - exact quantifier, literature, and explicit function
 
-The page fixes the quantifier that matters: every nonempty open set must contain a zero of **every sufficiently high derivative**. The short equivalence with the subsequence-density formulation is proved immediately by taking the exceptional derivative orders when cofinite hitting fails.
+The page fixes the quantifier that matters: every nonempty open set must contain a zero of **every sufficiently high derivative**. The equivalence with the original increasing-sequence formulation is proved in both directions by using the exceptional derivative orders when cofinite hitting fails.
 
 The literature paragraph separates three nearby statements:
 
@@ -12,9 +12,9 @@ The literature paragraph separates three nearby statements:
 - Gethner's final set uses infinitely many derivative orders;
 - Hou proves the cofinite condition by a probabilistic bounded-coefficient Fock series.
 
-The page then fixes the single function used in the formalized submission, `nu_j = floor(j^(3/2))`, and introduces the differentiated monomials `T_j`, crossing radii `rho_j`, and the circular two-term model centers. No general-`p` theorem is stated.
+The paper makes no first-solution claim. It then fixes the single function used in the formalized submission, `nu_j = floor(j^(3/2))`, and introduces `T_j`, the crossing radii `rho_j`, and the circular two-term model centres.
 
-## Page 2 - theorem package and the first scale estimates
+## Page 2 - theorem package and support scale
 
 The complete theorem package is stated before the proof:
 
@@ -26,35 +26,44 @@ The complete theorem package is stated before the proof:
 6. pairwise disjointness of model disks;
 7. exact finite distinct-zero counts.
 
-Each item has a separate Lean declaration. The page then derives the two elementary scales of the support. From the mean-value theorem and the floor error, `q_j` is comparable to `sqrt(j)`; in the differentiated saddle window this becomes `q_j ~ n^(1/3)`. The full sparse series is dominated by the standard factorial series, giving the upper quadratic-exponential bound and legitimizing termwise differentiation.
+Every statement retains the active-index and annulus hypotheses present in its Lean declaration. The page then derives `q_j ~ sqrt(j)` and, in the differentiated saddle window, `q_j ~ n^(1/3)`. The factorial majorant gives the printed upper growth estimate and justifies termwise differentiation.
 
-## Page 3 - discrete curvature, crossing radii, and tail domination
+## Page 3 - curvature, crossing radii, and the exact tail bound
 
-The logarithmic weight `Phi_{n,r}` is introduced on the full integer support before sparsification. Its discrete slope is strictly decreasing. In the relevant range the curvature is of order `n^(-1/2)`.
+The logarithmic weight `Phi_(n,r)` is introduced on the full integer support. Its first difference is strictly decreasing; in the relevant range the discrete curvature is comparable to `n^(-1/2)`.
 
-A crossing radius is the geometric mean arising from one entire sparse gap. Averaging the monotone full slope gives
+The crossing radius is an average of the full slope over one sparse gap. This yields the radial `n^(-1/6)` scale and the angular `n^(-1/3)` scale.
 
-- `rho_j = m_j/sqrt(n) + O(n^(-1/6))`;
-- consecutive relevant crossing radii are separated on the `n^(-1/6)` scale.
+The important release correction is equation (3.2). The paper now prints the same structural bound as `tail_sum_bound` in `Tail.lean`:
 
-At a crossing, curvature across a sparse gap of length `q_j ~ n^(1/3)` produces a slope margin `q_j/sqrt(n)`. Taking another sparse step multiplies this by another gap, producing the logarithmic tail loss `E_n ~ q_j^2/sqrt(n) ~ n^(1/6)`. This is the mechanism that reduces the derivative to two adjacent terms. The page ends by introducing the normalized logarithmic local model `1-exp(qw)+E(w)`.
+`exp(-(c-gamma)Q) * ((m+1) + exp(q gamma)/(1-exp(-(c-gamma))))`.
 
-## Page 4 - existence, uniqueness, simplicity, and annular exhaustion
+The factor `(m+1)` is essential: an earlier draft incorrectly replaced the left tail by a pure geometric-series factor. In the `p = 3/2` saddle range the exponential `exp(-c n^(1/6))` still dominates this polynomial factor, and the formal numeric lemmas provide the fixed thresholds required later.
 
-The existence proof is the same mechanism formalized in `TwoTerm.lean`. On a logarithmic disk `|w| <= c_0/q`, the normalized tail is exponentially small. At the centre the two principal terms cancel, while on the boundary the elementary estimate `|1-exp(qw)| >= c_0/2` dominates the tail. If the true function were zero-free, the maximum-modulus principle applied to its reciprocal would contradict the strict centre-versus-boundary modulus inequality. Hence a true zero lies near each model centre.
+## Page 4 - local existence, uniqueness, simplicity, and exclusion
 
-Uniqueness and simplicity follow the formalized `ZeroCount.lean` argument. In the coordinate `t=z/z_0`, write `G(t)=1-t^q+R(t)`. A tail bound on the doubled disk and Cauchy's estimate give `|R'| <= K/s`; the condition `q s <= 1/8` keeps `t^(q-1)` uniformly close to `1`. Thus `t -> t^q` has a quantitative lower Lipschitz bound on the model disk, while the error is strictly smaller. Two zeros would violate these two inequalities, and the same derivative comparison rules out a multiple zero.
+Existence follows the mechanism formalized in `TwoTerm.lean`. In logarithmic coordinates, after division by the principal monomial,
 
-The page then begins the exhaustion step. Strictly ordered crossing radii make the normalized block slopes decrease with the support index. Away from transition regions one term dominates the sum of all others, so no zero is possible; inside a transition region the two-term estimate forces a zero into a model disk.
+`Psi(w) = 1 - exp(q w) + E(w)`.
 
-## Page 5 - disjointness, covering, cofinite hitting, and machine crosswalk
+On `|w| = c0/q`, the two-term model has modulus at least `c0/2`, while the tail is smaller than `c0/4` for large `n`. At the centre the two main terms cancel. If the true function were zero-free, applying the maximum-modulus principle to its reciprocal would contradict this centre-versus-boundary modulus comparison.
 
-Exhaustion plus the one-zero theorem on an enlarged annulus gives eventual annular simplicity. Same-circle model centres are separated on the `q_j^(-1)=O(n^(-1/3))` scale, while adjacent crossing circles are separated on the larger `n^(-1/6)` radial scale; this proves pairwise disk disjointness and exact finite distinct-zero counts.
+The paper then synchronizes the constants for existence and uniqueness. Taking `s = 2 c0/q` puts the existence zero in the disk used for the uniqueness theorem. On the doubled `t`-disk, Cauchy's estimate gives `|R'| <= K/s`; `q s <= 1/8` gives the formal `1/7` estimate for `t^(q-1)-1` and hence the lower Lipschitz bound for `t -> t^q`. This proves uniqueness and simplicity.
 
-For an arbitrary point `w` of a fixed annulus, the support index nearest the continuous saddle `n+|w| sqrt(n)` has a crossing radius within `O(n^(-1/6))`. Choosing the nearest model angle adds only `O(n^(-1/3))`; the local model-disk zero adds another error of the same smaller order. This proves the covering theorem. A small annular disk inside any nonempty open set then gives the cofinite theorem.
+The page begins the global exclusion argument with the exact formal trichotomy: near the left crossing, near the right crossing, or one-term dominance away from both.
 
-The origin is separated from the annular simplicity statement because its multiplicity can be large. The remainder of the page gives the one-to-one crosswalk from printed theorem-level statements to Lean declarations and records the proof-escape/axiom audit.
+## Page 5 - exhaustion, disjointness, covering, and the cofinite conclusion
 
-## Page 6 - bibliography
+The exclusion trichotomy captures every annular zero in a model disk whose crossing radius lies in a fixed enlarged annulus. Combining this with the one-zero theorem gives eventual annular simplicity.
 
-The final page contains only the four references used for historical or contextual claims. Their roles and bibliographic data are separately audited in `PRIORITY_AND_SCOPE.md`.
+Same-circle model centres have separation at least `4 rho_j/q_j`. Different crossing circles are separated on the larger radial `n^(-1/6)` scale, while model-disk radii are `O(n^(-1/3))`. This proves eventual pairwise disjointness and the exact finite distinct-zero count.
+
+The covering proof now follows the Lean route exactly. For a target radius `r`, choose consecutive crossing radii `rho_j <= r < rho_(j+1)`. Their spacing gives an `O(n^(-1/6))` radial error. Choosing the nearest model angle and then the true zero inside its model disk adds only `O(n^(-1/3))`. A small closed disk contained in any nonempty open set then proves cofinite zero hitting.
+
+The origin is kept separate because its zero can have large multiplicity. The exact multiplicity statement is backed by `origin_multiplicity`.
+
+## Page 6 - machine crosswalk, disclosure, and references
+
+The final page gives the paper-to-Lean declaration table, identifies the exact modules containing the tail, local-zero, and exclusion mechanisms, and records the pinned Lean/toolchain information. `RequestProject/Main.lean` audits every declaration in the crosswalk, including the origin-multiplicity remark.
+
+The page ends with the separate AI-assistance disclosure and the four references used for historical/contextual claims. Their roles and bibliographic data are separately audited in `PRIORITY_AND_SCOPE.md` and `REFEREE_AUDIT.md`.
