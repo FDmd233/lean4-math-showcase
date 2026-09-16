@@ -67,7 +67,7 @@ The paper and Lean development follow the same dependency chain:
 
 `support arithmetic -> discrete curvature -> crossing radii -> tail domination -> local two-term zero -> exhaustion -> disjointness/count -> covering -> cofinite hitting`.
 
-The only deliberate expository difference is the local-zero transfer: the paper uses Rouché's theorem because it is the shortest conventional proof; the Lean code proves the same local count and simplicity directly instead of depending on a general Rouché theorem in Mathlib.
+The local-zero transfer now follows the same mechanism in print and in Lean: a minimum-modulus argument in the logarithmic variable supplies existence; a Cauchy derivative estimate for the normalized error supplies uniqueness and simplicity. No general Rouché theorem is used as a proof black box in either version.
 
 ## 8. Citation audit
 
