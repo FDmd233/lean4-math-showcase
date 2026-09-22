@@ -1,6 +1,9 @@
 # Erdős Problem 906 - sparse Fock series
 
-This project is deliberately split into two independent parts. The separation is part of the mathematical quality control: the website-submission paper contains only statements backed by the published Lean development, while broader research is kept outside the submission tree.
+This project is deliberately split into two independent layers. The separation is part of the mathematical quality control:
+
+- the website-submission paper contains only the fixed `p = 3/2` theorem package backed by the published Lean development;
+- broader generalizations and structural investigations are kept in `research/` and are **not** part of the formalized submission unless explicitly promoted.
 
 ## Part I - fully formalized website submission
 
@@ -44,19 +47,32 @@ cd projects/erdos-906-sparse-fock/formalization/lean
 lake build RequestProject.Main
 ```
 
-The CI workflow performs a static scan for proof escapes before building the Lean project. The paper workflow compiles the manuscript and rejects undefined references/citations, LaTeX errors, and overfull horizontal boxes before updating the checked-in PDF.
+The repository contains CI workflows for the Lean project and the paper build. The release documentation records the exact conditions under which a commit may be described as synchronized. This README does not by itself assert that an arbitrary later commit has passed those release checks.
 
 ## Part II - research extension, not part of the submission
 
-The [`research/`](research/) directory contains broader mathematical work that is intentionally **not** used to support the formalized submission. It includes the earlier general-parameter manuscript and status notes on subsequent research directions.
+The [`research/`](research/) directory contains broader mathematical work and status notes that are intentionally **not** used to support the formalized website submission.
 
-Nothing in `research/` should be read as machine verified merely because it appears in this repository. A research result moves into Part I only after its paper statement, proof, and Lean declaration have been synchronized and audited.
+The current research program includes:
+
+- broader sparse-Fock parameter ranges beyond `p = 3/2`;
+- macroscopic support-profile / zero-measure questions for high derivatives;
+- convex/Riesz descriptions of limiting radial zero measures;
+- possible weakenings of gap assumptions to local mesoscopic sparsity;
+- Le Roy-type factorial normalizations;
+- boundary and microscopic phase-transition questions.
+
+These topics are at different levels of completion. Some have manuscript arguments; others remain proof architectures or open research tasks. The exact status is recorded in [`research/README.md`](research/README.md).
+
+Nothing in `research/` should be read as machine verified merely because it appears in this repository. In particular, the general `1 < p < 2`, support-profile, identric-mean, mesoscopic-sparsity, Le Roy, realization/inverse, and microscopic phase-diagram discussions are **not** claims of the canonical Lean-checked submission unless and until they are explicitly promoted.
 
 ## Scope and priority
 
 I do **not** claim the first solution of Erdős Problem 906. Eric Hou gave a probabilistic bounded-coefficient Fock-series construction in 2026, with a public Lean formalization. The present submission has a different purpose: it gives a fixed explicit sparse series and a fully formalized quantitative localization theory for its high-derivative zeros.
 
 Erdős's 1982 discussion also states that the relevant existence questions had been proved earlier, while the directly checked Barth-Schneider theorem under the cited title is a different interpolation statement. The repository therefore keeps the historical-priority claim deliberately narrow; see [`paper/PRIORITY_AND_SCOPE.md`](paper/PRIORITY_AND_SCOPE.md).
+
+Research extensions are subject to a separate literature audit against classical and modern work on lacunary entire functions, repeated differentiation, coefficient-profile zero laws, and related asymptotic zero-distribution theory. No priority claim for those broader directions is made in this README.
 
 ## AI assistance disclosure
 
