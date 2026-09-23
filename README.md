@@ -1,12 +1,12 @@
 # Lean 4 Math Showcase
 
-这里主要放我正在整理的 Lean 4 / mathlib 证明。这个仓库不追求做成大型定理库；我更在意每个子项目的数学内容、依赖边界和可检查性都尽量清楚。
+本仓库收录若干 Lean 4 / mathlib 形式化项目，重点记录各项目的数学内容、依赖边界和可检查性。
 
-目前有三部分：
+目前包括三部分：
 
-- 顶层 `Lean4MathShowcase`：三个相对独立的初等分析/不等式例子。
-- [`projects/affine-prym-formalization`](projects/affine-prym-formalization)：Affine-Prym 论文的线性代数形式化子项目。
-- [`projects/erdos-906-sparse-fock`](projects/erdos-906-sparse-fock)：Erdős Problem #906 的显式稀疏 Fock 构造、英文论文和 `p=3/2` Lean 形式化。
+- 顶层 `Lean4MathShowcase`：三个相对独立的初等分析与不等式例子。
+- [`projects/affine-prym-formalization`](projects/affine-prym-formalization)：Affine-Prym 论文中线性代数部分的形式化。
+- [`projects/erdos-906-sparse-fock`](projects/erdos-906-sparse-fock)：Erdős Problem #906 的显式稀疏 Fock 构造、英文论文与 `p=3/2` Lean 形式化。
 
 ## Top-level examples
 
@@ -24,9 +24,9 @@ import Lean4MathShowcase
 
 ## Affine-Prym
 
-这个子项目对应 *A Rank (2g-1) Affine-Prym Construction and Its Scalar Two-Block Optimality*。形式化重点是把线性代数核心、外部输入和最终依赖关系分开写清楚。
+该子项目对应 *A Rank (2g-1) Affine-Prym Construction and Its Scalar Two-Block Optimality*。形式化将线性代数核心与尚未形式化的拓扑、表示论输入明确分开。
 
-它使用 Lean/mathlib `v4.28.0`，应从自己的目录构建：
+它使用 Lean/mathlib `v4.28.0`，应从子项目目录构建：
 
 ```bash
 cd projects/affine-prym-formalization
@@ -35,7 +35,7 @@ lake build RequestProject.Main
 
 ## Erdős Problem #906
 
-这个项目给出显式的稀疏 Fock 系列，并研究高阶导数零点在固定环带上的几何。目录包含英文论文、优先权说明以及 `p=3/2` 的 Lean 源码。项目不主张首次解决 #906；重点是显式构造和可量化的零点定位。
+该项目研究一个固定的显式稀疏 Fock 级数及其高阶导数零点在固定环带上的定量几何。主论文固定 `p=3/2`；更一般的研究方向单独保存在 `research/`，不计入当前形式化结论。
 
 Lean 子项目单独构建：
 
