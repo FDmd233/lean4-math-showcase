@@ -1,6 +1,6 @@
 # Erdős Problem 906 - sparse Fock series
 
-This project contains a fixed explicit construction for Erdős Problem 906, its quantitative annular zero theory, and a Lean 4 formalization of the `p = 3/2` theorem package. Broader generalizations are kept separately in `research/` and are not part of the formalized submission.
+This project studies the question catalogued as **Erdős Problem #906** by the contemporary [Erdős Problems database](https://www.erdosproblems.com/906). The number 906 is the database number, not a numbering from Erdős's original papers. The database traces the problem to a 1956 Hungarian source and to Erdős's 1982 survey. The project gives a fixed explicit construction, its quantitative annular zero theory, and a Lean 4 formalization of the `p = 3/2` theorem package. Broader generalizations are kept separately in `research/` and are not part of the formalized submission.
 
 ## Paper and formalization
 
@@ -45,7 +45,7 @@ The [`research/`](research/) directory contains work beyond the fixed `p = 3/2` 
 
 ## Scope and priority
 
-No first-solution priority is claimed for Erdős Problem 906. The project instead records a fixed explicit sparse construction and its quantitative zero localization. Historical and literature details are given in [`paper/PRIORITY_AND_SCOPE.md`](paper/PRIORITY_AND_SCOPE.md).
+No first-solution priority is claimed for Erdős Problem #906. Erdős's 1982 survey states that the relevant existence questions had been proved more than ten years earlier, but it does not identify a specific theorem establishing item (i). The modern database notes that the surrounding context suggests work of Barth and Schneider; the directly checked 1972 Barth--Schneider theorem is a different discrete interpolation result. The project therefore records the explicit sparse construction and its quantitative zero localization without assigning historical priority. Details are given in [`paper/PRIORITY_AND_SCOPE.md`](paper/PRIORITY_AND_SCOPE.md).
 
 ## AI assistance
 
