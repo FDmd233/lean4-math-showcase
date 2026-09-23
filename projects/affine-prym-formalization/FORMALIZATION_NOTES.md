@@ -1,6 +1,6 @@
 # Formalization notes
 
-This note records the current mathematical boundary of the Affine-Prym Lean project and its remaining external inputs.
+This note records the mathematical boundary of the Affine-Prym Lean project and its remaining external inputs.
 
 ## Build and axiom audit
 
@@ -48,6 +48,6 @@ The following material is not formalized here:
 
 `LooijengaInput` records the irreducibility consequence needed by the linear-algebra argument. Westwick's theorem enters through the declarations in `ExternalInputs.lean` that carry `sorry`.
 
-## Reading the result
+## Interpretation
 
-I think the cleanest way to read this project is as a dependency audit, not as a claim that the whole paper has been machine-checked. The useful point is that the final linear-algebraic reduction is explicit, and the remaining external mathematics is named in the theorem statements rather than absorbed into undocumented assumptions.
+The project is a dependency-level formalization rather than a claim that the whole paper has been machine checked. The final linear-algebraic reduction is explicit, and the remaining external mathematics is named in the theorem statements rather than absorbed into undocumented assumptions.
