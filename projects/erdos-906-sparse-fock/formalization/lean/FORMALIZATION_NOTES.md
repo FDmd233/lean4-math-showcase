@@ -30,6 +30,6 @@ The uniqueness/simplicity argument is proved directly from analytic estimates in
 
 `RequestProject/Main.lean` prints the axioms of the main declarations. The supplied build record reports only `propext`, `Classical.choice`, and `Quot.sound` for those declarations. The public source contains no `sorry`, `admit`, custom `axiom`, `unsafe`, `native_decide`, or `@[implemented_by]` under `RequestProject/`.
 
-## Remaining gaps
+## Outside the formalized scope
 
-The Lean project does not yet contain the sector-count asymptotic, the limiting zero measure, the general `4/3<p<2` structural theorem, the critical `p=4/3` compactness argument, or the lower growth bound giving exact order/type. Those statements remain claims of the manuscript rather than claims of this formalization.
+The Lean project does not contain the sector-count asymptotic, limiting zero measure, general `4/3<p<2` structural results, the critical `p=4/3` compactness argument, or the lower growth bound giving exact order/type. These topics are retained as research material and are not claims of the canonical formalization.
