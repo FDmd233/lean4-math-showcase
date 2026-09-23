@@ -10,7 +10,7 @@ The earlier manuscript contains arguments for a larger parameter range, includin
 
 ## Structural directions
 
-Subsequent work explores mesoscopic support gaps, scaled support profiles, boundary circle-crystal behavior, and dual Poisson-saddle models. These topics remain outside \`paper/\` while their proofs and literature position are still being developed.
+Subsequent work explores mesoscopic support gaps, scaled support profiles, boundary circle-crystal behavior, and dual Poisson-saddle models. These topics remain outside `paper/` while their proofs and literature position are still being developed.
 
 ## Terminology
 
