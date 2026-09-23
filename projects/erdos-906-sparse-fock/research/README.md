@@ -11,7 +11,7 @@ F_p(z)=\sum_{j\ge1}\frac{z^{\lfloor j^p\rfloor}}{\sqrt{\lfloor j^p\rfloor!}},
 \]
 
 That version is preserved in repository history at commit
-\`d23fed4692bd04195555d9f176a2ca31e6405918\`.
+`d23fed4692bd04195555d9f176a2ca31e6405918`.
 
 It contains arguments for a broader parameter range, including the noncritical two-term regime and a critical \(p=4/3\) compactness argument. These results are not part of the current \(p=3/2\) formalization.
 
@@ -42,6 +42,6 @@ The subcritical microscopic regime is not presently a theorem of the project.
 
 ## Scope
 
-The \`research/\` directory does not assert that the general \(1<p<2\) theory, support-profile results, Le Roy extensions, mesoscopic-sparsity statements, or microscopic phase diagram have been formally verified or externally refereed.
+The `research/` directory does not assert that the general \(1<p<2\) theory, support-profile results, Le Roy extensions, mesoscopic-sparsity statements, or microscopic phase diagram have been formally verified or externally refereed.
 
-The fixed \(p=3/2\) theorem package is contained in \`../paper/\` and \`../formalization/\`.
+The fixed \(p=3/2\) theorem package is contained in `../paper/` and `../formalization/`.
