@@ -32,4 +32,4 @@ The uniqueness/simplicity argument is proved directly from analytic estimates in
 
 ## Outside the formalized scope
 
-The Lean project does not contain the sector-count asymptotic, limiting zero measure, general `4/3<p<2` structural results, the critical `p=4/3` compactness argument, or the lower growth bound giving exact order/type. These topics are retained as research material and are not claims of the canonical formalization.
+The Lean project does not contain the sector-count asymptotic, limiting zero measure, general `4/3<p<2` structural results, the critical `p=4/3` compactness argument, or the lower growth bound giving exact order/type. These topics are retained as research material and are not claims of the current formalization.
