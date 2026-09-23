@@ -266,7 +266,7 @@ The Lean development uses Lean~4.28.0 and the Mathlib revision pinned by the pro
 \begin{center}
 \url{https://github.com/FDmd233/lean4-math-showcase/tree/main/projects/erdos-906-sparse-fock}.
 \end{center}
-The main entry point is \texttt{formalization/lean/RequestProject/Main.lean}.  It imports the complete proof chain and prints the axiom dependencies of every declaration in the paper-to-Lean crosswalk.  The main correspondences are:
+The canonical entry point is \texttt{formalization/lean/RequestProject/Main.lean}.  It imports the complete proof chain and prints the axiom dependencies of every declaration in the paper-to-Lean crosswalk.  The main correspondences are:
 
 \begin{center}
 \renewcommand{\arraystretch}{1.08}
@@ -291,10 +291,10 @@ Remark~\ref{rem:origin} & \texttt{origin\_multiplicity} \\
 
 The exact tail inequality \eqref{eq:tail_exact} is \texttt{tail\_sum\_bound} in \texttt{Tail.lean}; the minimum-modulus localization is formalized in \texttt{TwoTerm.lean}; the local uniqueness and simplicity estimate is formalized in \texttt{ZeroCount32.lean}; and the three-case exclusion argument is formalized in \texttt{Exclusion.lean} and \texttt{Annulus.lean}.  The repository contains a more detailed proof-to-code map.
 
-The checked project modules pass the repository's static proof-integrity policy before compilation.  The declarations printed by \texttt{Main.lean} use only the standard dependencies \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}.  Continuous integration then builds the main entry point from the pinned Lean toolchain.
+The checked project modules pass the repository's static proof-integrity policy before compilation.  The declarations printed by \texttt{Main.lean} use only the standard dependencies \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}.  Continuous integration then builds the canonical entry point from the pinned Lean toolchain.
 
 \section*{AI assistance disclosure}
-Language-model tools were used substantially during derivation, checking, exposition, repository maintenance, and formalization.  The paper and repository distinguish the Lean-checked results from research material that lies outside the scope of this paper.
+Language-model tools were used substantially during derivation, checking, exposition, repository maintenance, and formalization.  The repository separates the machine-checked submission from research material that is not part of this paper.
 
 \begin{thebibliography}{9}
 
