@@ -1,6 +1,6 @@
 # Priority and scope
 
-Literature review date: 2026-09-17.
+Literature review date: 2026-09-23.
 
 This note concerns the fixed `p = 3/2` paper. Research material in `../research/` lies outside the claims below.
 
@@ -16,19 +16,25 @@ has the cofinite high-derivative zero-hitting property and the quantitative annu
 
 No theorem depends on an originality claim.
 
+## Database numbering and source note
+
+The label **Erdős Problem #906** is the numbering used by the contemporary [Erdős Problems database](https://www.erdosproblems.com/906), not a numbering from Erdős's original publications. The database lists `[Er56d]` and `[Er82e,p.72]` as sources and notes that `[Er56d]` is a 1956 Hungarian source. The present paper has directly checked the 1982 survey but does not claim an independent reading or translation of `[Er56d]`; the 1956 source trace is therefore attributed explicitly to the database.
+
 ## Literature used for the historical discussion
 
-1. **P. Erdős (1982).** *Some of my favourite problems which recently have been solved*, Proceedings of the International Mathematical Conference, Singapore 1981, North-Holland Mathematics Studies 74, 59-79. DOI: `10.1016/S0304-0208(08)70415-8`. Page 72, item (i), asks for an entire function such that for every increasing infinite sequence of derivative orders, the union of the corresponding zero sets is dense.
+1. **Erdős Problems database, Problem #906.** `https://www.erdosproblems.com/906`, accessed 2026-09-23. This source is used for the modern problem number and the cross-reference to `[Er56d]`; it is not used in place of the primary 1982 text for Erdős's wording.
 
-2. **K. F. Barth and W. J. Schneider (1972).** *On a problem of Erdös concerning the zeros of the derivatives of an entire function*, Proceedings of the American Mathematical Society 32, 229-232. DOI: `10.2307/2038336`. Their Theorem 1 is a discrete interpolation statement in which derivative orders are chosen together with prescribed discrete zero sets.
+2. **P. Erdős (1982).** *Some of my favourite problems which recently have been solved*, Proceedings of the International Mathematical Conference, Singapore 1981, North-Holland Mathematics Studies 74, 59-79. DOI: `10.1016/S0304-0208(08)70415-8`. Page 72, item (i), asks for an entire function such that for every increasing infinite sequence of derivative orders, the union of the corresponding zero sets is dense.
 
-3. **R. M. Gethner (1985).** *On the zeros of the derivatives of some entire functions of finite order*, Proceedings of the Edinburgh Mathematical Society 28, 381-407. DOI: `10.1017/S001309150001720X`. Gethner's final set is defined through neighborhoods containing points of infinitely many derivatives.
+3. **K. F. Barth and W. J. Schneider (1972).** *On a problem of Erdös concerning the zeros of the derivatives of an entire function*, Proceedings of the American Mathematical Society 32, 229-232. DOI: `10.2307/2038336`. Their Theorem 1 is a discrete interpolation statement in which derivative orders are chosen together with prescribed discrete zero sets.
 
-4. **Eric Hou (2026).** *Cofinite Zeros of High Derivatives*, arXiv:2607.20816. The arXiv record describes a probabilistic bounded-coefficient Fock-series construction satisfying the cofinite property and an accompanying Lean formalization.
+4. **R. M. Gethner (1985).** *On the zeros of the derivatives of some entire functions of finite order*, Proceedings of the Edinburgh Mathematical Society 28, 381-407. DOI: `10.1017/S001309150001720X`. Gethner's final set is defined through neighborhoods containing points of infinitely many derivatives.
+
+5. **Eric Hou (2026).** *Cofinite Zeros of High Derivatives*, arXiv:2607.20816. The arXiv record describes a probabilistic bounded-coefficient Fock-series construction satisfying the cofinite property and an accompanying Lean formalization.
 
 ## Historical caution
 
-Erdős's 1982 article states that the existence questions in items (i) and (ii) had been proved more than ten years earlier, but the article does not identify a proof or precise reference for the cofinite statement in item (i). The directly checked Barth-Schneider theorem is the interpolation result described above rather than the same cofinite statement.
+Erdős's 1982 article states that the existence questions in items (i) and (ii) had been proved more than ten years earlier. The survey passage does not identify a specific theorem establishing item (i), the cofinite statement used in the present paper. The Erdős Problems database notes that the surrounding context suggests work of Barth and Schneider, but the directly checked 1972 Barth--Schneider theorem is the discrete interpolation result described above rather than the same cofinite statement.
 
 For that reason, the paper does not attempt to assign historical priority for the first proof of the cofinite statement.
 
