@@ -5,7 +5,7 @@
 目前包括三部分：
 
 - 顶层 `Lean4MathShowcase`：三个相对独立的初等分析与不等式例子。
-- [`projects/affine-prym-formalization`](projects/affine-prym-formalization)：Affine-Prym 论文中线性代数部分的形式化。
+- [`projects/affine-prym-formalization`](projects/affine-prym-formalization)：一个 Affine-Prym 论证的线性代数形式化与依赖边界记录。
 - [`projects/erdos-906-sparse-fock`](projects/erdos-906-sparse-fock)：Erdős Problem #906 的显式稀疏 Fock 构造、英文论文与 `p=3/2` Lean 形式化。
 
 ## Top-level examples
@@ -22,9 +22,9 @@
 import Lean4MathShowcase
 ```
 
-## Affine-Prym
+## Affine-Prym formalization
 
-该子项目对应 *A Rank (2g-1) Affine-Prym Construction and Its Scalar Two-Block Optimality*。形式化将线性代数核心与尚未形式化的拓扑、表示论输入明确分开。
+该子项目保留一个较早 Affine-Prym 论证的线性代数形式化。它明确区分 Lean 中已经证明的部分与仍作为外部输入的拓扑、表示论和代数几何结果。
 
 它使用 Lean/mathlib `v4.28.0`，应从子项目目录构建：
 
