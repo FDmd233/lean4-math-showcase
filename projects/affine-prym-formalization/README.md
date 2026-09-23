@@ -1,8 +1,8 @@
 # Affine-Prym scalar two-block formalization
 
-This is the Lean 4 companion to *A Rank (2g-1) Affine-Prym Construction and Its Scalar Two-Block Optimality*. It is maintained as a separate Lake project because it uses Lean/mathlib `v4.28.0`, while the examples at the repository root use a different toolchain.
+This Lean 4 project records the linear-algebraic formalization developed from an earlier Affine-Prym argument. It is maintained as a separate Lake project because it uses Lean/mathlib `v4.28.0`, while the examples at the repository root use a different toolchain.
 
-The formalization isolates the linear-algebraic core from the topological and representation-theoretic inputs that remain external.
+The project isolates the linear-algebraic core from the topological and representation-theoretic inputs that remain external.
 
 ## Build
 
@@ -22,7 +22,7 @@ The project proves the linear-algebraic chain leading to the rank inequality, co
 - `two_block_optimality_conditional` reaches the final rank inequality but inherits `sorryAx` through the Westwick wrappers in `ExternalInputs.lean`;
 - the support, contraction-map, rank-strata, and finite-orbit linear algebra is proved in the project itself.
 
-This is not a full formalization of the paper. Surface topology, mapping class groups, twisted cohomology, Looijenga's Prym image theorem, ordinary conjugacy, projective algebraic geometry, and Westwick's theorem remain external to this Lean development.
+This is a dependency-level formalization, not a full formalization of the surrounding topology and representation theory. Surface topology, mapping class groups, twisted cohomology, Looijenga's Prym image theorem, ordinary conjugacy, projective algebraic geometry, and Westwick's theorem remain external to this Lean development.
 
 See [`FORMALIZATION_NOTES.md`](FORMALIZATION_NOTES.md) for the precise boundary.
 
