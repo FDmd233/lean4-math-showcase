@@ -18,7 +18,7 @@
 
 \title[Formalized sparse Fock construction]{A formally verified sparse Fock construction for Erd\H{o}s Problem 906}
 \author{Zhijie He}
-\date{September 17, 2026}
+\date{September 23, 2026}
 \keywords{Entire functions, successive derivatives, sparse power series, formal verification, zero localization}
 \hypersetup{pdftitle={A formally verified sparse Fock construction for Erdos Problem 906},pdfauthor={Zhijie He}}
 
@@ -43,7 +43,7 @@ The literal formulation of Erd\H{o}s Problem~906 allows a polynomial, since all 
 \end{equation}
 This has the same quantifier content as the usual formulation using every strictly increasing sequence of derivative orders.  If \eqref{eq:cofinite} fails for some $U$, the infinitely many exceptional orders contain a strictly increasing sequence all of whose selected derivatives miss $U$.  Conversely, if \eqref{eq:cofinite} holds, then every strictly increasing sequence $n_k$ eventually satisfies $n_k\ge N(U)$, so all sufficiently late selected derivatives have a zero in $U$.
 
-Erd\H{o}s recorded the problem in \cite[p.~72]{Erdos82} and wrote that the two existence questions stated there had been proved more than ten years earlier, but he supplied no proof or precise reference for the cofinite statement.  Barth and Schneider's 1972 theorem \cite{BS72} proves a related but different interpolation statement: for prescribed discrete sets $S_k$, one may choose derivative orders $n_k$ and a transcendental entire function whose $n_k$-th derivative vanishes on $S_k$.  Their result does not contain the cofinite quantifier in \eqref{eq:cofinite}.  Gethner's final-set theory likewise concerns points approached by zeros of infinitely many derivatives, again a weaker quantifier than \eqref{eq:cofinite} \cite{Gethner85}.  Hou gave a probabilistic bounded-coefficient Fock-series construction satisfying \eqref{eq:cofinite}, together with a Lean formalization of the main theorem and growth estimate \cite{Hou26}.  The present construction is explicit and sparse, and its derivative zeros admit a quantitative localization theory.  I make no historical-priority claim beyond these stated features.
+The label ``Erd\H{o}s Problem~906'' follows the numbering of the contemporary Erd\H{o}s Problems database; it is not a numbering from Erd\H{o}s's original papers.  That database traces the problem to a 1956 Hungarian source and to Erd\H{o}s's 1982 survey \cite{Bloom906}.  In the 1982 survey, Erd\H{o}s states that the two existence questions discussed there had been proved more than ten years earlier \cite[p.~72]{Erdos82}.  The survey passage does not identify a specific theorem establishing item~(i), the cofinite statement used here.  The Erd\H{o}s Problems database notes that the surrounding context suggests work of Barth and Schneider, but the directly checked 1972 Barth--Schneider theorem \cite{BS72} is a related interpolation result: for prescribed discrete sets $S_k$, one may choose derivative orders $n_k$ and a transcendental entire function whose $n_k$-th derivative vanishes on $S_k$.  It does not contain the cofinite quantifier in \eqref{eq:cofinite}.  Gethner's final-set theory likewise concerns points approached by zeros of infinitely many derivatives, again a weaker quantifier than \eqref{eq:cofinite} \cite{Gethner85}.  Hou gave a probabilistic bounded-coefficient Fock-series construction satisfying \eqref{eq:cofinite}, together with a Lean formalization of the main theorem and growth estimate \cite{Hou26}.  The present construction is explicit and sparse, and its derivative zeros admit a quantitative localization theory.  I make no historical-priority claim beyond these stated features.
 
 Put
 \begin{equation}\label{eq:series}
@@ -297,6 +297,12 @@ The checked project modules pass the repository's static proof-integrity policy 
 Language-model tools were used substantially during derivation, checking, exposition, and Lean formalization.
 
 \begin{thebibliography}{9}
+
+\bibitem{Bloom906}
+T.~F. Bloom,
+\emph{Erd\H{o}s Problem \#906},
+Erd\H{o}s Problems, accessed September 23, 2026.
+\href{https://www.erdosproblems.com/906}{https://www.erdosproblems.com/906}.
 
 \bibitem{BS72}
 K.~F. Barth and W.~J. Schneider,
