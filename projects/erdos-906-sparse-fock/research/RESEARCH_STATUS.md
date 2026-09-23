@@ -2,16 +2,16 @@
 
 Status date: 2026-09-17.
 
-This document records directions beyond the formalized `p = 3/2` submission. It is not a theorem list and should not be cited as machine verification.
+This document records directions beyond the formalized \(p=3/2\) paper. It is not a list of machine-checked theorems.
 
-## Earlier manuscript layer
+## Earlier general-parameter manuscript
 
-The earlier general-parameter manuscript contains self-contained arguments for a larger range than the canonical submission, including the noncritical two-term regime and a critical `p = 4/3` compactness argument. These arguments remain outside the current Lean boundary.
+The earlier manuscript contains arguments for a larger parameter range, including the noncritical two-term regime and a critical \(p=4/3\) compactness argument. These arguments remain outside the current Lean development.
 
-## Later structural investigations
+## Structural directions
 
-Subsequent work has explored broader organizing principles: mesoscopic support gaps, scaled support profiles, boundary circle-crystal behavior, and dual Poisson-saddle models. These investigations are potentially stronger than the archived manuscript, but they are intentionally kept outside `paper/` until their proofs and literature position have been independently stabilized.
+Subsequent work explores mesoscopic support gaps, scaled support profiles, boundary circle-crystal behavior, and dual Poisson-saddle models. These topics remain outside \`paper/\` while their proofs and literature position are still being developed.
 
-## Verification policy
+## Terminology
 
-The words *proved*, *formalized*, and *submission theorem* are reserved for statements satisfying the promotion rule in `README.md`. Other statements should be described as research results, candidates, proof skeletons, or open tasks according to their actual status.
+Statements represented by Lean declarations are identified explicitly as formalized. Other material is described according to its actual status: proved in manuscript form, conjectural, partial, or open.
