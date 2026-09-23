@@ -1,17 +1,8 @@
-This project was edited by [Aristotle](https://aristotle.harmonic.fun).
-
-To cite Aristotle:
-- Tag @Aristotle-Harmonic on GitHub PRs/issues
-- Add as co-author to commits:
-```
-Co-authored-by: Aristotle (Harmonic) <aristotle-harmonic@harmonic.fun>
-```
-
 # `p=3/2` Lean formalization
 
-This Lake project contains the published Lean 4 / Mathlib source for the `p=3/2` part of *Zeros of high derivatives of sparse Fock series*.
+This Lake project contains the Lean 4 / Mathlib source accompanying *Zeros of high derivatives of sparse Fock series* for the fixed parameter `p=3/2`.
 
-I have tried to keep the boundary straightforward: the code proves the cofinite theorem and a substantial amount of the annular zero geometry, while the general `p` range and the critical endpoint remain in the manuscript.
+The code proves the cofinite theorem together with the annular zero-geometry statements used in the paper. Broader general-`p` results and endpoint questions are kept in the research archive and are not part of this formalized theorem package.
 
 ## Build
 
@@ -36,10 +27,14 @@ The project is pinned to Lean/mathlib `v4.28.0`.
 
 ## File guide
 
-The early files (`Support`, `Curvature`, `Growth`, `Fock`, `Radii`) set up the sparse series and its weights. `Tail`, `TwoTerm`, and `ModelDisk` develop the local two-term picture. `Covering32` proves the annular covering rate. `Exclusion`, `Annulus`, `Simplicity`, `Disjoint`, and `ZeroCountUnion` give the stronger fixed-annulus classification.
+The early files (`Support`, `Curvature`, `Growth`, `Fock`, `Radii`) set up the sparse series and its weights. `Tail`, `TwoTerm`, and `ModelDisk` develop the local two-term picture. `Covering32` proves the annular covering rate. `Exclusion`, `Annulus`, `Simplicity`, `Disjoint`, and `ZeroCountUnion` give the fixed-annulus classification.
 
-For the paper-to-code correspondence and the remaining gaps, see `../formalization_map.md` and `../FORMALIZATION_STATUS.md`.
+For the paper-to-code correspondence and the formalization boundary, see `../formalization_map.md` and `../FORMALIZATION_STATUS.md`.
 
 ## Scope
 
-The source does not formalize the general `4/3<p<2` theorem, the `p=4/3` compactness argument, the sector asymptotic, the limiting zero measure, or the exact lower growth estimate. I prefer to leave those gaps explicit rather than suggest that the whole manuscript is already machine-checked.
+The source does not formalize the general `4/3<p<2` theory, the critical `p=4/3` compactness argument, sector asymptotics, limiting zero measures, or the exact lower growth estimate. Those topics belong to the research archive rather than the canonical `p=3/2` paper.
+
+## Preparation note
+
+AI-assisted tools, including formalization tools, were used during development. The public Lean source and its stated axiom dependencies are the basis for checking the formal claims.
