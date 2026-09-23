@@ -33,7 +33,7 @@ For the paper-to-code correspondence and the formalization boundary, see `../for
 
 ## Scope
 
-The source does not formalize the general `4/3<p<2` theory, the critical `p=4/3` compactness argument, sector asymptotics, limiting zero measures, or the exact lower growth estimate. Those topics belong to the research archive rather than the canonical `p=3/2` paper.
+The source does not formalize the general `4/3<p<2` theory, the critical `p=4/3` compactness argument, sector asymptotics, limiting zero measures, or the exact lower growth estimate. Those topics belong to the research archive rather than the fixed `p=3/2` paper.
 
 ## Preparation note
 
