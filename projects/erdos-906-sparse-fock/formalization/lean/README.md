@@ -37,4 +37,4 @@ The source does not formalize the general `4/3<p<2` theory, the critical `p=4/3`
 
 ## Preparation note
 
-AI-assisted tools, including formalization tools, were used during development. The public Lean source and its stated axiom dependencies are the basis for checking the formal claims.
+Aristotle was used in connection with Lean formalization and machine-assisted verification. OpenAI GPT-6 Astra, GPT-5.6 Sol, and Codex were also used during parts of the research, checking, and preparation. The public Lean source and its stated axiom dependencies define the formal verification boundary.
