@@ -59,4 +59,4 @@ Hou's construction is probabilistic and uses bounded Fock coefficients. The pres
 
 ## AI assistance
 
-AI tools were used during parts of the derivation, checking, exposition, repository preparation, and formalization. The mathematical claims and verification boundary are stated independently of that assistance.
+OpenAI GPT-6 Astra and GPT-5.6 Sol, together with Codex and Aristotle, were used during parts of the research, checking, exposition, repository preparation, and formalization. Astra was used chiefly for research and proof checking; Aristotle for Lean formalization and machine-assisted verification; GPT-5.6 Sol and Codex for detailed checking and preparation. The mathematical claims and verification boundary are stated independently of this assistance.
