@@ -1,54 +1,56 @@
 # Lean 4 Math Showcase
 
-本仓库收录若干 Lean 4 / mathlib 形式化项目，重点记录各项目的数学内容、依赖边界和可检查性。
+This repository collects several Lean 4 / mathlib formalization projects. Each project records the mathematical statement being formalized, the boundary between machine-checked arguments and external mathematical input, and the exact build environment.
 
-目前包括三部分：
+## Projects
 
-- 顶层 `Lean4MathShowcase`：三个相对独立的初等分析与不等式例子。
-- [`projects/affine-prym-formalization`](projects/affine-prym-formalization)：一个 Affine-Prym 论证的线性代数形式化与依赖边界记录。
-- [`projects/erdos-906-sparse-fock`](projects/erdos-906-sparse-fock)：Erdős Problem #906 的显式稀疏 Fock 构造、英文论文与 `p=3/2` Lean 形式化。
+| Project | Mathematical content | Location |
+| --- | --- | --- |
+| Top-level examples | Elementary analysis and inequalities, including the extremal problem for $5\cos x-\cos(5x)$ | `Lean4MathShowcase/` |
+| Affine--Prym formalization | Linear-algebraic part of an Affine--Prym argument, with external topological and algebro-geometric inputs stated separately | [`projects/affine-prym-formalization`](projects/affine-prym-formalization) |
+| Erdős Problem #906 | Sparse Fock construction, paper, and a Lean formalization of the $p=3/2$ case | [`projects/erdos-906-sparse-fock`](projects/erdos-906-sparse-fock) |
 
 ## Top-level examples
 
-| 文件 | 内容 | 定理示例 |
+| File | Content | Representative theorem |
 | --- | --- | --- |
-| `Lean4MathShowcase/TrigonometricExtrema.lean` | `5 cos x - cos (5x)` 的极值与上界 | `trig_maximum_on_Icc`, `cosine_interval_witness`, `least_phase_shift_upper_bound` |
-| `Lean4MathShowcase/LogExtrema.lean` | 对数函数极值点与切线计算 | `part1`, `two_extrema_sum_bounds` |
-| `Lean4MathShowcase/RootFunctionBounds.lean` | 根式函数的单调性和双边估计 | `a8_increasing_on_Ioc`, `a8_decreasing_on_Ici`, `root_function_gt_one`, `root_function_lt_two` |
+| `Lean4MathShowcase/TrigonometricExtrema.lean` | Extremal estimates for $5\cos x-\cos(5x)$ | `trig_maximum_on_Icc`, `cosine_interval_witness`, `least_phase_shift_upper_bound` |
+| `Lean4MathShowcase/LogExtrema.lean` | Critical points and tangent-line calculations for logarithmic functions | `part1`, `two_extrema_sum_bounds` |
+| `Lean4MathShowcase/RootFunctionBounds.lean` | Monotonicity and two-sided bounds for a root function | `a8_increasing_on_Ioc`, `a8_decreasing_on_Ici`, `root_function_gt_one`, `root_function_lt_two` |
 
-统一入口：
+The top-level project is imported by
 
-```lean
+~~~lean
 import Lean4MathShowcase
-```
+~~~
 
-## Affine-Prym formalization
+## Affine--Prym formalization
 
-该子项目保留一个较早 Affine-Prym 论证的线性代数形式化。它明确区分 Lean 中已经证明的部分与仍作为外部输入的拓扑、表示论和代数几何结果。
+This subproject preserves the linear-algebraic formalization of an earlier Affine--Prym argument. It explicitly separates the Lean-checked part from topological, representation-theoretic, and algebro-geometric results used as external input.
 
-它使用 Lean/mathlib `v4.28.0`，应从子项目目录构建：
+It uses Lean/mathlib `v4.28.0` and should be built from the subproject directory:
 
-```bash
+~~~bash
 cd projects/affine-prym-formalization
 lake build RequestProject.Main
-```
+~~~
 
 ## Erdős Problem #906
 
-该项目研究一个固定的显式稀疏 Fock 级数及其高阶导数零点在固定环带上的定量几何。主论文固定 `p=3/2`；更一般的研究方向单独保存在 `research/`，不计入当前形式化结论。
+This project studies a fixed explicit sparse Fock series and the quantitative geometry of the zeros of its higher derivatives on a fixed annulus. The main paper treats $p=3/2$. Broader exploratory material is kept separately under `research/` and is not part of the formalized theorem.
 
-Lean 子项目单独构建：
+Build the Lean project with
 
-```bash
+~~~bash
 cd projects/erdos-906-sparse-fock/formalization/lean
 lake build RequestProject.Main
-```
+~~~
 
 ## Root project build
 
-```bash
+~~~bash
 lake update
 lake build
-```
+~~~
 
-具体 Lean/mathlib 版本以各目录中的 `lean-toolchain` 和 Lake 配置为准。
+The exact Lean and mathlib versions are specified by the `lean-toolchain` and Lake configuration files in the relevant project directories.
