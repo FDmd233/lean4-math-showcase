@@ -1,0 +1,32 @@
+name: Retain published PDF for independent visual QA
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/published-pdf-visual-qa.yml'
+      - 'projects/erdos-906-sparse-fock/paper/paper_en.pdf'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preserve-current-pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout published files
+        uses: actions/checkout@v4
+      - name: Verify PDF files are present
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s 'projects/erdos-906-sparse-fock/paper/paper_en.pdf'
+          sha256sum 'projects/erdos-906-sparse-fock/paper/paper_en.pdf'
+      - name: Retain exact published PDF bytes
+        uses: actions/upload-artifact@v4
+        with:
+          name: erdos906-pdf-${{ github.sha }}
+          path: |
+            projects/erdos-906-sparse-fock/paper/paper_en.pdf
+          if-no-files-found: error
+          retention-days: 14
