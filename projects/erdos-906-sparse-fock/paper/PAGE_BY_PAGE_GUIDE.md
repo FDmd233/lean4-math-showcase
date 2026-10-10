@@ -1,67 +1,76 @@
-# Proof guide
+# Proof guide for the six-page sparse Fock manuscript
 
-This note gives a compact guide to the six-page manuscript `paper_en.pdf`. The paper itself is the authoritative statement.
+This guide summarizes the mathematical structure of paper_en.pdf.
+The paper itself is the authoritative source for hypotheses, constants,
+quantifiers, and the exact scope of formal verification.
 
-## Page 1 - formulation and explicit function
+## Page 1 — the function and the problem
 
-The paper states the cofinite formulation used throughout: every nonempty open set contains a zero of every sufficiently high derivative. It also explains the equivalence with Erdős's increasing-sequence formulation.
+The function under consideration is
+\[
+F(z)=\sum_{j\ge1}
+\frac{z^{\lfloor j^{3/2}\rfloor}}
+     {\sqrt{\lfloor j^{3/2}\rfloor!}}.
+\]
+The paper proves the cofinite formulation: each nonempty open subset
+of \(\mathbb C\) contains a zero of every sufficiently high derivative
+of \(F\). It explains the relationship to the increasing-sequence
+formulation of Erdős Problem 906 and distinguishes earlier related
+results without making an unsupported priority claim.
 
-The historical paragraph distinguishes the related results of Barth-Schneider, Gethner, and Hou, and makes no first-solution claim.
+## Page 2 — theorem package and support scales
 
-The fixed function is
-[
-F(z)=sum_{jge1}rac{z^{lfloor j^{3/2}floor}}{sqrt{lfloor j^{3/2}floor!}}.
-]
-The notation for the active monomials, crossing radii, and two-term model centres is introduced here.
+The main results establish cofinite zero hitting, an annular
+\(O(n^{-1/6})\) covering estimate, one simple zero in every admissible
+model disk, exclusion of other zeros in a fixed annulus, eventual
+annular simplicity, separation of model disks, and exact finite-union
+distinct-zero counts.
 
-## Page 2 - theorem package and support scale
+The support gaps satisfy \(q_j\asymp j^{1/2}\). In the relevant
+differentiated saddle range, \(q_j\asymp n^{1/3}\).
 
-The main statements are:
+## Page 3 — curvature and tail domination
 
-1. cofinite zero hitting;
-2. `O(n^{-1/6})` annular covering;
-3. one simple zero per admissible model disk;
-4. exhaustion of annular zeros by model disks;
-5. eventual annular simplicity;
-6. pairwise disjointness of model disks;
-7. exact finite distinct-zero counts.
+Discrete concavity of the logarithmic weights controls consecutive
+crossing radii. The radial spacing is of order \(n^{-1/6}\), while
+the angular spacing is of order \(n^{-1/3}\).
 
-The support gaps satisfy (q_jasymp j^{1/2}), and in the differentiated saddle window (q_jasymp n^{1/3}).
+The estimate used for the nonprincipal terms is
+\[
+\frac{\displaystyle\sum_{h\ne j,j+1}|T_h(z)|}{|T_j(z)|}
+\le e^{-(c-\gamma)Q}
+\left((m+1)+\frac{e^{q\gamma}}{1-e^{-(c-\gamma)}}\right).
+\]
+The factor \(m+1\) is essential to the stated estimate. It remains
+controlled by the exponential decay in the \(p=3/2\) saddle range.
 
-## Page 3 - curvature, crossing radii, and tail domination
+## Page 4 — local zeros and annular exclusion
 
-The logarithmic weight is discretely concave in the relevant range. This controls the spacing of crossing radii and yields the radial scale (n^{-1/6}) and angular scale (n^{-1/3}).
+Near a model centre, set \(z=z_0e^w\) and normalize the derivative:
+\[
+\Psi(w)=1-e^{qw}+E(w).
+\]
+A minimum-modulus argument proves zero existence; Cauchy estimates
+for the error derivative imply local uniqueness and simplicity.
+Annular exclusion treats proximity to either crossing radius and
+the intervening one-term-dominance region.
 
-The tail estimate used in the proof is
-[
- rac{sum_{h
-e j,j+1}|T_h(z)|}{|T_j(z)|}
- le
- e^{-(c-gamma)Q}
- left((m+1)+rac{e^{qgamma}}{1-e^{-(c-gamma)}}ight).
-]
-The polynomial factor ((m+1)) is retained explicitly. In the (p=3/2) saddle range, the exponential decay dominates it.
+## Page 5 — global annular geometry
 
-## Page 4 - local existence, uniqueness, simplicity, and exclusion
+Exclusion captures all annular zeros inside admissible model disks.
+Crossing radii are separated on the scale \(n^{-1/6}\), while angular
+spacing and local model radii are on the scale \(n^{-1/3}\).
+This yields eventual disk disjointness and the covering estimate.
+A closed disk contained in any nonempty open set then gives the
+cofinite zero-hitting conclusion.
 
-Near a model centre, logarithmic coordinates reduce the derivative to
-[
-Psi(w)=1-e^{qw}+E(w).
-]
-A minimum-modulus argument gives existence of a zero. Cauchy control of the error derivative gives uniqueness and simplicity on the corresponding model disk.
+The multiplicity of a possible zero at the origin is handled separately.
 
-The annular exclusion argument has three cases: proximity to the left crossing, proximity to the right crossing, or one-term dominance between them.
+## Page 6 — formalization and references
 
-## Page 5 - global annular geometry and cofinite hitting
-
-The exclusion theorem captures every annular zero in a model disk. Radial spacing is of order (n^{-1/6}), while model-disk radii and angular spacing are of order (n^{-1/3}). This gives disjointness and the stated covering rate.
-
-A small closed disk contained in any nonempty open set then yields the cofinite zero-hitting theorem.
-
-The origin is treated separately because its multiplicity can be larger than one.
-
-## Page 6 - formal verification and references
-
-The final page records the paper-to-Lean correspondence, the principal source modules, and the pinned Lean/mathlib environment. The detailed declaration map is in `../formalization/formalization_map.md`.
-
-A brief AI-assistance statement is included separately from the mathematical content.
+The final page states the paper-to-Lean correspondence and identifies
+the pinned Lean and Mathlib environment. Consult
+formalization/formalization_map.md and
+formalization/FORMALIZATION_STATUS.md for the exact declarations and
+verification boundary. The disclosed AI assistance is separate from
+the mathematical proof.
