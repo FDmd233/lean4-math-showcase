@@ -1,80 +1,99 @@
-# Verification notes for the fixed (p=3/2) paper
+# Verification notes: sparse Fock series at p = 3/2
 
-This note records several points where the printed proof and Lean development are matched explicitly.
+These notes document the correspondence between the mathematical argument and the Lean development. The manuscript and its formally checked theorem statements are authoritative. No result for the full interval 1 < p < 2 is asserted here.
 
-## 1. Scope
+## Scope and quantifiers
 
-The paper fixes (p=3/2). Results concerning exact order/type, sectorial zero counts, limiting zero measures, general (p), and endpoint regimes are kept outside the theorem package of this manuscript.
+Let
+\[
+F(z)=\sum_{j\ge1}\frac{z^{\lfloor j^{3/2}\rfloor}}{\sqrt{\lfloor j^{3/2}\rfloor!}}.
+\]
+The cofinite zero-hitting theorem states
+\[
+\forall U\subseteq\mathbb C\;
+\bigl(U\text{ nonempty and open}\bigr)
+\ \Longrightarrow\
+\exists N\in\mathbb N\;\forall n\ge N,\quad
+Z\bigl(F^{(n)}\bigr)\cap U\ne\varnothing.
+\]
+The paper proves the equivalence with Erdős's increasing-sequence formulation. Its quantitative statements concern this fixed function only.
 
-## 2. Quantifiers
+## Tail estimate
 
-The main theorem is stated as
-[
-orall U
-earnothing	ext{ open},quad exists Nquad
-orall nge N,quad Z(F^{(n)})cap U
-earnothing.
-]
-The paper also proves its equivalence with the increasing-sequence formulation of Erdős Problem 906.
+At an active crossing radius, use the paper's notation
+\(m=m_j\), \(q=q_j\), \(Q=\min(q_{j-1},q_{j+1})\), with
+\(0\le\gamma<c\) and \(|z|=\rho_j e^\sigma\), \(|\sigma|\le\gamma\).
+The bound actually used is
+\[
+\frac{\displaystyle\sum_{h\ne j,j+1}|T_h(z)|}{|T_j(z)|}
+\le e^{-(c-\gamma)Q}
+\left((m+1)+\frac{e^{q\gamma}}{1-e^{-(c-\gamma)}}\right).
+\]
+The factor \(m+1\) belongs to the left-tail estimate; it cannot simply be omitted.
+For \(p=3/2\) in the fixed saddle range, the exponential decay dominates
+this polynomial factor.
 
-## 3. Tail estimate
+## Local zeros and annular exclusion
 
-The proof uses the bound
-[
-e^{-(c-gamma)Q}
-left((m+1)+rac{e^{qgamma}}{1-e^{-(c-gamma)}}ight).
-]
-The factor (m+1) from the left tail is part of the formal statement. In the (p=3/2) saddle range the exponential term still dominates this polynomial factor.
-
-## 4. Local zero theorem
-
-The model-disk theorem uses one fixed small constant. In logarithmic coordinates the normalized function is
-[
+For an admissible model centre \(z_0\), logarithmic coordinates
+\(z=z_0e^w\) reduce the normalized derivative to
+\[
 1-e^{qw}+E(w).
-]
-Existence follows from a minimum-modulus argument. Uniqueness and simplicity follow from Cauchy control of the normalized error on a slightly larger disk.
+\]
+The minimum-modulus argument yields a zero in a sufficiently small
+model disk. Cauchy estimates for the error on a larger disk establish
+uniqueness and simplicity.
 
-## 5. Annular exhaustion
+Between two consecutive crossing radii, the annular exclusion argument
+covers three alternatives: proximity to the left crossing, proximity to
+the right crossing, and the central region where one term strictly
+dominates the others. The paper and Lean development use the same
+trichotomy.
 
-For consecutive crossing radii (ho_jle |z|<ho_{j+1}), the proof divides into three cases:
+## Disjointness, counting, and covering
 
-1. the radius is close to (ho_j);
-2. the radius is close to (ho_{j+1});
-3. it is separated from both, in which case the middle term dominates the remaining series.
+On one crossing circle, model centres have angular spacing on the
+scale \(\rho_j/q_j\). Distinct crossing circles have radial separation
+on the scale \(n^{-1/6}\); model disks are eventually pairwise disjoint.
 
-This is the same trichotomy used in the formal development.
+The finite-union theorem counts distinct zeros. The separately proved
+simplicity statement identifies this count with total multiplicity
+within those disks.
 
-## 6. Disjointness and counting
+For a target point in a fixed annulus, the nearest crossing circle
+contributes a radial error \(O(n^{-1/6})\); angular and local-model
+errors are \(O(n^{-1/3})\). The resulting covering estimate implies
+cofinite zero hitting on every nonempty open set.
 
-Same-circle model centres are separated on the scale (ho_j/q_j). Distinct crossing circles are separated on the larger radial scale (n^{-1/6}). The model disks are therefore eventually pairwise disjoint.
+The origin is treated separately; the paper does not claim that all
+zeros at the origin are simple. The formal statement recording its
+multiplicity is named origin_multiplicity.
 
-The finite-union counting theorem is a distinct-zero count; simplicity implies equality with total multiplicity on those disks.
+## Proof dependencies and audit boundary
 
-## 7. Covering
+The main chain is
+\[
+\text{support arithmetic}\longrightarrow
+\text{discrete curvature}\longrightarrow
+\text{crossing radii}\longrightarrow
+\text{tail domination}\longrightarrow
+\text{local zeros}\longrightarrow
+\text{annular exclusion}\longrightarrow
+\text{disjointness and counting}\longrightarrow
+\text{covering}\longrightarrow
+\text{cofinite zero hitting}.
+\]
+The statement-to-declaration crosswalk is in the adjacent
+formalization/formalization_map.md file. The Lean sources must be
+compiled against the pinned Lean and Mathlib revisions; the absence
+of unfinished proof placeholders alone is not a compilation certificate.
 
-Given a target point in a fixed annulus, the nearest crossing circle produces radial error (O(n^{-1/6})), while the angular and local model errors are (O(n^{-1/3})). The radial term dominates.
+Results about exact order and type, sectorial zero counts, limiting
+zero measures, general \(p\), and endpoint regimes are outside the
+theorem package.
 
-## 8. Origin
+## Historical references
 
-No global simplicity statement is made at the origin. Its multiplicity is recorded separately by `origin_multiplicity`.
-
-## 9. Paper-to-Lean correspondence
-
-The principal dependency chain is
-[
-	ext{support arithmetic}
-	o 	ext{curvature}
-	o 	ext{crossing radii}
-	o 	ext{tail domination}
-	o 	ext{local zero theorem}
-	o 	ext{annular exclusion}
-	o 	ext{disjointness/counting}
-	o 	ext{covering}
-	o 	ext{cofinite hitting}.
-]
-
-The detailed statement-to-declaration map is in `../formalization/formalization_map.md`.
-
-## 10. References
-
-The historical discussion uses Erdős (1982), Barth-Schneider (1972), Gethner (1985), and Hou (2026). The scope of the corresponding claims is summarized in `PRIORITY_AND_SCOPE.md`.
+The manuscript distinguishes its scope from the related work of
+Erdős (1982), Barth–Schneider (1972), Gethner (1985), and Hou (2026).
+See PRIORITY_AND_SCOPE.md for the precise priority discussion.
