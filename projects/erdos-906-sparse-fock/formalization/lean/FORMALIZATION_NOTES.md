@@ -24,7 +24,7 @@ For fixed annuli and sufficiently high derivatives, the project also proves:
 - pairwise disjointness of the model disks;
 - exact distinct-zero counts on finite unions of model disks.
 
-The uniqueness/simplicity argument is proved directly from analytic estimates in `ZeroCount.lean`; it does not depend on a formal Rouché theorem in Mathlib.
+The uniqueness/simplicity argument is proved directly from analytic estimates in `ZeroCount32.lean`; it does not depend on a formal Rouché theorem in Mathlib.
 
 ## Axiom and integrity checks
 
